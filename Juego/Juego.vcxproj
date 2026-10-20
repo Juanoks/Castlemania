@@ -153,6 +153,7 @@
     <ClCompile Include="Plataforma.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Constantes.h" />
     <ClInclude Include="Jugador.h" />
     <ClInclude Include="Meta.h" />
     <ClInclude Include="Nivel.h" />

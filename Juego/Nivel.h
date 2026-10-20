@@ -17,6 +17,7 @@ public:
 	void dibujar(sf::RenderWindow& ventana);
 	bool jugadorTocoPinche(sf::FloatRect hitboxJugador) const;
 	bool jugadorTocoMeta(sf::FloatRect hitboxJugador) const;
+	bool jugadorCayoAlVacio(sf::FloatRect hitboxJugador) const;
 	const std::vector<Plataforma>& getPlataformas() const;
 	sf::Vector2f getRespawn() const;
 

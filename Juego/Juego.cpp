@@ -2,15 +2,20 @@
 #include <SFML/graphics.hpp> /// SFML versión 3.1
 #include <SFML/window.hpp>
 #include <optional>
+#include "Constantes.h"
 #include "Nivel.h"
 #include "Jugador.h"
 
 int main() {
-	sf::RenderWindow ventana(sf::VideoMode({ 800, 600 }), "Punto B"); // resolucion y titulo en la ventana
+	sf::RenderWindow ventana(sf::VideoMode({ static_cast<unsigned int>(ANCHO_MUNDO), static_cast<unsigned int>(ALTO_MUNDO) }), "Punto B"); // resolucion y titulo en la ventana
+	//Si ponemos directamente {ANCHO_MUNDO, ALTO_MUNDO}, el compilador se queja porque 
+	//pasar de float a entero puede perder decimales.
+	//Hay que convertirlos explicitamente con static_cast<unsigned int>(...)
+
 	ventana.setFramerateLimit(60); // setea los frames
 
 	int numeroNivel = 1;
-	int totalNiveles = 3;
+	int totalNiveles = 4;
 	Nivel nivel(numeroNivel);
 
 	Jugador personaje(nivel.getRespawn());
@@ -45,7 +50,7 @@ int main() {
 			personaje.aterrizarEn(p.getHitbox());
 		}
 
-		if (nivel.jugadorTocoPinche(personaje.getHitbox())) {
+		if (nivel.jugadorTocoPinche(personaje.getHitbox()) || nivel.jugadorCayoAlVacio(personaje.getHitbox())) {
 			personaje.reiniciar(nivel.getRespawn());
 		}
 
