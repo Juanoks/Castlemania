@@ -4,7 +4,7 @@
 Pinche::Pinche(sf::Vector2f posicion) {
 	_forma.setPointCount(3);
 	_forma.setRadius(25.f);
-	_forma.setFillColor(sf::Color::White);
+	_forma.setFillColor(sf::Color(150, 150, 150));
 	_forma.setPosition(posicion);
 }
 

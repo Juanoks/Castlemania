@@ -1,13 +1,8 @@
 #pragma once
-#include <SFML/graphics.hpp>
+#include "Terreno.h"
 
-class Plataforma {
-private:
-	sf::RectangleShape _forma;
+class Plataforma : public Terreno {
 public:
 	Plataforma(sf::Vector2f posicion, sf::Vector2f tamanio);
-
-	void dibujar(sf::RenderWindow& ventana);
-	sf::FloatRect getHitbox() const;
 };
 

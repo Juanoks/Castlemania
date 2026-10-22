@@ -6,19 +6,19 @@ sf::Vector2f metaPosicion(860.f, 380.f);
 Nivel::Nivel(int numeroNivel) : _numeroNivel(numeroNivel), _meta(metaPosicion){
 	if (numeroNivel == 1) {	
 		_respawn = sf::Vector2f (50.f, 420.f);
-		_plataformas.push_back(Plataforma(sf::Vector2f(0.f, 500.f), sf::Vector2f(960.f, 40.f)));
-		// posicion y tamanio de plataforma (x,y) (ancho,alto)
+		_bloques.push_back(Bloque(sf::Vector2f(0.f, 500.f), sf::Vector2f(960.f, 40.f))); // agrego bloques/suelo en el nivel
+		// posicion y tamanio de bloque (x,y) (ancho,alto)
 		_pinches.push_back(sf::Vector2f(350.f, 462.5f)); // agrego pinches en el nivel
 	}		
 	else if (numeroNivel == 2) {
 		_respawn = sf::Vector2f(50.f, 420.f);
-		_plataformas.push_back(Plataforma(sf::Vector2f(0.f, 500.f), sf::Vector2f(960.f, 40.f)));
+		_bloques.push_back(Bloque(sf::Vector2f(0.f, 500.f), sf::Vector2f(960.f, 40.f)));
 		_pinches.push_back(sf::Vector2f(350.f, 462.5f));
 		_pinches.push_back(sf::Vector2f(400.f, 462.5f));
 	}
 	else if (numeroNivel == 3) {
 		_respawn = sf::Vector2f(50.f, 420.f);
-		_plataformas.push_back(Plataforma(sf::Vector2f(0.f, 500.f), sf::Vector2f(960.f, 40.f)));
+		_bloques.push_back(Bloque(sf::Vector2f(0.f, 500.f), sf::Vector2f(960.f, 40.f)));
 		_plataformas.push_back(Plataforma(sf::Vector2f(200.f, 400.f), sf::Vector2f(100.f, 20.f)));
 		_pinches.push_back(sf::Vector2f(300.f, 462.5f));
 		_pinches.push_back(sf::Vector2f(350.f, 462.5f));
@@ -30,10 +30,10 @@ Nivel::Nivel(int numeroNivel) : _numeroNivel(numeroNivel), _meta(metaPosicion){
 	else if (numeroNivel == 4) {
 		_respawn = sf::Vector2f(50.f, 420.f);
 		_meta = sf::Vector2f(850.f, 180.f);
-		_plataformas.push_back(Plataforma(sf::Vector2f(0.f, 500.f), sf::Vector2f(200.f, 40.f)));
-		_plataformas.push_back(Plataforma(sf::Vector2f(350.f, 400.f), sf::Vector2f(200.f, 40.f)));
+		_bloques.push_back(Bloque(sf::Vector2f(0.f, 500.f), sf::Vector2f(200.f, 40.f)));
+		_bloques.push_back(Bloque(sf::Vector2f(350.f, 400.f), sf::Vector2f(200.f, 40.f)));
 		_pinches.push_back(sf::Vector2f(427.5f, 365.5f));
-		_plataformas.push_back(Plataforma(sf::Vector2f(700.f, 300.f), sf::Vector2f(200.f, 40.f)));
+		_bloques.push_back(Bloque(sf::Vector2f(700.f, 300.f), sf::Vector2f(200.f, 40.f)));
 
 	}
 	//proximos niveles
@@ -45,6 +45,9 @@ void Nivel::dibujar(sf::RenderWindow& ventana) {
 	}
 	for (Plataforma& p : _plataformas) {
 		p.dibujar(ventana);
+	}
+	for (Bloque& b : _bloques) {
+		b.dibujar(ventana);
 	}
 	_meta.dibujar(ventana);
 	
@@ -74,6 +77,10 @@ bool Nivel::jugadorCayoAlVacio(sf::FloatRect hitboxJugador) const {
 
 const std::vector<Plataforma>& Nivel::getPlataformas() const {
 	return _plataformas;
+}
+
+const std::vector<Bloque>& Nivel::getBloques() const {
+	return _bloques;
 }
 
 sf::Vector2f Nivel::getRespawn() const {

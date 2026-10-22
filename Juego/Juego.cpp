@@ -100,13 +100,21 @@ int main() {
 
 		personaje.mover(dt);
 
-		personaje.actualizar(dt);
-
-		// ¿cayó sobre alguna plataforma?
-		for (const Plataforma& p : nivel.getPlataformas()) { 
-			personaje.aterrizarEn(p.getHitbox());
+		for (const Bloque& b : nivel.getBloques()) {
+			personaje.chocarHorizontal(b.getHitbox());
 		}
 
+		personaje.actualizar(dt);
+
+		for (const Bloque& b : nivel.getBloques()) {
+			personaje.chocarVertical(b.getHitbox());
+		}
+
+		// ¿cayó sobre alguna plataforma?
+		for (const Terreno& t : nivel.getPlataformas()) { 
+			personaje.aterrizarEn(t.getHitbox());
+		}
+		
 		if (nivel.jugadorTocoPinche(personaje.getHitbox()) || nivel.jugadorCayoAlVacio(personaje.getHitbox())) {
 			personaje.reiniciar(nivel.getRespawn());
 		}
