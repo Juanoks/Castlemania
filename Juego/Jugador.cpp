@@ -26,7 +26,7 @@ void Jugador::reiniciar(sf::Vector2f posicion) {
     _enElSuelo = false;
 }
 
-void Jugador::mover(float dt) { //“¿qué teclas apretó el jugador?” y reaccionar a eso.
+void Jugador::mover(float dt) { //“¿que teclas apreto el jugador?” y reaccionar a eso.
     sf::Vector2f movimiento(0.f, 0.f);
     if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::A)){
         movimiento.x -= _velocidadX * dt;
@@ -45,16 +45,15 @@ void Jugador::mover(float dt) { //“¿qué teclas apretó el jugador?” y reac
     _desplazamientoX = movimiento.x;
 }
 
-//“¿qué le hace el mundo al jugador este frame?”: la gravedad lo tira hacia abajo, se aplica el movimiento vertical y después las plataformas lo frenan (ver aterrizarEn).
-// 
-//dt en SFML se refiere comúnmente al Delta Time (Tiempo Delta).Es el tiempo que transcurre entre el fotograma (frame) anterior 
-//y el fotograma actual en un videojuego.
 void Jugador::actualizar(float dt) {
+    // Lo que le hace el mundo al jugador en este frame: la gravedad acelera la caída
+    //  y después se aplica el movimiento vertical.
+
     _alturaPiesAnterior = getHitbox().position.y+ getHitbox().size.y;
     _enElSuelo = false;
-    _velocidadY += _gravedad * dt;
+    _velocidadY += _gravedad * dt;  // la gravedad cambia la VELOCIDAD
     
-    _forma.move(sf::Vector2f(0.f,_velocidadY*dt));
+    _forma.move(sf::Vector2f(0.f,_velocidadY*dt)); // la velocidad cambia la POSICION
 }
 
 void Jugador::aterrizarEn(sf::FloatRect plataformaHitbox) {
@@ -67,7 +66,7 @@ void Jugador::aterrizarEn(sf::FloatRect plataformaHitbox) {
     if (_alturaPiesAnterior > plataformaHitbox.position.y + 0.5f) { // si los pies del jugador estaban más abajo que la parte de 
         return;                                                     // arriba de la plataforma, no aterriza.
     }
-    // Si llegó hasta acá, ningún chequeo lo descartó: aterrizó.
+    // Si llego hasta aca, ningun chequeo lo descartó: aterrizo.
     // Se lo apoya con los pies justo sobre la plataforma y se frena la caída.
     _forma.setPosition(sf::Vector2f(_forma.getPosition().x, plataformaHitbox.position.y - getHitbox().size.y));
     // y = parte de arriba de la plataforma menos el alto del jugador
@@ -75,46 +74,45 @@ void Jugador::aterrizarEn(sf::FloatRect plataformaHitbox) {
     _enElSuelo = true;
 }
 
-// Choque de costado contra un bloque sólido.
-void Jugador::chocarHorizontal(sf::FloatRect bloqueHitBox) {
+void Jugador::chocarHorizontal(sf::FloatRect bloqueHitbox) { // Choque de costado contra un bloque sólido.
     // ¿No lo toca? Nada que hacer.
-    if (!getHitbox().findIntersection(bloqueHitBox)) {
+    if (!getHitbox().findIntersection(bloqueHitbox)) {
         return;
     }
-    // ¿Está parado encima del bloque? Entonces no es un choque de costado
+    // ¿Esta parado encima del bloque? Entonces no es un choque de costado
     // (sin esto, al caminar sobre un bloque lo empujaría hacia un lado).
-    if (getHitbox().size.y + _forma.getPosition().y  <= bloqueHitBox.position.y + 0.5f) {
+    if (getHitbox().size.y + _forma.getPosition().y  <= bloqueHitbox.position.y + 0.5f) {
         return;
     }
     // si jugador viene desde la izquierda hacia un bloque a su derecha
     if (_desplazamientoX > 0) {
         // lo dejamos pegado al lado izquierdo del bloque.
-        _forma.setPosition(sf::Vector2f(bloqueHitBox.position.x - getHitbox().size.x , _forma.getPosition().y));
+        _forma.setPosition(sf::Vector2f(bloqueHitbox.position.x - getHitbox().size.x , _forma.getPosition().y));
     }            // borde de la izquierda del bloque(su posicion) - ancho el jugador | La altura del jugador permanece igual.
                  // esto establece la posicion del jugador hacia atras (su ancho) evitando que atraviese el bloque
                  
     // si jugador viene desde la derecha hacia un bloque a su izquierda
     if (_desplazamientoX < 0) {
-        _forma.setPosition(sf::Vector2f(bloqueHitBox.position.x + bloqueHitBox.size.x , _forma.getPosition().y));
+        _forma.setPosition(sf::Vector2f(bloqueHitbox.position.x + bloqueHitbox.size.x , _forma.getPosition().y));
                  // aca necesitamos hacer: posicion del bloque en eje x mas su ancho dado que la posicion x siempre empieza
                  // en el borde izquierdo
     }
 }
 
-void Jugador::chocarVertical(sf::FloatRect bloqueHitBox) {
+void Jugador::chocarVertical(sf::FloatRect bloqueHitbox) {
     // ¿No lo toca? Nada que hacer.
-    if (!getHitbox().findIntersection(bloqueHitBox)) {
+    if (!getHitbox().findIntersection(bloqueHitbox)) {
         return;
     }
     // jugador choca el bloque por arriba
     if (_velocidadY > 0) {
-        _forma.setPosition(sf::Vector2f(_forma.getPosition().x , bloqueHitBox.position.y - getHitbox().size.y));
+        _forma.setPosition(sf::Vector2f(_forma.getPosition().x , bloqueHitbox.position.y - getHitbox().size.y));
         _velocidadY = 0.f; // reinicia velocidad de caida
         _enElSuelo = true;
     }
     // jugador choca el bloque por abajo
     else if (_velocidadY < 0) {
-        _forma.setPosition(sf::Vector2f(_forma.getPosition().x, bloqueHitBox.position.y + bloqueHitBox.size.y));
+        _forma.setPosition(sf::Vector2f(_forma.getPosition().x, bloqueHitbox.position.y + bloqueHitbox.size.y));
         _velocidadY = 0.f;
     }
 }

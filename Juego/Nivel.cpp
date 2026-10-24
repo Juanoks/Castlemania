@@ -35,6 +35,28 @@ Nivel::Nivel(int numeroNivel) : _numeroNivel(numeroNivel), _meta(metaPosicion){
 		_pinches.push_back(sf::Vector2f(427.5f, 365.5f));
 		_bloques.push_back(Bloque(sf::Vector2f(700.f, 300.f), sf::Vector2f(200.f, 40.f)));
 
+	} //posicion y tamanio de bloque (x,y) (ancho,alto)
+	else if (numeroNivel == 5) {
+		_respawn = sf::Vector2f(50.f, 420.f);
+		_bloques.push_back(Bloque(sf::Vector2f(0.f, 500.f), sf::Vector2f(150.f, 40.f)));
+		_plataformas.push_back(Plataforma(sf::Vector2f(125.f, 400.f), sf::Vector2f(80.f, 10.f)));
+		_plataformas.push_back(Plataforma(sf::Vector2f(50.f, 300.f), sf::Vector2f(80.f, 10.f)));
+		_plataformas.push_back(Plataforma(sf::Vector2f(50.f, 180.f), sf::Vector2f(80.f, 10.f)));
+		_bloques.push_back(Bloque(sf::Vector2f(130.f, 180.f), sf::Vector2f(400.f, 40.f)));
+		_bloques.push_back(Bloque(sf::Vector2f(330.f, 180.f), sf::Vector2f(400.f, 40.f)));
+		_bloques.push_back(Bloque(sf::Vector2f(600.f, 320.f), sf::Vector2f(500.f, 40.f)));
+		_bloques.push_back(Bloque(sf::Vector2f(700.f, 500.f), sf::Vector2f(500.f, 40.f)));
+		_plataformas.push_back(Plataforma(sf::Vector2f(600.f, 500.f), sf::Vector2f(40.f, 10.f)));
+
+		_bloques.push_back(Bloque(sf::Vector2f(930.f, 0.f), sf::Vector2f(50.f, 600.f)));
+		_pinches.push_back(sf::Vector2f(165.f, 142.5f));
+		_pinches.push_back(sf::Vector2f(205.f, 142.5f));
+		_pinches.push_back(sf::Vector2f(335.f, 142.5f));
+		_pinches.push_back(sf::Vector2f(375.f, 142.5f));
+		_pinches.push_back(sf::Vector2f(500.f, 142.5f));
+		_pinches.push_back(sf::Vector2f(540.f, 142.5f));
+		
+
 	}
 	//proximos niveles
 }
@@ -53,19 +75,19 @@ void Nivel::dibujar(sf::RenderWindow& ventana) {
 	
 }
 
-bool Nivel::jugadorTocoPinche(sf::FloatRect hitBoxJugador) const{
+bool Nivel::jugadorTocoPinche(sf::FloatRect hitboxJugador) const{
 	for (const Pinche& p : _pinches) { // El & hace que "p" sea el pinche de la lista y no una copia.
 		//sf::FloatRect tiene un método findIntersection() que recibe otro FloatRect
 		//Devuelve un std::optional<sf::FloatRect>, y vale lo mismo que con pollEvent()
-		if (hitBoxJugador.findIntersection(p.getHitbox())) {
+		if (hitboxJugador.findIntersection(p.getHitbox())) {
 			return true;
 		}
 	}
 	return false;
 }
 
-bool Nivel::jugadorTocoMeta(sf::FloatRect hitBoxJugador) const {
-	if (hitBoxJugador.findIntersection(_meta.getHitbox())) {
+bool Nivel::jugadorTocoMeta(sf::FloatRect hitboxJugador) const {
+	if (hitboxJugador.findIntersection(_meta.getHitbox())) {
 		return true;
 	}
 	return false;

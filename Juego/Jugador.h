@@ -20,7 +20,7 @@ public:
     void mover(float dt);
     void actualizar(float dt);
     void aterrizarEn(sf::FloatRect plataformaHitbox);
-    void chocarHorizontal(sf::FloatRect bloqueHitBox);
-    void chocarVertical(sf::FloatRect bloqueHitBox);
+    void chocarHorizontal(sf::FloatRect bloqueHitbox);
+    void chocarVertical(sf::FloatRect bloqueHitbox);
     sf::FloatRect getHitbox() const;
 };
