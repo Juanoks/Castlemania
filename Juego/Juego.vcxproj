@@ -155,6 +155,7 @@
     <ClCompile Include="PilarMovil.cpp" />
     <ClCompile Include="Pinche.cpp" />
     <ClCompile Include="Plataforma.cpp" />
+    <ClCompile Include="Resultado.cpp" />
     <ClCompile Include="Terreno.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -169,6 +170,7 @@
     <ClInclude Include="PilarMovil.h" />
     <ClInclude Include="Pinche.h" />
     <ClInclude Include="Plataforma.h" />
+    <ClInclude Include="Resultado.h" />
     <ClInclude Include="Terreno.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

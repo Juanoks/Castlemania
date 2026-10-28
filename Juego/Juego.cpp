@@ -1,4 +1,5 @@
 #include <iostream>  //Ctrl+K, Ctrl+D para ordenar el codigo
+#include <string>
 #include <SFML/graphics.hpp> 
 #include <SFML/window.hpp>
 #include <optional>
@@ -52,8 +53,9 @@ int main() {
 
 	sf::Text nombre(fuente, "Integrantes", 30);
 	nombre.setPosition(sf::Vector2f(330.f, 200.f));
-	sf::Text victoria(fuente, "Gracias por jugar", 30);
-	victoria.setPosition(sf::Vector2f(330.f, 200.f));
+	sf::Text victoria(fuente, "", 30);
+	victoria.setPosition(sf::Vector2f(250.f, 200.f));
+	victoria.setFillColor(sf::Color::Magenta);
 
 	EstadoJuego estadoActual = EstadoJuego::Menu;
 
@@ -147,11 +149,13 @@ int main() {
 			partida.actualizar(dt);
 			if (partida.termino()) {
 				estadoActual = EstadoJuego::Victoria;
+				victoria.setString("Gracias por jugar\n\nMuertes: " + std::to_string(partida.getCantidadMuertes()) + 
+					"\n\nTiempo: " + std::to_string(partida.getTiempoDeCompletado()));	
 			}
 
 			break;
 
-		case EstadoJuego::Victoria:
+		case EstadoJuego::Victoria:		
 
 			break;
 		}
