@@ -15,81 +15,81 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="Jugador.cpp">
+    <ClCompile Include="src\Jugador.cpp">
       <Filter>Archivos de origen</Filter>
     </ClCompile>
-    <ClCompile Include="Pinche.cpp">
+    <ClCompile Include="src\Pinche.cpp">
       <Filter>Archivos de origen</Filter>
     </ClCompile>
-    <ClCompile Include="Meta.cpp">
+    <ClCompile Include="src\Meta.cpp">
       <Filter>Archivos de origen</Filter>
     </ClCompile>
-    <ClCompile Include="Nivel.cpp">
+    <ClCompile Include="src\Nivel.cpp">
       <Filter>Archivos de origen</Filter>
     </ClCompile>
-    <ClCompile Include="Plataforma.cpp">
+    <ClCompile Include="src\Plataforma.cpp">
       <Filter>Archivos de origen</Filter>
     </ClCompile>
-    <ClCompile Include="Terreno.cpp">
+    <ClCompile Include="src\Terreno.cpp">
       <Filter>Archivos de origen</Filter>
     </ClCompile>
-    <ClCompile Include="Bloque.cpp">
+    <ClCompile Include="src\Bloque.cpp">
       <Filter>Archivos de origen</Filter>
     </ClCompile>
-    <ClCompile Include="PilarMovil.cpp">
+    <ClCompile Include="src\PilarMovil.cpp">
       <Filter>Archivos de origen</Filter>
     </ClCompile>
-    <ClCompile Include="MenuPrincipal.cpp">
+    <ClCompile Include="src\MenuPrincipal.cpp">
       <Filter>Archivos de origen</Filter>
     </ClCompile>
-    <ClCompile Include="Juego.cpp">
+    <ClCompile Include="src\Partida.cpp">
+      <Filter>Archivos de origen</Filter>
+    </ClCompile>
+    <ClCompile Include="src\RegistroPartida.cpp">
+      <Filter>Archivos de origen</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Juego.cpp">
       <Filter>Archivos de recursos</Filter>
-    </ClCompile>
-    <ClCompile Include="Partida.cpp">
-      <Filter>Archivos de origen</Filter>
-    </ClCompile>
-    <ClCompile Include="Resultado.cpp">
-      <Filter>Archivos de origen</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Jugador.h">
+    <ClInclude Include="include\Jugador.h">
       <Filter>Archivos de encabezado</Filter>
     </ClInclude>
-    <ClInclude Include="Pinche.h">
+    <ClInclude Include="include\Pinche.h">
       <Filter>Archivos de encabezado</Filter>
     </ClInclude>
-    <ClInclude Include="Meta.h">
+    <ClInclude Include="include\Meta.h">
       <Filter>Archivos de encabezado</Filter>
     </ClInclude>
-    <ClInclude Include="Nivel.h">
+    <ClInclude Include="include\Nivel.h">
       <Filter>Archivos de encabezado</Filter>
     </ClInclude>
-    <ClInclude Include="Plataforma.h">
+    <ClInclude Include="include\Plataforma.h">
       <Filter>Archivos de encabezado</Filter>
     </ClInclude>
-    <ClInclude Include="Terreno.h">
+    <ClInclude Include="include\Terreno.h">
       <Filter>Archivos de encabezado</Filter>
     </ClInclude>
-    <ClInclude Include="Bloque.h">
+    <ClInclude Include="include\Bloque.h">
       <Filter>Archivos de encabezado</Filter>
     </ClInclude>
-    <ClInclude Include="PilarMovil.h">
+    <ClInclude Include="include\PilarMovil.h">
       <Filter>Archivos de encabezado</Filter>
     </ClInclude>
-    <ClInclude Include="Partida.h">
+    <ClInclude Include="include\Partida.h">
       <Filter>Archivos de encabezado</Filter>
     </ClInclude>
-    <ClInclude Include="MenuPrincipal.h">
+    <ClInclude Include="include\MenuPrincipal.h">
       <Filter>Archivos de encabezado</Filter>
     </ClInclude>
-    <ClInclude Include="Constantes.h">
+    <ClInclude Include="include\Constantes.h">
       <Filter>Archivos de encabezado</Filter>
     </ClInclude>
-    <ClInclude Include="EstadoJuego.h">
+    <ClInclude Include="include\EstadoJuego.h">
       <Filter>Archivos de encabezado</Filter>
     </ClInclude>
-    <ClInclude Include="Resultado.h">
+    <ClInclude Include="include\RegistroPartida.h">
       <Filter>Archivos de encabezado</Filter>
     </ClInclude>
   </ItemGroup>

@@ -77,6 +77,7 @@
       <PreprocessorDefinitions>WIN32;_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <LanguageStandard>stdcpp20</LanguageStandard>
+      <AdditionalIncludeDirectories>$(ProjectDir)include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -95,6 +96,7 @@
       <PreprocessorDefinitions>WIN32;NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <LanguageStandard>stdcpp20</LanguageStandard>
+      <AdditionalIncludeDirectories>$(ProjectDir)include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -111,7 +113,7 @@
       <PreprocessorDefinitions>_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <LanguageStandard>stdcpp20</LanguageStandard>
-      <AdditionalIncludeDirectories>D:\Programación\SFML-3.1.0-windows-vc17-64-bit\SFML-3.1.0\include</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(ProjectDir)include;D:\Programación\SFML-3.1.0-windows-vc17-64-bit\SFML-3.1.0\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -132,7 +134,7 @@
       <PreprocessorDefinitions>NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <LanguageStandard>stdcpp20</LanguageStandard>
-      <AdditionalIncludeDirectories>D:\Programación\SFML-3.1.0-windows-vc17-64-bit\SFML-3.1.0\include</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(ProjectDir)include;D:\Programación\SFML-3.1.0-windows-vc17-64-bit\SFML-3.1.0\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -145,33 +147,33 @@
     </Manifest>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="Bloque.cpp" />
-    <ClCompile Include="Juego.cpp" />
-    <ClCompile Include="Jugador.cpp" />
-    <ClCompile Include="MenuPrincipal.cpp" />
-    <ClCompile Include="Meta.cpp" />
-    <ClCompile Include="Nivel.cpp" />
-    <ClCompile Include="Partida.cpp" />
-    <ClCompile Include="PilarMovil.cpp" />
-    <ClCompile Include="Pinche.cpp" />
-    <ClCompile Include="Plataforma.cpp" />
-    <ClCompile Include="Resultado.cpp" />
-    <ClCompile Include="Terreno.cpp" />
+    <ClCompile Include="src\Bloque.cpp" />
+    <ClCompile Include="src\Juego.cpp" />
+    <ClCompile Include="src\Jugador.cpp" />
+    <ClCompile Include="src\MenuPrincipal.cpp" />
+    <ClCompile Include="src\Meta.cpp" />
+    <ClCompile Include="src\Nivel.cpp" />
+    <ClCompile Include="src\Partida.cpp" />
+    <ClCompile Include="src\PilarMovil.cpp" />
+    <ClCompile Include="src\Pinche.cpp" />
+    <ClCompile Include="src\Plataforma.cpp" />
+    <ClCompile Include="src\RegistroPartida.cpp" />
+    <ClCompile Include="src\Terreno.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Bloque.h" />
-    <ClInclude Include="Constantes.h" />
-    <ClInclude Include="EstadoJuego.h" />
-    <ClInclude Include="Jugador.h" />
-    <ClInclude Include="MenuPrincipal.h" />
-    <ClInclude Include="Meta.h" />
-    <ClInclude Include="Nivel.h" />
-    <ClInclude Include="Partida.h" />
-    <ClInclude Include="PilarMovil.h" />
-    <ClInclude Include="Pinche.h" />
-    <ClInclude Include="Plataforma.h" />
-    <ClInclude Include="Resultado.h" />
-    <ClInclude Include="Terreno.h" />
+    <ClInclude Include="include\Bloque.h" />
+    <ClInclude Include="include\Constantes.h" />
+    <ClInclude Include="include\EstadoJuego.h" />
+    <ClInclude Include="include\Jugador.h" />
+    <ClInclude Include="include\MenuPrincipal.h" />
+    <ClInclude Include="include\Meta.h" />
+    <ClInclude Include="include\Nivel.h" />
+    <ClInclude Include="include\Partida.h" />
+    <ClInclude Include="include\PilarMovil.h" />
+    <ClInclude Include="include\Pinche.h" />
+    <ClInclude Include="include\Plataforma.h" />
+    <ClInclude Include="include\RegistroPartida.h" />
+    <ClInclude Include="include\Terreno.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
