@@ -27,5 +27,4 @@ al punto B de cada nivel esquivando obstáculos.
 
 ## Estado
 
-- Hecho: movimiento con salto y gravedad, pinches, meta, 3 niveles, plataformas.
-- Pendiente: caída al vacío, menú, archivos `.dat`, sprites, sonido, etc.
+- Pendiente: archivos `.dat`, sprites, sonido, etc.
