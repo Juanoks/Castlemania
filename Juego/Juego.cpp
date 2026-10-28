@@ -1,11 +1,11 @@
-#include <iostream>
+#include <iostream>  //Ctrl+K, Ctrl+D para ordenar el codigo
 #include <SFML/graphics.hpp> 
 #include <SFML/window.hpp>
 #include <optional>
 #include "Constantes.h"
+#include "MenuPrincipal.h"
 #include "EstadoJuego.h"
-#include "Nivel.h"
-#include "Jugador.h"
+#include "Partida.h"
 
 // Ajusta la cámara para que el mundo entre en una ventana de ese tamaño
 // sin deformarse: lo que sobra queda en negro (letterbox).
@@ -44,14 +44,20 @@ int main() {
 	ventana.setView(vista); // todo lo que se dibuje pasa por esta cámara
 	bool pantallaCompleta = false;
 
-	EstadoJuego estadoActual = EstadoJuego::Jugando;
+	// Titulo y fuentes
+	sf::Font fuente;
+	fuente.openFromFile("fuentes/PressStart2P-Regular.ttf");
+	MenuPrincipal menuPrincipal(fuente);
 
 
-	int numeroNivel = 1;
-	int totalNiveles = 5;
-	Nivel nivel(numeroNivel);
+	sf::Text nombre(fuente, "Integrantes", 30);
+	nombre.setPosition(sf::Vector2f(330.f, 200.f));
+	sf::Text victoria(fuente, "Gracias por jugar", 30);
+	victoria.setPosition(sf::Vector2f(330.f, 200.f));
 
-	Jugador personaje(nivel.getRespawn());
+	EstadoJuego estadoActual = EstadoJuego::Menu;
+
+	Partida partida; // el nivel, el jugador y el progreso de la partida en curso
 
 	// Cronometro para medir cuánto dura cada frame.
 	sf::Clock tiempo;
@@ -73,10 +79,6 @@ int main() {
 				ventana.setView(vista);
 			}
 
-			if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::Escape)) {
-				ventana.close();
-			}
-
 			// F11: alterna entre ventana y pantalla completa
 			if (const auto* tecla = evento->getIf<sf::Event::KeyPressed>()) {
 				if (tecla->code == sf::Keyboard::Key::F11) {
@@ -96,60 +98,82 @@ int main() {
 					ajustarVista(vista, ventana.getSize());
 					ventana.setView(vista);
 				}
+
+				//Selecciona las opciones del menu
+				if (estadoActual == EstadoJuego::Menu) {
+					if (tecla->code == sf::Keyboard::Key::Up) {
+						menuPrincipal.subir();
+					}
+					if (tecla->code == sf::Keyboard::Key::Down) {
+						menuPrincipal.bajar();
+					}
+					if (tecla->code == sf::Keyboard::Key::Enter) {
+						if (menuPrincipal.opcionElegida() == OpcionMenu::Jugar) {
+							estadoActual = EstadoJuego::Jugando;
+							if (partida.termino()) {
+								partida = Partida();
+							}
+						}
+						if (menuPrincipal.opcionElegida() == OpcionMenu::Creditos) {
+							estadoActual = EstadoJuego::Creditos;
+						}
+						if (menuPrincipal.opcionElegida() == OpcionMenu::Salir) {
+							ventana.close();
+						}
+					}
+				}
+
+				if (tecla->code == sf::Keyboard::Key::Escape) {
+					estadoActual = EstadoJuego::Menu;
+				}
+
 			}
+
 		}
 
 		dt = tiempo.restart().asSeconds(); // cuanto pasó desde el frame anterior (y reinicia el cronómetro)
 
 		switch (estadoActual) {
 		case EstadoJuego::Menu:
+
 			break;
 
 		case EstadoJuego::Creditos:
+
+
 			break;
 
 		case EstadoJuego::Jugando:
-			personaje.mover(dt);
-
-			for (const Bloque& b : nivel.getBloques()) {
-				personaje.chocarHorizontal(b.getHitbox());
+			partida.actualizar(dt);
+			if (partida.termino()) {
+				estadoActual = EstadoJuego::Victoria;
 			}
 
-			personaje.actualizar(dt);
-
-			for (const Bloque& b : nivel.getBloques()) {
-				personaje.chocarVertical(b.getHitbox());
-			}
-
-			for (const Terreno& t : nivel.getPlataformas()) {
-				personaje.aterrizarEn(t.getHitbox());
-			}
-
-			if (nivel.jugadorTocoPinche(personaje.getHitbox()) || nivel.jugadorCayoAlVacio(personaje.getHitbox())) {
-				personaje.reiniciar(nivel.getRespawn());
-			}
-
-			if (nivel.jugadorTocoMeta(personaje.getHitbox())) {
-				if (numeroNivel < totalNiveles) {
-					numeroNivel++;
-					nivel = Nivel(numeroNivel);
-					personaje.reiniciar(nivel.getRespawn());
-				}
-				else {
-					estadoActual = EstadoJuego::Victoria;
-				}
-			}
 			break;
 
 		case EstadoJuego::Victoria:
-			std::cout << "Ganaste!" << std::endl;
+
 			break;
 		}
 
 		ventana.clear();			// "Limpiar" la ventana borrando el fotograma anterior
+		switch (estadoActual) {
+		case EstadoJuego::Menu:
+			menuPrincipal.dibujar(ventana);
+			break;
+		case EstadoJuego::Creditos:
+			ventana.draw(nombre);
+			break;
+		case EstadoJuego::Jugando:
+			partida.dibujar(ventana);
+			break;
+		case EstadoJuego::Victoria:
+			partida.dibujar(ventana);
+			ventana.draw(victoria);
 
-		personaje.dibujar(ventana);	// "Dibujar" algo (recibe como argumento el objeto que querés dibujar, en este caso el rectángulo)
-		nivel.dibujar(ventana);
+			break;
+		}
+
 
 		ventana.display();			// "Mostrar" en pantalla todo lo que se dibujó
 

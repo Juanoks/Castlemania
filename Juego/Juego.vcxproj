@@ -148,8 +148,10 @@
     <ClCompile Include="Bloque.cpp" />
     <ClCompile Include="Juego.cpp" />
     <ClCompile Include="Jugador.cpp" />
+    <ClCompile Include="MenuPrincipal.cpp" />
     <ClCompile Include="Meta.cpp" />
     <ClCompile Include="Nivel.cpp" />
+    <ClCompile Include="Partida.cpp" />
     <ClCompile Include="PilarMovil.cpp" />
     <ClCompile Include="Pinche.cpp" />
     <ClCompile Include="Plataforma.cpp" />
@@ -160,8 +162,10 @@
     <ClInclude Include="Constantes.h" />
     <ClInclude Include="EstadoJuego.h" />
     <ClInclude Include="Jugador.h" />
+    <ClInclude Include="MenuPrincipal.h" />
     <ClInclude Include="Meta.h" />
     <ClInclude Include="Nivel.h" />
+    <ClInclude Include="Partida.h" />
     <ClInclude Include="PilarMovil.h" />
     <ClInclude Include="Pinche.h" />
     <ClInclude Include="Plataforma.h" />
