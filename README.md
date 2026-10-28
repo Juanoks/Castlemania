@@ -23,7 +23,7 @@ al punto B de cada nivel esquivando obstáculos.
 | A / D | Moverse |
 | W | Saltar |
 | F11 | Pantalla completa |
-| ESC | Salir |
+| ESC | Volver al menu |
 
 ## Estado
 
