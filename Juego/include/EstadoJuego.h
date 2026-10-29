@@ -1,3 +1,3 @@
 #pragma once
 
-enum class EstadoJuego { Menu,Creditos,Jugando,Victoria };
+enum class EstadoJuego {Menu,Records,Creditos,Jugando,Victoria};

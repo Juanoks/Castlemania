@@ -51,6 +51,9 @@
     <ClCompile Include="src\Juego.cpp">
       <Filter>Archivos de recursos</Filter>
     </ClCompile>
+    <ClCompile Include="src\ArchivoPartidas.cpp">
+      <Filter>Archivos de recursos</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="include\Jugador.h">
@@ -91,6 +94,9 @@
     </ClInclude>
     <ClInclude Include="include\RegistroPartida.h">
       <Filter>Archivos de encabezado</Filter>
+    </ClInclude>
+    <ClInclude Include="include\ArchivoPartidas.h">
+      <Filter>Archivos de recursos</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

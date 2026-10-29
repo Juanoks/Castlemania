@@ -1,30 +1,31 @@
-#include <iostream>  //Ctrl+K, Ctrl+D para ordenar el codigo
+#include <iostream>  // Ctrl+K, Ctrl+D para ordenar el codigo
 #include <string>
 #include <SFML/graphics.hpp> 
 #include <SFML/window.hpp>
 #include <optional>
+#include "ArchivoPartidas.h"
 #include "Constantes.h"
 #include "MenuPrincipal.h"
 #include "EstadoJuego.h"
 #include "Partida.h"
 
-// Ajusta la cámara para que el mundo entre en una ventana de ese tamaño
+// ajusta la camara para que el mundo entre en una ventana de ese tamaño
 // sin deformarse: lo que sobra queda en negro (letterbox).
 void ajustarVista(sf::View& vista, sf::Vector2u tamanioVentana) {
-	// Proporción = ancho / alto. Si son distintas, sobra espacio en algún lado.
+	// proporción = ancho / alto. Si son distintas, sobra espacio en algún lado.
 	float proporcionVentana = static_cast<float>(tamanioVentana.x) / static_cast<float>(tamanioVentana.y);
 	float proporcionMundo = ANCHO_MUNDO / ALTO_MUNDO;
 
-	// El viewport es la parte de la ventana donde se dibuja el mundo, en fracciones (0 a 1).
+	// el viewport es la parte de la ventana donde se dibuja el mundo, en fracciones (0 a 1).
 	sf::FloatRect viewport({ 0.f, 0.f }, { 1.f, 1.f });
 
 	if (proporcionVentana > proporcionMundo) {
-		// Sobra a los costados
+		// sobra a los costados
 		viewport.size.x = proporcionMundo / proporcionVentana;
 		viewport.position.x = (1 - viewport.size.x) / 2;   // lo que sobra, repartido en dos franjas
 	}
 	else {
-		// Sobra arriba y abajo
+		// sobra arriba y abajo
 		viewport.size.y = proporcionVentana / proporcionMundo;
 		viewport.position.y = (1 - viewport.size.y) / 2;
 	}
@@ -33,19 +34,19 @@ void ajustarVista(sf::View& vista, sf::Vector2u tamanioVentana) {
 
 int main() {
 	sf::RenderWindow ventana(sf::VideoMode({ static_cast<unsigned int>(ANCHO_MUNDO), static_cast<unsigned int>(ALTO_MUNDO) }), "Punto B"); // resolucion y titulo en la ventana
-	//Si ponemos directamente {ANCHO_MUNDO, ALTO_MUNDO}, el compilador se queja porque 
-	//pasar de float a entero puede perder decimales.
-	//Hay que convertirlos explicitamente con static_cast<unsigned int>(...)
+	// si ponemos directamente {ANCHO_MUNDO, ALTO_MUNDO}, el compilador se queja porque 
+	// pasar de float a entero puede perder decimales.
+	// hay que convertirlos explicitamente con static_cast<unsigned int>(...)
 
-	ventana.setFramerateLimit(FPS); // setea los frames
+	ventana.setFramerateLimit(FPS); //setea los frames
 
-	//Camara: muestra siempre el mundo entero (ANCHO_MUNDO x ALTO_MUNDO),
-	//sin importar el tamaño de la ventana.
+	// camara: muestra siempre el mundo entero (ANCHO_MUNDO x ALTO_MUNDO),
+	// sin importar el tamaño de la ventana.
 	sf::View vista(sf::FloatRect({ 0.f, 0.f }, { ANCHO_MUNDO, ALTO_MUNDO }));
 	ventana.setView(vista); // todo lo que se dibuje pasa por esta cámara
 	bool pantallaCompleta = false;
 
-	// Titulo y fuentes
+	// titulo y fuentes
 	sf::Font fuente;
 	fuente.openFromFile("fuentes/PressStart2P-Regular.ttf");
 	MenuPrincipal menuPrincipal(fuente);
@@ -56,17 +57,20 @@ int main() {
 	sf::Text victoria(fuente, "", 30);
 	victoria.setPosition(sf::Vector2f(250.f, 200.f));
 	victoria.setFillColor(sf::Color::Magenta);
+	sf::Text records(fuente, "", 15);
+	records.setPosition(sf::Vector2f(100.f, 80.f));
 
 	EstadoJuego estadoActual = EstadoJuego::Menu;
 
 	Partida partida; // el nivel, el jugador y el progreso de la partida en curso
+	ArchivoPartidas registro;
 
-	// Cronometro para medir cuánto dura cada frame.
+	// cronometro para medir cuánto dura cada frame.
 	sf::Clock tiempo;
 
 	float dt = 0.f;
 	// dt (delta time): duración del frame anterior, en segundos (a 60 FPS, ~0.016).
-	// Todas las velocidades del juego estan en "píxeles por segundo" y se multiplican
+	// todas las velocidades del juego estan en "píxeles por segundo" y se multiplican
 	// por dt, así el juego va igual de rápido en una PC lenta o en una rápida.
 
 	while (ventana.isOpen()) {  // isOpen metodo de la clase RenderWindow que devuelve true o false si la ventana (el juego) está abierta
@@ -74,7 +78,7 @@ int main() {
 			if (evento->is<sf::Event::Closed>()) {
 				ventana.close();
 			}
-			// La ventana cambió de tamaño: recalcular dónde se dibuja el mundo
+			// la ventana cambió de tamaño: recalcular dónde se dibuja el mundo
 			// para que no se deforme (si sobra espacio, queda en negro).
 			if (const auto* cambio = evento->getIf<sf::Event::Resized>()) {
 				ajustarVista(vista, cambio->size);
@@ -87,21 +91,21 @@ int main() {
 					pantallaCompleta = !pantallaCompleta; // // alterna: si estaba en pantalla completa sale, y si no, entra
 
 					if (pantallaCompleta) {
-						// Pantalla completa con la resolución del monitor
+						// pantalla completa con la resolución del monitor
 						ventana.create(sf::VideoMode::getDesktopMode(), "Punto B", sf::State::Fullscreen);
 					}
 					else {
-						// Vuelve a la ventana normal, del tamaño del mundo
+						// vuelve a la ventana normal, del tamaño del mundo
 						ventana.create(sf::VideoMode({ static_cast<unsigned int>(ANCHO_MUNDO), static_cast<unsigned int>(ALTO_MUNDO) }), "Punto B");
 					}
 
-					// La ventana nueva arranca de cero: hay que volver a configurarla
+					// la ventana nueva arranca de cero: hay que volver a configurarla
 					ventana.setFramerateLimit(FPS);
 					ajustarVista(vista, ventana.getSize());
 					ventana.setView(vista);
 				}
 
-				//Selecciona las opciones del menu
+				// selecciona las opciones del menu
 				if (estadoActual == EstadoJuego::Menu) {
 					if (tecla->code == sf::Keyboard::Key::Up) {
 						menuPrincipal.subir();
@@ -109,12 +113,27 @@ int main() {
 					if (tecla->code == sf::Keyboard::Key::Down) {
 						menuPrincipal.bajar();
 					}
-					if (tecla->code == sf::Keyboard::Key::Enter) {
+					if (tecla->code == sf::Keyboard::Key::Enter) { 
 						if (menuPrincipal.opcionElegida() == OpcionMenu::Jugar) {
 							estadoActual = EstadoJuego::Jugando;
+
 							if (partida.termino()) {
 								partida = Partida();
 							}
+						}
+						if (menuPrincipal.opcionElegida() == OpcionMenu::Records) {
+							estadoActual = EstadoJuego::Records;
+
+							int recordsRegistro = registro.contarRegistros();
+							std::string texto = "RECORDS\n\n";
+							for (int i = 0; i < recordsRegistro; i++) {
+								RegistroPartida registrosP = registro.leer(i);
+								texto += "Tiempo: " + std::to_string(registrosP.getTiempo()) +
+									" | Muertes: " + std::to_string(registrosP.getMuertes()) + "\n";
+
+							}
+							// a la variable "texto" se le asigna "RECORDS\n\n" y cada Tiempo y Muerte registrada
+							records.setString(texto);
 						}
 						if (menuPrincipal.opcionElegida() == OpcionMenu::Creditos) {
 							estadoActual = EstadoJuego::Creditos;
@@ -133,7 +152,7 @@ int main() {
 
 		}
 
-		dt = tiempo.restart().asSeconds(); // cuanto pasó desde el frame anterior (y reinicia el cronómetro)
+		dt = tiempo.restart().asSeconds(); // cuanto paso desde el frame anterior (y reinicia el cronómetro)
 
 		switch (estadoActual) {
 		case EstadoJuego::Menu:
@@ -147,12 +166,16 @@ int main() {
 
 		case EstadoJuego::Jugando:
 			partida.actualizar(dt);
+
 			if (partida.termino()) {
+				RegistroPartida registroPartida(partida.getTiempoDeCompletado(),partida.getCantidadMuertes());
+				registro.guardar(registroPartida);
+
+
 				estadoActual = EstadoJuego::Victoria;
 				victoria.setString("Gracias por jugar\n\nMuertes: " + std::to_string(partida.getCantidadMuertes()) + 
 					"\n\nTiempo: " + std::to_string(partida.getTiempoDeCompletado()));	
 			}
-
 			break;
 
 		case EstadoJuego::Victoria:		
@@ -164,6 +187,9 @@ int main() {
 		switch (estadoActual) {
 		case EstadoJuego::Menu:
 			menuPrincipal.dibujar(ventana);
+			break;
+		case EstadoJuego::Records:
+			ventana.draw(records);
 			break;
 		case EstadoJuego::Creditos:
 			ventana.draw(nombre);
@@ -177,7 +203,6 @@ int main() {
 
 			break;
 		}
-
 
 		ventana.display();			// "Mostrar" en pantalla todo lo que se dibujó
 
