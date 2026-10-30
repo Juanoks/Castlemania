@@ -1,5 +1,6 @@
 #include <iostream>  // Ctrl+K, Ctrl+D para ordenar el codigo
 #include <string>
+#include <vector>
 #include <SFML/graphics.hpp> 
 #include <SFML/window.hpp>
 #include <optional>
@@ -8,6 +9,20 @@
 #include "MenuPrincipal.h"
 #include "EstadoJuego.h"
 #include "Partida.h"
+
+// convierte segundos (con decimales) en texto con formato minutos:segundos
+std::string ajustarTiempo(float segundos) {
+	int totalSegundos = static_cast<int>(segundos); 
+	int minutos = totalSegundos / 60;               
+	int segundosRestantes = totalSegundos % 60;    
+
+	std::string tiempo = std::to_string(minutos) + ":";
+	if (segundosRestantes < 10) {
+		tiempo += "0"; // para que quede "2:05" y no "2:5"
+	}
+	tiempo += std::to_string(segundosRestantes);
+	return tiempo;
+}
 
 // ajusta la camara para que el mundo entre en una ventana de ese tamaño
 // sin deformarse: lo que sobra queda en negro (letterbox).
@@ -125,14 +140,30 @@ int main() {
 							estadoActual = EstadoJuego::Records;
 
 							int recordsRegistro = registro.contarRegistros();
+							std::vector<RegistroPartida> lista;
 							std::string texto = "RECORDS\n\n";
 							for (int i = 0; i < recordsRegistro; i++) {
 								RegistroPartida registrosP = registro.leer(i);
-								texto += "Tiempo: " + std::to_string(registrosP.getTiempo()) +
-									" | Muertes: " + std::to_string(registrosP.getMuertes()) + "\n";
-
+								lista.push_back(registrosP);
 							}
-							// a la variable "texto" se le asigna "RECORDS\n\n" y cada Tiempo y Muerte registrada
+
+							for (int p = 0; p < static_cast<int>(lista.size()) - 1; p++) {
+								for (int j = 0; j < static_cast<int>(lista.size()) - 1; j++) {        // recorre los pares de vecinos
+									if (lista[j].getTiempo() > lista[j+1].getTiempo()) {  
+										RegistroPartida aux = lista[j];     
+										lista[j] = lista[j+1];                
+										lista[j + 1] = aux;          
+									}
+								}
+							}
+
+							for (int i = 0; i < lista.size() && i < MAX_RECORDS; i++) {
+								texto += "Tiempo: " + ajustarTiempo(lista[i].getTiempo()) +
+									" | Muertes: " + std::to_string(lista[i].getMuertes()) + "\n";
+							}
+
+
+							// a la variable "texto" se le asigna RECORDS y cada Tiempo y Muerte en el registro
 							records.setString(texto);
 						}
 						if (menuPrincipal.opcionElegida() == OpcionMenu::Creditos) {
@@ -174,7 +205,7 @@ int main() {
 
 				estadoActual = EstadoJuego::Victoria;
 				victoria.setString("Gracias por jugar\n\nMuertes: " + std::to_string(partida.getCantidadMuertes()) + 
-					"\n\nTiempo: " + std::to_string(partida.getTiempoDeCompletado()));	
+					"\n\nTiempo: " + ajustarTiempo(partida.getTiempoDeCompletado()));
 			}
 			break;
 
