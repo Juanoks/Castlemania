@@ -5,7 +5,7 @@ Jugador::Jugador(sf::Vector2f posicion) {
     _forma.setSize(sf::Vector2f(50.f, 80.f)); 
     // Vector2f Es una clase simple que representa un par de números: una coordenada x y una coordenada y.
     // Vector2f = vector 2D de floats (10.f = float | 10.0 = double) Vector2f espera 2 floats.  
-    _forma.setFillColor(sf::Color::Red);
+    _forma.setFillColor(sf::Color::Blue);
 
     _velocidadX = 300.f;
     _gravedad = 980.f;

@@ -16,14 +16,17 @@ void Nivel::actualizar(float dt) {
 void Nivel::cargarNivel(int numeroNivel) {
 	for (Obstaculo* o : _obstaculos) { delete o; }
 	_obstaculos.clear(); _plataformas.clear(); _bloques.clear();
+
+	// Valores por defecto de los niveles. si se quiere se puede cambiar en el nivel que se quiera
 	_numeroNivel = numeroNivel;
-	_meta = metaPosicion;
+	_meta = metaPosicion; 
 	_respawn = sf::Vector2f(50.f, 420.f);
 
 	if (numeroNivel == 1) {
 		_bloques.push_back(Bloque(sf::Vector2f(0.f, 500.f), sf::Vector2f(960.f, 40.f))); // agrego bloques/suelo en el nivel
 		// posicion y tamanio de bloque (x,y) (ancho,alto)
 		_obstaculos.push_back(new Pinche(sf::Vector2f(350.f, 462.5f))); // agrego obstaculos en el nivel
+		_obstaculos.push_back(new PilarMovil(sf::Vector2f(500.f, 420.f), sf::Vector2f(40.f, 80.f),  500.f,  750.f,  150.f));
 	}
 	else if (numeroNivel == 2) {
 		_bloques.push_back(Bloque(sf::Vector2f(0.f, 500.f), sf::Vector2f(960.f, 40.f)));
