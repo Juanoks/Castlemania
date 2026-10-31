@@ -18,6 +18,7 @@ public:
 
 	void actualizar(float dt);
 	void dibujar(sf::RenderWindow& ventana);
+	void reiniciarPartida();
 	bool termino() const;
 	float getTiempoDeCompletado() const;
 	int getCantidadMuertes() const;

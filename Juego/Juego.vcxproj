@@ -154,6 +154,7 @@
     <ClCompile Include="src\MenuPrincipal.cpp" />
     <ClCompile Include="src\Meta.cpp" />
     <ClCompile Include="src\Nivel.cpp" />
+    <ClCompile Include="src\Obstaculo.cpp" />
     <ClCompile Include="src\Partida.cpp" />
     <ClCompile Include="src\PilarMovil.cpp" />
     <ClCompile Include="src\Pinche.cpp" />
@@ -170,6 +171,7 @@
     <ClInclude Include="include\MenuPrincipal.h" />
     <ClInclude Include="include\Meta.h" />
     <ClInclude Include="include\Nivel.h" />
+    <ClInclude Include="include\Obstaculo.h" />
     <ClInclude Include="include\Partida.h" />
     <ClInclude Include="include\PilarMovil.h" />
     <ClInclude Include="include\Pinche.h" />

@@ -54,6 +54,9 @@
     <ClCompile Include="src\ArchivoPartidas.cpp">
       <Filter>Archivos de recursos</Filter>
     </ClCompile>
+    <ClCompile Include="src\Obstaculo.cpp">
+      <Filter>Archivos de origen</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="include\Jugador.h">
@@ -97,6 +100,9 @@
     </ClInclude>
     <ClInclude Include="include\ArchivoPartidas.h">
       <Filter>Archivos de recursos</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Obstaculo.h">
+      <Filter>Archivos de encabezado</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

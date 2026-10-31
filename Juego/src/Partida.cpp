@@ -9,6 +9,7 @@ void Partida::actualizar(float dt) {
 	if (_terminada) { //la partida ya termino: no hay nada que actualizar
 		return;
 	}
+	_nivel.actualizar(dt);
 
 	_jugador.mover(dt);
 	for (const Bloque& b : _nivel.getBloques()) {
@@ -23,15 +24,15 @@ void Partida::actualizar(float dt) {
 		_jugador.aterrizarEn(t.getHitbox());
 	}
 
-	if (_nivel.jugadorTocoPinche(_jugador.getHitbox()) || _nivel.jugadorCayoAlVacio(_jugador.getHitbox())) {
+	if (_nivel.jugadorTocoObstaculo(_jugador.getHitbox()) || _nivel.jugadorCayoAlVacio(_jugador.getHitbox())) {
 		_jugador.reiniciar(_nivel.getRespawn());
 		_cantidadMuertes++;
 	}
 
 	if (_nivel.jugadorTocoMeta(_jugador.getHitbox())) {
 		if (_numeroNivel < _totalNiveles) {
-			_numeroNivel++;
-			_nivel = Nivel(_numeroNivel);
+			_numeroNivel++;	
+			_nivel.cargarNivel(_numeroNivel);
 			_jugador.reiniciar(_nivel.getRespawn());
 		}
 		else {
@@ -46,6 +47,16 @@ void Partida::actualizar(float dt) {
 void Partida::dibujar(sf::RenderWindow& ventana) {
 	_nivel.dibujar(ventana);
 	_jugador.dibujar(ventana);
+}
+
+//vuelve todo al estado inicial (igual que el constructor) sin copiar la Partida
+void Partida::reiniciarPartida() {
+	_numeroNivel = 1;
+	_nivel.cargarNivel(_numeroNivel);
+	_jugador.reiniciar(_nivel.getRespawn());
+	_terminada = false;
+	_tiempoDeCompletado = 0;
+	_cantidadMuertes = 0;
 }
 
 //pregunta para main: ¿ya se paso el ultimo nivel?

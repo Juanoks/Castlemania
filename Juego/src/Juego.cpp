@@ -63,7 +63,10 @@ int main() {
 
 	// titulo y fuentes
 	sf::Font fuente;
-	fuente.openFromFile("fuentes/PressStart2P-Regular.ttf");
+	if (!fuente.openFromFile("fuentes/PressStart2P-Regular.ttf")) {
+		std::cout << "No se pudo cargar la fuente";
+		return -1;
+	}
 	MenuPrincipal menuPrincipal(fuente);
 
 
@@ -133,7 +136,7 @@ int main() {
 							estadoActual = EstadoJuego::Jugando;
 
 							if (partida.termino()) {
-								partida = Partida();
+								partida.reiniciarPartida();
 							}
 						}
 						if (menuPrincipal.opcionElegida() == OpcionMenu::Records) {
