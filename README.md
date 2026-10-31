@@ -27,4 +27,4 @@ al punto B de cada nivel esquivando obstáculos.
 
 ## Estado
 
-- Pendiente: archivos `.dat`, sprites, sonido, etc.
+- Pendiente: más obstaculos, niveles, sprites, sonido, etc.
