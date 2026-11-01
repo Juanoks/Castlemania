@@ -22,6 +22,7 @@ al punto B de cada nivel esquivando obstáculos.
 |---|---|
 | A / D | Moverse |
 | W | Saltar |
+| Click Derecho | Dispara flecha |
 | F11 | Pantalla completa |
 | ESC | Volver al menu |
 
