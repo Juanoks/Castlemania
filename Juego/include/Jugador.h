@@ -9,8 +9,11 @@ private:
     float _desplazamientoX;
     float _gravedad;
     float _fuerzaSalto;
+    int _saltosRestantes;
     float _alturaPiesAnterior;
     bool _enElSuelo;
+    bool _saltoApretadoAntes;
+    float _cortarSalto;
 
 public:
     Jugador(sf::Vector2f posicion);
