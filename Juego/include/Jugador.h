@@ -14,6 +14,7 @@ private:
     bool _enElSuelo;
     bool _saltoApretadoAntes;
     float _cortarSalto;
+    float _velocidadMaximaCaida;
 
 public:
     Jugador(sf::Vector2f posicion);

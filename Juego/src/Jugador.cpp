@@ -11,6 +11,7 @@ Jugador::Jugador(sf::Vector2f posicion) {
 	_gravedad = 980.f;
 	_fuerzaSalto = -420.f;
 	_cortarSalto = 0.45f;
+	_velocidadMaximaCaida = 500.f;
 
 	reiniciar(posicion);
 }
@@ -67,6 +68,8 @@ void Jugador::actualizar(float dt) {
 	_alturaPiesAnterior = getHitbox().position.y + getHitbox().size.y;
 	_enElSuelo = false;
 	_velocidadY += _gravedad * dt;  // la gravedad cambia la VELOCIDAD
+
+	if (_velocidadY > _velocidadMaximaCaida) { _velocidadY = _velocidadMaximaCaida; } // tope de caida: evita caer cada vez mas rapido
 
 	_forma.move(sf::Vector2f(0.f, _velocidadY * dt)); // la velocidad cambia la POSICION
 }
