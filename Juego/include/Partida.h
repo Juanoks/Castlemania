@@ -10,7 +10,6 @@
 class Partida {
 private:
 	int _numeroNivel;
-	int _totalNiveles;
 	Nivel _nivel;      // va antes que _jugador: el jugador se crea en el respawn del nivel
 	Jugador _jugador;  // (los atributos se inicializan en el orden en que estan declarados)
 	std::vector<Flecha> _flechas;
@@ -28,4 +27,11 @@ public:
 	int getCantidadMuertes() const;
 
 	void dispararFlecha(sf::Vector2f destino);
+
+private:
+	// partes de actualizar()
+	void actualizarFlechas(float dt);
+	void moverJugador(float dt);
+	void revisarMuerte();
+	void revisarSalida();
 };

@@ -3,7 +3,7 @@
 #include <cmath>
 // "origen" (el jugador) que sale disparada hacia "destino" (el mouse)
 Flecha::Flecha(sf::Vector2f origen, sf::Vector2f destino) : _gravedad(600.f), _clavada(false) {
-	_forma.setSize(sf::Vector2f(16.f, 4.f));
+	_forma.setSize(sf::Vector2f(20.f, 4.f));
 	_forma.setFillColor(sf::Color::White);
 	_forma.setPosition(origen);
 

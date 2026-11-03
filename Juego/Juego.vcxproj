@@ -153,7 +153,7 @@
     <ClCompile Include="src\Juego.cpp" />
     <ClCompile Include="src\Jugador.cpp" />
     <ClCompile Include="src\MenuPrincipal.cpp" />
-    <ClCompile Include="src\Meta.cpp" />
+    <ClCompile Include="src\Salida.cpp" />
     <ClCompile Include="src\Nivel.cpp" />
     <ClCompile Include="src\Obstaculo.cpp" />
     <ClCompile Include="src\Partida.cpp" />
@@ -171,7 +171,7 @@
     <ClInclude Include="include\Flecha.h" />
     <ClInclude Include="include\Jugador.h" />
     <ClInclude Include="include\MenuPrincipal.h" />
-    <ClInclude Include="include\Meta.h" />
+    <ClInclude Include="include\Salida.h" />
     <ClInclude Include="include\Nivel.h" />
     <ClInclude Include="include\Obstaculo.h" />
     <ClInclude Include="include\Partida.h" />

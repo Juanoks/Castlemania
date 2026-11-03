@@ -1,8 +1,9 @@
 #include "Jugador.h"
+#include "Constantes.h"
 #include <SFML/window.hpp>
 
 Jugador::Jugador(sf::Vector2f posicion) {
-	_forma.setSize(sf::Vector2f(24.f, 40.f));
+	_forma.setSize(sf::Vector2f(ANCHO_JUGADOR, ALTO_JUGADOR));
 	// Vector2f Es una clase simple que representa un par de números: una coordenada x y una coordenada y.
 	// Vector2f = vector 2D de floats (10.f = float | 10.0 = double) Vector2f espera 2 floats.  
 	_forma.setFillColor(sf::Color::Blue);

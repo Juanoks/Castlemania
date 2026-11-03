@@ -21,7 +21,7 @@
     <ClCompile Include="src\Pinche.cpp">
       <Filter>Archivos de origen</Filter>
     </ClCompile>
-    <ClCompile Include="src\Meta.cpp">
+    <ClCompile Include="src\Salida.cpp">
       <Filter>Archivos de origen</Filter>
     </ClCompile>
     <ClCompile Include="src\Nivel.cpp">
@@ -68,7 +68,7 @@
     <ClInclude Include="include\Pinche.h">
       <Filter>Archivos de encabezado</Filter>
     </ClInclude>
-    <ClInclude Include="include\Meta.h">
+    <ClInclude Include="include\Salida.h">
       <Filter>Archivos de encabezado</Filter>
     </ClInclude>
     <ClInclude Include="include\Nivel.h">
