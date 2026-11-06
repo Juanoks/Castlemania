@@ -5,14 +5,14 @@
 sf::Vector2f salidaTamanio(30.f, 120.f);
 
 // Mapa: cada fila es una sala y cada columna un lado de esa sala.
-// izquierda, derecha, arriba, abajo | 0 = pared cerrada | -1 = fin del juego
+// izquierda, derecha, arriba, abajo | 0 = pared cerrada | -1 = fin del juego | -2/TERRENO_A_MANO = hacer el piso de esa sala a mano
 const int CONEXIONES[31][4] = {
 	{0, 0, 0, 0},  // 0: no se usa (asi el numero de fila coincide con el numero de sala)
 	{0, 2, 0, 0},  // 1: inicio
 	{1, 3, 0, 0},  // 2
 	{2, 0, 0, 4},  // 3   (arriba ira a la 26)
 	{0, 0, 3, 5},  // 4
-	{0, 6, 4, 0},  // 5
+	{0, 6, 4, TERRENO_A_MANO},  // 5
 	{5, 7, 0, 0},  // 6
 	{6, 8, 0, 0},  // 7   (arriba ira a la 22)
 	{7, -1, 0, 9},  // 8   sala central (derecha ira a la 30, el jefe; por ahora -1 = fin del juego; arriba ira a la 29)
@@ -42,6 +42,10 @@ void Nivel::cargarNivel(int numeroNivel) {
 	techo(CONEXIONES[numeroNivel][2]);
 	piso(CONEXIONES[numeroNivel][3]);
 
+	if (numeroNivel == 0) {
+		_bloques.push_back(Bloque(sf::Vector2f(350.f, 400.f), sf::Vector2f(200.f, 40.f)));
+	}
+
 	if (numeroNivel == 1) {
 		_obstaculos.push_back(new Pinche(sf::Vector2f(350.f, Y_PISO - 37.5f))); // agrego obstaculos en el nivel
 		_obstaculos.push_back(new PilarMovil(sf::Vector2f(500.f, Y_PISO - 80.f), sf::Vector2f(40.f, 80.f), 500.f, 750.f, 150.f));
@@ -60,7 +64,9 @@ void Nivel::cargarNivel(int numeroNivel) {
 
 	} // posicion y tamanio de bloque (x,y) (ancho,alto)
 	else if (numeroNivel == 5) {
-		
+		_bloques.push_back(Bloque(sf::Vector2f(0.f, Y_PISO), sf::Vector2f(300.f, GROSOR_PARED)));
+		_bloques.push_back(Bloque(sf::Vector2f(450.f, Y_PISO), sf::Vector2f(510.f, GROSOR_PARED)));
+
 		_plataformas.push_back(Plataforma(sf::Vector2f(125.f, 400.f), sf::Vector2f(80.f, 10.f)));
 		_plataformas.push_back(Plataforma(sf::Vector2f(50.f, 300.f), sf::Vector2f(80.f, 10.f)));
 		_plataformas.push_back(Plataforma(sf::Vector2f(50.f, 180.f), sf::Vector2f(80.f, 10.f)));
@@ -139,6 +145,7 @@ Nivel::~Nivel() {
 void Nivel::paredDerecha(int destino, float inicioHueco) {
 	float posicionX = ANCHO_MUNDO - GROSOR_PARED; // la pared va pegada al borde derecho del mundo
 	float finHueco = inicioHueco + TAMANIO_HUECO; // donde termina el hueco (y empieza el bloque de abajo)
+	if (destino == TERRENO_A_MANO) {return;}
 	if (destino == 0) {
 		// sin salida: un solo bloque de arriba a abajo
 		_bloques.push_back(Bloque(sf::Vector2f(posicionX, 0.f), sf::Vector2f(GROSOR_PARED, ALTO_MUNDO)));
@@ -160,6 +167,7 @@ void Nivel::paredDerecha(int destino, float inicioHueco) {
 void Nivel::paredIzquierda(int destino, float inicioHueco) {
 	float posicionX = 0.f;
 	float finHueco = inicioHueco + TAMANIO_HUECO;
+	if (destino == TERRENO_A_MANO) { return; }
 	if (destino == 0) {
 		_bloques.push_back(Bloque(sf::Vector2f(posicionX, 0.f), sf::Vector2f(GROSOR_PARED, ALTO_MUNDO)));
 	}
@@ -175,6 +183,7 @@ void Nivel::paredIzquierda(int destino, float inicioHueco) {
 
 void Nivel::techo(int destino, float inicioHueco) {
 	float finHueco = inicioHueco + TAMANIO_HUECO;
+	if (destino == TERRENO_A_MANO) { return; }
 	if (destino == 0) {
 		_bloques.push_back(Bloque(sf::Vector2f(0.f, 0.f), sf::Vector2f(ANCHO_MUNDO, GROSOR_PARED)));
 	}
@@ -191,6 +200,7 @@ void Nivel::piso(int destino, float inicioHueco) {
 	float posicionY = Y_PISO;
 	float alto = ALTO_MUNDO - posicionY;
 	float finHueco = inicioHueco + TAMANIO_HUECO;
+	if (destino == TERRENO_A_MANO) { return; }
 	if (destino == 0) {
 		_bloques.push_back(Bloque(sf::Vector2f(0.f, posicionY), sf::Vector2f(ANCHO_MUNDO, alto)));
 	}

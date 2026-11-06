@@ -1,9 +1,9 @@
-#include "Flecha.h"
+#include "Lanza.h"
 #include "Constantes.h"
 #include <cmath>
-// "origen" (el jugador) que sale disparada hacia "destino" (el mouse)
-Flecha::Flecha(sf::Vector2f origen, sf::Vector2f destino) : _gravedad(600.f), _clavada(false) {
-	_forma.setSize(sf::Vector2f(20.f, 4.f));
+// "origen" (el jugador) que sale lanzada hacia "destino" (el mouse)
+Lanza::Lanza(sf::Vector2f origen, sf::Vector2f destino) : _gravedad(600.f), _clavada(false) {
+	_forma.setSize(sf::Vector2f(48.f, 4.f)); // larga (el doble del jugador) para poder pararse encima
 	_forma.setFillColor(sf::Color::White);
 	_forma.setPosition(origen);
 
@@ -16,11 +16,11 @@ Flecha::Flecha(sf::Vector2f origen, sf::Vector2f destino) : _gravedad(600.f), _c
 	// si el clic fue justo sobre el origen, el largo es 0 y no se puede dividir
 	if (largo > 0){
 		sf::Vector2f direccion = diferencia / largo;
-		_velocidad = direccion * VELOCIDAD_FLECHA;
+		_velocidad = direccion * VELOCIDAD_LANZA;
 	}
 }
 
-void Flecha::actualizar(float dt) {
+void Lanza::actualizar(float dt) {
 	if (!_clavada) {
 		_velocidad.y += _gravedad * dt;
 		_forma.move(_velocidad * dt);
@@ -28,19 +28,19 @@ void Flecha::actualizar(float dt) {
 }
 
 
-void Flecha::clavar() {
+void Lanza::clavar() {
 	_velocidad = sf::Vector2f(0.f,0.f);
 	_clavada = true;
 }
 
-bool Flecha::estaClavada() const {
+bool Lanza::estaClavada() const {
 	return _clavada;
 }
 
-void Flecha::dibujar(sf::RenderWindow& ventana) {
+void Lanza::dibujar(sf::RenderWindow& ventana) {
 	ventana.draw(_forma);
 }
 
-sf::FloatRect Flecha::getHitbox() const {
+sf::FloatRect Lanza::getHitbox() const {
 	return _forma.getGlobalBounds();
 }

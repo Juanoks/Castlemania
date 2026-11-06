@@ -149,7 +149,7 @@
   <ItemGroup>
     <ClCompile Include="src\ArchivoPartidas.cpp" />
     <ClCompile Include="src\Bloque.cpp" />
-    <ClCompile Include="src\Flecha.cpp" />
+    <ClCompile Include="src\Lanza.cpp" />
     <ClCompile Include="src\Juego.cpp" />
     <ClCompile Include="src\Jugador.cpp" />
     <ClCompile Include="src\MenuPrincipal.cpp" />
@@ -168,7 +168,7 @@
     <ClInclude Include="include\Bloque.h" />
     <ClInclude Include="include\Constantes.h" />
     <ClInclude Include="include\EstadoJuego.h" />
-    <ClInclude Include="include\Flecha.h" />
+    <ClInclude Include="include\Lanza.h" />
     <ClInclude Include="include\Jugador.h" />
     <ClInclude Include="include\MenuPrincipal.h" />
     <ClInclude Include="include\Salida.h" />

@@ -107,7 +107,7 @@ int main() {
 				if (clic->button == sf::Mouse::Button::Left && estadoActual == EstadoJuego::Jugando) {
 					// el mouse da pixeles de la ventana; se pasan a coordenadas del mundo (por la camara)
 					sf::Vector2f destino = ventana.mapPixelToCoords(clic->position);
-					partida.dispararFlecha(destino);
+					partida.lanzarLanza(destino);
 				}
 			}
 

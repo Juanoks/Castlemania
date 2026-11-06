@@ -1,8 +1,8 @@
 #include "Partida.h"
 
 // Nivel y Jugador no tienen constructor vacio: por eso se crean en la lista de inicializacion.
-Partida::Partida() : _numeroNivel(5), _nivel(_numeroNivel), _jugador(_nivel.getRespawn()), 
-_terminada(false), _tiempoDeCompletado(0), _cantidadMuertes(0) {}
+Partida::Partida() : _numeroNivel(0), _nivel(_numeroNivel), _jugador(_nivel.getRespawn()), 
+_terminada(false), _lanzaDisponible(true), _tiempoDeCompletado(0), _cantidadMuertes(0) { }
 
 // un frame de juego. Cada paso esta en su propio metodo (abajo), en el orden en que tiene que pasar.
 void Partida::actualizar(float dt) {
@@ -10,7 +10,7 @@ void Partida::actualizar(float dt) {
 		return;
 	}
 	_nivel.actualizar(dt);   // obstaculos (por ejemplo, los pilares que se mueven)
-	actualizarFlechas(dt);   // mover, clavar y borrar las que se fueron
+	actualizarLanzas(dt);   // mover, clavar y borrar las que se fueron
 	moverJugador(dt);        // movimiento por ejes y choques
 	revisarMuerte();         // obstaculos o vacio
 	revisarSalida();           // pasar de nivel o terminar la partida
@@ -19,27 +19,27 @@ void Partida::actualizar(float dt) {
 }
 
 
-void Partida::actualizarFlechas(float dt) { // flechas: moverlas, clavarlas al tocar un bloque y borrar las que salieron del mundo.
-	for (Flecha& f : _flechas) {
+void Partida::actualizarLanzas(float dt) { // lanzas: moverlas, clavarlas al tocar un bloque y borrar las que salieron del mundo.
+	for (Lanza& f : _lanzas) {
 		f.actualizar(dt);
 	}
-	for (Flecha& f : _flechas) {
+	for (Lanza& f : _lanzas) {
 		if(f.estaClavada()){
-			continue; // las flechas ya clavadas no se revisan, las demas se clavan al tocar un bloque
+			continue; // las lanzas ya clavadas no se revisan, las demas se clavan al tocar un bloque
 		}
 		for (const Bloque& b : _nivel.getBloques()) {
-			// si la hitbox de la flecha se cruza con la del bloque. la flecha se clava
+			// si la hitbox de la lanza se cruza con la del bloque. la lanza se clava
 			if (f.getHitbox().findIntersection(b.getHitbox())) {
 				f.clavar();
 			}
 		}
 	}
-	// borra las flechas que salieron del mundo (por abajo o por los costados).
-	for (int i = static_cast<int>(_flechas.size()) - 1; i >= 0; i--) {
-		sf::FloatRect flechaHitBox =  _flechas[i].getHitbox();
-		if (flechaHitBox.position.y > ALTO_MUNDO || flechaHitBox.position.x > ANCHO_MUNDO || 
-			flechaHitBox.position.x + flechaHitBox.size.x < 0) {
-			_flechas.erase(_flechas.begin() + i);
+	// borra las lanzas que salieron del mundo (por abajo o por los costados).
+	for (int i = static_cast<int>(_lanzas.size()) - 1; i >= 0; i--) {
+		sf::FloatRect lanzaHitBox =  _lanzas[i].getHitbox();
+		if (lanzaHitBox.position.y > ALTO_MUNDO || lanzaHitBox.position.x > ANCHO_MUNDO || 
+			lanzaHitBox.position.x + lanzaHitBox.size.x < 0) {
+			_lanzas.erase(_lanzas.begin() + i);
 		}
 	}
 }
@@ -61,10 +61,15 @@ void Partida::moverJugador(float dt) {
 	for (const Terreno& t : _nivel.getPlataformas()) {
 		_jugador.aterrizarEn(t.getHitbox());
 	}
-	// las flechas clavadas funcionan como plataformas: se puede aterrizar encima
-	for (const Flecha& f : _flechas) {
-		if (f.estaClavada()) {
-			_jugador.aterrizarEn(f.getHitbox());
+
+	// recarga la lanza solo si esta parado sobre un bloque o una plataforma
+	if (_jugador.estaEnElSuelo()) {
+		_lanzaDisponible = true;
+	}
+	// las lanzas clavadas funcionan como plataformas: se puede aterrizar encima
+	for (const Lanza& l : _lanzas) {
+		if (l.estaClavada()) {
+			_jugador.aterrizarEn(l.getHitbox());
 		}
 	}
 }
@@ -92,7 +97,7 @@ void Partida::revisarSalida() {
 		else {
 			_numeroNivel = destino;            // la salida decide a que sala se va
 			_nivel.cargarNivel(_numeroNivel);
-			_flechas.clear();
+			_lanzas.clear();
 			_jugador.reiniciar(entrada);       // aparece donde indica la salida
 		}
 	}
@@ -102,7 +107,7 @@ void Partida::revisarSalida() {
 void Partida::dibujar(sf::RenderWindow& ventana) {
 	_nivel.dibujar(ventana);
 	_jugador.dibujar(ventana);
-	for (Flecha& f : _flechas) {
+	for (Lanza& f : _lanzas) {
 		f.dibujar(ventana);
 	}
 }
@@ -115,7 +120,8 @@ void Partida::reiniciarPartida() {
 	_terminada = false;
 	_tiempoDeCompletado = 0;
 	_cantidadMuertes = 0;
-	_flechas.clear();
+	_lanzas.clear();
+	_lanzaDisponible = true;
 }
 
 
@@ -132,15 +138,19 @@ int Partida::getCantidadMuertes() const {
 	return _cantidadMuertes;
 }
 
-void Partida::dispararFlecha(sf::Vector2f destino) {
-	for (const Flecha& f : _flechas) {
-		if (!f.estaClavada()) {
-			return;
-		}
+void Partida::lanzarLanza(sf::Vector2f destino) {
+	if (!_lanzas.empty()) { // si hay lanza disponible
+		_lanzas.clear();
+		_lanzaDisponible = false;
+		return;
 	}
+
+	if (!_lanzaDisponible) {
+		return;
+	}
+	
 	sf::Vector2f centroJugador = _jugador.getHitbox().getCenter();
-	if (_flechas.size() >= MAX_FLECHAS) {
-		_flechas.erase(_flechas.begin());
-	}
-	_flechas.push_back(Flecha(centroJugador,destino));
+	
+	_lanzas.push_back(Lanza(centroJugador,destino));
+	_lanzaDisponible = false;
 }

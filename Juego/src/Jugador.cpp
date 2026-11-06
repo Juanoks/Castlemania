@@ -138,6 +138,10 @@ void Jugador::chocarVertical(sf::FloatRect bloqueHitbox) {
 	}
 }
 
+bool Jugador::estaEnElSuelo() const {
+	return _enElSuelo;
+}
+
 /*
 sf::FloatRect es “un rectángulo guardado como números”. Es una clase simple de SFML, parecida a Vector2f:
 así como Vector2f guarda un par de floats (x, y), un FloatRect guarda dos Vector2f:

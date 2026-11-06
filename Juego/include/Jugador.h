@@ -26,5 +26,6 @@ public:
     void aterrizarEn(sf::FloatRect plataformaHitbox);
     void chocarHorizontal(sf::FloatRect bloqueHitbox);
     void chocarVertical(sf::FloatRect bloqueHitbox);
+    bool estaEnElSuelo() const;
     sf::FloatRect getHitbox() const;
 };
