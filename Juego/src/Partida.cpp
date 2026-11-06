@@ -28,9 +28,17 @@ void Partida::actualizarLanzas(float dt) { // lanzas: moverlas, clavarlas al toc
 			continue; // las lanzas ya clavadas o volviendo no se revisan, las demas se clavan al tocar un bloque
 		}
 		for (const Bloque& b : _nivel.getBloques()) {
-			// si la hitbox de la lanza se cruza con la del bloque. la lanza se clava
+			// si la hitbox de la lanza se cruza con la del bloque; la lanza se clava si es de madera
 			if (l.getHitbox().findIntersection(b.getHitbox())) {
-				l.clavar();
+				if (b.esMadera()) {
+					l.clavar();
+					break;
+				}
+				else {
+					l.volver();
+					break;
+				}
+				
 			}
 		}
 	}

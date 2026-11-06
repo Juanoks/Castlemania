@@ -42,8 +42,13 @@ void Nivel::cargarNivel(int numeroNivel) {
 	techo(CONEXIONES[numeroNivel][2]);
 	piso(CONEXIONES[numeroNivel][3]);
 
+	// posicion y tamanio  (x,y), (ancho,alto)
 	if (numeroNivel == 0) {
 		_bloques.push_back(Bloque(sf::Vector2f(350.f, 400.f), sf::Vector2f(200.f, 40.f)));
+		_bloques.push_back(Bloque(sf::Vector2f(800.f, 300.f), sf::Vector2f(20.f, 100.f), true));
+		_obstaculos.push_back(new Pinche(sf::Vector2f(150.f, Y_PISO - 37.5f)));
+		_obstaculos.push_back(new PilarMovil(sf::Vector2f(600.f, Y_PISO - 80.f), sf::Vector2f(40.f, 80.f), 600.f, 800.f, 150.f));
+		_plataformas.push_back(Plataforma(sf::Vector2f(200.f, 300.f), sf::Vector2f(100.f, 20.f)));
 	}
 
 	if (numeroNivel == 1) {
@@ -62,7 +67,7 @@ void Nivel::cargarNivel(int numeroNivel) {
 		_obstaculos.push_back(new Pinche(sf::Vector2f(427.5f, 365.5f)));
 		_bloques.push_back(Bloque(sf::Vector2f(700.f, 300.f), sf::Vector2f(200.f, 40.f)));
 
-	} // posicion y tamanio de bloque (x,y) (ancho,alto)
+	} 
 	else if (numeroNivel == 5) {
 		_bloques.push_back(Bloque(sf::Vector2f(0.f, Y_PISO), sf::Vector2f(300.f, GROSOR_PARED)));
 		_bloques.push_back(Bloque(sf::Vector2f(450.f, Y_PISO), sf::Vector2f(510.f, GROSOR_PARED)));
