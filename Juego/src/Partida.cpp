@@ -1,7 +1,7 @@
 #include "Partida.h"
 
 // Nivel y Jugador no tienen constructor vacio: por eso se crean en la lista de inicializacion.
-Partida::Partida() : _numeroNivel(1), _nivel(_numeroNivel), _jugador(_nivel.getRespawn()), 
+Partida::Partida() : _numeroNivel(5), _nivel(_numeroNivel), _jugador(_nivel.getRespawn()), 
 _terminada(false), _tiempoDeCompletado(0), _cantidadMuertes(0) {}
 
 // un frame de juego. Cada paso esta en su propio metodo (abajo), en el orden en que tiene que pasar.

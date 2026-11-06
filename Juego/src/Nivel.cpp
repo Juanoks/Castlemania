@@ -4,6 +4,22 @@
 // Tamanio de la salida por defecto (un hueco angosto y alto, como la meta de antes)
 sf::Vector2f salidaTamanio(30.f, 120.f);
 
+// Mapa: cada fila es una sala y cada columna un lado de esa sala.
+// izquierda, derecha, arriba, abajo | 0 = pared cerrada | -1 = fin del juego
+const int CONEXIONES[31][4] = {
+	{0, 0, 0, 0},  // 0: no se usa (asi el numero de fila coincide con el numero de sala)
+	{0, 2, 0, 0},  // 1: inicio
+	{1, 3, 0, 0},  // 2
+	{2, 0, 0, 4},  // 3   (arriba ira a la 26)
+	{0, 0, 3, 5},  // 4
+	{0, 6, 4, 0},  // 5
+	{5, 7, 0, 0},  // 6
+	{6, 8, 0, 0},  // 7   (arriba ira a la 22)
+	{7, -1, 0, 9},  // 8   sala central (derecha ira a la 30, el jefe; por ahora -1 = fin del juego; arriba ira a la 29)
+	{0, 10, 8, 0},  // 9   (izquierda ira a la 21, abajo a la 14)
+	{9, 0, 0, 0}   // 10  (derecha ira a la 11)
+};
+
 Nivel::Nivel(int numeroNivel) : _numeroNivel(numeroNivel) {
 	cargarNivel(numeroNivel);
 }
@@ -18,75 +34,46 @@ void Nivel::cargarNivel(int numeroNivel) {
 	for (Obstaculo* o : _obstaculos) { delete o; }
 	_obstaculos.clear(); _plataformas.clear(); _bloques.clear(); _salidas.clear();
 
-	// Valores por defecto de los niveles. si se quiere se puede cambiar en el nivel que se quiera
 	_numeroNivel = numeroNivel;
 	_respawn = sf::Vector2f(50.f, Y_PISO - ALTO_JUGADOR); // parado sobre el piso
 
-	if (numeroNivel == 1) {
-		// () = pared sin salida | (numero de sala) salida
-		// si se quiere ajustar la posicion de la salida es en el segundo parametro. 
-		// Por defecto: en las paredes el hueco queda pegado al piso, y en piso y techo queda centrado
-		techo();
-		piso();
-		paredIzquierda();
-		paredDerecha(2);
+	paredIzquierda(CONEXIONES[numeroNivel][0]);
+	paredDerecha(CONEXIONES[numeroNivel][1]);
+	techo(CONEXIONES[numeroNivel][2]);
+	piso(CONEXIONES[numeroNivel][3]);
 
+	if (numeroNivel == 1) {
 		_obstaculos.push_back(new Pinche(sf::Vector2f(350.f, Y_PISO - 37.5f))); // agrego obstaculos en el nivel
 		_obstaculos.push_back(new PilarMovil(sf::Vector2f(500.f, Y_PISO - 80.f), sf::Vector2f(40.f, 80.f), 500.f, 750.f, 150.f));
-
 	}
 	else if (numeroNivel == 2) {
-		techo();
-		piso();
-		paredIzquierda(1); // vuelve a la sala 1
-		paredDerecha(3); // va a sala 3
 		_obstaculos.push_back(new Pinche(sf::Vector2f(350.f, Y_PISO - 37.5f)));
 		_obstaculos.push_back(new Pinche(sf::Vector2f(400.f, Y_PISO - 37.5f)));
 	}
 	else if (numeroNivel == 3) {
-		techo();
-		piso();
-		paredIzquierda(2);
-		paredDerecha(4);
 		_plataformas.push_back(Plataforma(sf::Vector2f(200.f, 400.f), sf::Vector2f(100.f, 20.f)));
-		_obstaculos.push_back(new Pinche(sf::Vector2f(300.f, Y_PISO - 37.5f)));
-		_obstaculos.push_back(new Pinche(sf::Vector2f(350.f, Y_PISO - 37.5f)));
-		_obstaculos.push_back(new Pinche(sf::Vector2f(400.f, Y_PISO - 37.5f)));
-		_obstaculos.push_back(new Pinche(sf::Vector2f(450.f, Y_PISO - 37.5f)));
-		_obstaculos.push_back(new Pinche(sf::Vector2f(500.f, Y_PISO - 37.5f)));
-		_obstaculos.push_back(new Pinche(sf::Vector2f(550.f, Y_PISO - 37.5f)));
 	}
 	else if (numeroNivel == 4) {
-		techo();
-		paredIzquierda(3);
-		_salidas.push_back(Salida(sf::Vector2f(850.f, 180.f), salidaTamanio, 5, sf::Vector2f(50.f, Y_PISO - ALTO_JUGADOR))); // en este nivel la salida esta mas arriba
-		_bloques.push_back(Bloque(sf::Vector2f(0.f, Y_PISO), sf::Vector2f(200.f, GROSOR_PARED)));
 		_bloques.push_back(Bloque(sf::Vector2f(350.f, 400.f), sf::Vector2f(200.f, 40.f)));
 		_obstaculos.push_back(new Pinche(sf::Vector2f(427.5f, 365.5f)));
 		_bloques.push_back(Bloque(sf::Vector2f(700.f, 300.f), sf::Vector2f(200.f, 40.f)));
 
 	} // posicion y tamanio de bloque (x,y) (ancho,alto)
 	else if (numeroNivel == 5) {
-		_bloques.push_back(Bloque(sf::Vector2f(0.f, Y_PISO), sf::Vector2f(150.f, GROSOR_PARED)));
+		
 		_plataformas.push_back(Plataforma(sf::Vector2f(125.f, 400.f), sf::Vector2f(80.f, 10.f)));
 		_plataformas.push_back(Plataforma(sf::Vector2f(50.f, 300.f), sf::Vector2f(80.f, 10.f)));
 		_plataformas.push_back(Plataforma(sf::Vector2f(50.f, 180.f), sf::Vector2f(80.f, 10.f)));
 		_bloques.push_back(Bloque(sf::Vector2f(130.f, 180.f), sf::Vector2f(400.f, 40.f)));
 		_bloques.push_back(Bloque(sf::Vector2f(330.f, 180.f), sf::Vector2f(400.f, 40.f)));
 		_bloques.push_back(Bloque(sf::Vector2f(600.f, 320.f), sf::Vector2f(500.f, 40.f)));
-		_bloques.push_back(Bloque(sf::Vector2f(700.f, Y_PISO), sf::Vector2f(500.f, GROSOR_PARED)));
-		_plataformas.push_back(Plataforma(sf::Vector2f(600.f, Y_PISO), sf::Vector2f(40.f, 10.f)));
 
-		_bloques.push_back(Bloque(sf::Vector2f(930.f, 0.f), sf::Vector2f(50.f, 600.f)));
 		_obstaculos.push_back(new Pinche(sf::Vector2f(165.f, 142.5f)));
 		_obstaculos.push_back(new Pinche(sf::Vector2f(205.f, 142.5f)));
 		_obstaculos.push_back(new Pinche(sf::Vector2f(335.f, 142.5f)));
 		_obstaculos.push_back(new Pinche(sf::Vector2f(375.f, 142.5f)));
 		_obstaculos.push_back(new Pinche(sf::Vector2f(500.f, 142.5f)));
 		_obstaculos.push_back(new Pinche(sf::Vector2f(540.f, 142.5f)));
-		// ultimo nivel: destino -1 = fin del juego
-		_salidas.push_back(Salida(sf::Vector2f(860.f, 380.f), salidaTamanio, -1, sf::Vector2f(50.f, 420.f)));
-
 
 	}
 	//proximos niveles
