@@ -18,27 +18,32 @@ void Partida::actualizar(float dt) {
 	_tiempoDeCompletado += dt; //sumando la duración de todos los frames da el tiempo total jugado.
 }
 
-
 void Partida::actualizarLanzas(float dt) { // lanzas: moverlas, clavarlas al tocar un bloque y borrar las que salieron del mundo.
-	for (Lanza& f : _lanzas) {
-		f.actualizar(dt);
+	sf::Vector2f centroJugador = _jugador.getHitbox().getCenter();
+	for (Lanza& l : _lanzas) {
+		l.actualizar(dt, centroJugador);
 	}
-	for (Lanza& f : _lanzas) {
-		if(f.estaClavada()){
-			continue; // las lanzas ya clavadas no se revisan, las demas se clavan al tocar un bloque
+	for (Lanza& l : _lanzas) {
+		if(l.estaClavada() || l.estaVolviendo()){
+			continue; // las lanzas ya clavadas o volviendo no se revisan, las demas se clavan al tocar un bloque
 		}
 		for (const Bloque& b : _nivel.getBloques()) {
 			// si la hitbox de la lanza se cruza con la del bloque. la lanza se clava
-			if (f.getHitbox().findIntersection(b.getHitbox())) {
-				f.clavar();
+			if (l.getHitbox().findIntersection(b.getHitbox())) {
+				l.clavar();
 			}
 		}
 	}
-	// borra las lanzas que salieron del mundo (por abajo o por los costados).
+	// Borra lanzas en dos casos:
 	for (int i = static_cast<int>(_lanzas.size()) - 1; i >= 0; i--) {
 		sf::FloatRect lanzaHitBox =  _lanzas[i].getHitbox();
-		if (lanzaHitBox.position.y > ALTO_MUNDO || lanzaHitBox.position.x > ANCHO_MUNDO || 
-			lanzaHitBox.position.x + lanzaHitBox.size.x < 0) {
+		// 1) salieron del mundo
+		if ((lanzaHitBox.position.y > ALTO_MUNDO || lanzaHitBox.position.x > ANCHO_MUNDO ||
+			lanzaHitBox.position.x + lanzaHitBox.size.x < 0) && !_lanzas[i].estaVolviendo()) {
+			_lanzas.erase(_lanzas.begin() + i);
+		}
+		//  2) estaban volviendo y llegaron al jugador
+		else if (_lanzas[i].estaVolviendo() && lanzaHitBox.findIntersection(_jugador.getHitbox())) {
 			_lanzas.erase(_lanzas.begin() + i);
 		}
 	}
@@ -140,7 +145,7 @@ int Partida::getCantidadMuertes() const {
 
 void Partida::lanzarLanza(sf::Vector2f destino) {
 	if (!_lanzas.empty()) { // si hay lanza disponible
-		_lanzas.clear();
+		_lanzas[0].volver();
 		_lanzaDisponible = false;
 		return;
 	}
