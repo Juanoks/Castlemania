@@ -130,6 +130,7 @@ void Partida::revisarColeccionables() {
 
 		_obtenidos[static_cast<int>(tipo)] = true; // el tipo como numero = su casilla en el arreglo
 		_nivel.quitarColeccionable(tipo);
+		if (tipo == TipoColeccionable::DobleSalto){ _jugador.setDobleSalto(true); }
 	}
 }
 
@@ -139,6 +140,11 @@ void Partida::quitarColeccionablesObtenidos() {
 			_nivel.quitarColeccionable(static_cast <TipoColeccionable>(i));
 		}
 	}
+}
+
+bool Partida::tiene(TipoColeccionable tipo) const // devuelve si ya se agarro ese coleccionable (su casilla en _obtenidos)
+{
+	return _obtenidos[static_cast<int>(tipo)];
 }
 
 // primero el nivel, después el jugador y por último las lanzas
@@ -160,9 +166,8 @@ void Partida::reiniciarPartida() {
 	_cantidadMuertes = 0;
 	_lanzas.clear();
 	_lanzaDisponible = true;
-	for (int i = 0; i < CANTIDAD_COLECCIONABLES; i++) {
-		_obtenidos[i] = false;
-	}
+	for (int i = 0; i < CANTIDAD_COLECCIONABLES; i++) {_obtenidos[i] = false;}
+	_jugador.setDobleSalto(false);
 }
 
 
@@ -180,6 +185,9 @@ int Partida::getCantidadMuertes() const {
 }
 
 void Partida::lanzarLanza(sf::Vector2f destino) {
+	if (!tiene(TipoColeccionable::Lanza)) { // si no tenes la lanza
+		return;
+	}
 	if (!_lanzas.empty()) { // si ya hay una lanza en el mapa, el clic la hace volver
 		_lanzas[0].volver();
 		_lanzaDisponible = false;

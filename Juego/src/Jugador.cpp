@@ -2,7 +2,7 @@
 #include "Constantes.h"
 #include <SFML/window.hpp>
 
-Jugador::Jugador(sf::Vector2f posicion) {
+Jugador::Jugador(sf::Vector2f posicion) : _tieneDobleSalto(false){
 	_forma.setSize(sf::Vector2f(ANCHO_JUGADOR, ALTO_JUGADOR));
 	// Vector2f Es una clase simple que representa un par de números: una coordenada x y una coordenada y.
 	// Vector2f = vector 2D de floats (10.f = float | 10.0 = double) Vector2f espera 2 floats.  
@@ -27,7 +27,8 @@ void Jugador::reiniciar(sf::Vector2f posicion) {
 	_velocidadY = 0.f;
 	_desplazamientoX = 0.f;
 	_enElSuelo = false;
-	_saltosRestantes = 1;
+	_saltosRestantes = _tieneDobleSalto ? 1 : 0;// "?" es un operador ternario, es como un mini if
+	         									//"_saltosRestantes vale 1 si tiene doble salto, y si no, 0"
 	_saltoApretadoAntes = false;
 }
 
@@ -91,7 +92,7 @@ void Jugador::aterrizarEn(sf::FloatRect plataformaHitbox) {
 	// y = parte de arriba de la plataforma menos el alto del jugador
 	_velocidadY = 0.f;
 	_enElSuelo = true;
-	_saltosRestantes = 1;
+	_saltosRestantes = _tieneDobleSalto ? 1 : 0;
 }
 
 void Jugador::chocarHorizontal(sf::FloatRect bloqueHitbox) { // Choque de costado contra un bloque sólido.
@@ -129,7 +130,7 @@ void Jugador::chocarVertical(sf::FloatRect bloqueHitbox) {
 		_forma.setPosition(sf::Vector2f(_forma.getPosition().x, bloqueHitbox.position.y - getHitbox().size.y));
 		_velocidadY = 0.f; // reinicia velocidad de caida
 		_enElSuelo = true;
-		_saltosRestantes = 1;
+		_saltosRestantes = _tieneDobleSalto ? 1 : 0;
 	}
 	// jugador choca el bloque por abajo
 	else if (_velocidadY < 0) {
@@ -140,6 +141,10 @@ void Jugador::chocarVertical(sf::FloatRect bloqueHitbox) {
 
 bool Jugador::estaEnElSuelo() const {
 	return _enElSuelo;
+}
+
+void Jugador::setDobleSalto(bool tieneDobleSalto) {
+	_tieneDobleSalto = tieneDobleSalto;
 }
 
 /*

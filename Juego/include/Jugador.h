@@ -13,6 +13,7 @@ private:
     float _alturaPiesAnterior;
     bool _enElSuelo;
     bool _saltoApretadoAntes;
+    bool _tieneDobleSalto;
     float _cortarSalto;
     float _velocidadMaximaCaida;
 
@@ -27,5 +28,6 @@ public:
     void chocarHorizontal(sf::FloatRect bloqueHitbox);
     void chocarVertical(sf::FloatRect bloqueHitbox);
     bool estaEnElSuelo() const;
+    void setDobleSalto(bool tieneDobleSalto);
     sf::FloatRect getHitbox() const;
 };

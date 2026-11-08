@@ -40,4 +40,5 @@ private:
 	void revisarSalida();
 	void revisarColeccionables();
 	void quitarColeccionablesObtenidos();
+	bool tiene(TipoColeccionable tipo) const;
 };
