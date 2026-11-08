@@ -23,7 +23,7 @@ private:
 public:
 	Nivel(int numeroNivel);
 	void actualizar(float dt);
-	void cargarNivel(int numeroNivel);
+	void cargarNivel(int numeroNivel, bool puertaAbierta = false);
 	void dibujar(sf::RenderWindow& ventana);
 	bool jugadorTocoObstaculo(sf::FloatRect hitboxJugador) const;
 	bool jugadorCayoAlVacio(sf::FloatRect hitboxJugador) const;

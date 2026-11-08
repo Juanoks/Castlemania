@@ -30,7 +30,7 @@ void Nivel::actualizar(float dt) {
 	}
 }
 
-void Nivel::cargarNivel(int numeroNivel) {
+void Nivel::cargarNivel(int numeroNivel, bool puertaAbierta) {
 	for (Obstaculo* o : _obstaculos) { delete o; }
 	_obstaculos.clear(); _plataformas.clear(); _bloques.clear(); _salidas.clear(); _coleccionables.clear();
 
@@ -47,6 +47,7 @@ void Nivel::cargarNivel(int numeroNivel) {
 		_bloques.push_back(Bloque(sf::Vector2f(0.f, ALTO_MUNDO-20.f), sf::Vector2f(400.f, 30.f)));
 		_bloques.push_back(Bloque(sf::Vector2f(500.f, ALTO_MUNDO - 20.f), sf::Vector2f(400.f, 30.f)));
 		_coleccionables.push_back(Coleccionable(sf::Vector2f(300.f, 480.f), TipoColeccionable::LlaveAzul));
+		_coleccionables.push_back(Coleccionable(sf::Vector2f(200.f, 480.f), TipoColeccionable::LlaveAmarilla));
 		_coleccionables.push_back(Coleccionable(sf::Vector2f(500.f, 280.f), TipoColeccionable::Lanza));
 		_coleccionables.push_back(Coleccionable(sf::Vector2f(100.f, 480.f), TipoColeccionable::DobleSalto));
 		_bloques.push_back(Bloque(sf::Vector2f(350.f, 400.f), sf::Vector2f(200.f, 40.f)));
@@ -91,6 +92,12 @@ void Nivel::cargarNivel(int numeroNivel) {
 		_obstaculos.push_back(new Pinche(sf::Vector2f(500.f, 142.5f)));
 		_obstaculos.push_back(new Pinche(sf::Vector2f(540.f, 142.5f)));
 
+	}
+	else if (numeroNivel == 8) {
+		if (!puertaAbierta) {
+			_bloques.push_back(Bloque(sf::Vector2f
+			(ANCHO_MUNDO - GROSOR_PARED * 2, Y_PISO - TAMANIO_HUECO), sf::Vector2f(GROSOR_PARED, TAMANIO_HUECO)));
+		}
 	}
 	//proximos niveles
 

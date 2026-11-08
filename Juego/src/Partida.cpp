@@ -114,7 +114,7 @@ void Partida::revisarSalida() {
 		}
 		else {
 			_numeroNivel = destino;            // la salida decide a que sala se va
-			_nivel.cargarNivel(_numeroNivel);
+			_nivel.cargarNivel(_numeroNivel, tieneLasLlaves());
 			quitarColeccionablesObtenidos();
 			_lanzas.clear();
 			_jugador.reiniciar(entrada);       // aparece donde indica la salida
@@ -145,6 +145,11 @@ void Partida::quitarColeccionablesObtenidos() {
 bool Partida::tiene(TipoColeccionable tipo) const // devuelve si ya se agarro ese coleccionable (su casilla en _obtenidos)
 {
 	return _obtenidos[static_cast<int>(tipo)];
+}
+
+bool Partida::tieneLasLlaves() const { // true solo si se agarraron las 4 llaves
+	return tiene(TipoColeccionable::LlaveAzul) && tiene(TipoColeccionable::LlaveAmarilla)
+		&& tiene(TipoColeccionable::LlaveVerde) && tiene(TipoColeccionable::LlaveRoja);
 }
 
 // primero el nivel, después el jugador y por último las lanzas
