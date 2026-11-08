@@ -1,8 +1,8 @@
 # Punto B
 
 Juego de plataformas de precisión en 2D, hecho en C++ con SFML 3.1
-para la materia Programación 2. El jugador debe llegar del punto A
-al punto B de cada nivel esquivando obstáculos.
+para la materia Programación 2. El jugador debe superar un laberinto
+esquivando obstáculos, coleccionando llaves y habilidades.
 
 ## Cómo compilar
 
@@ -19,11 +19,15 @@ al punto B de cada nivel esquivando obstáculos.
 ## Controles
 
 | Tecla | Acción |
-|---|---|
+# Menu #
+| ↑ / ↓ | Seleccionar opción |
+| ENTER | Confirmar opción |
+| F11 | Pantalla completa |
+
+# Juego #
 | A / D | Moverse |
 | W | Saltar |
-| Click Derecho | Dispara flecha |
-| F11 | Pantalla completa |
+| Click Izquierdo | Lanzar Lanza |
 | ESC | Volver al menu |
 
 ## Estado
