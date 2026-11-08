@@ -30,11 +30,13 @@ void Lanza::actualizar(float dt, sf::Vector2f posicionJugador) {
 	if (_estado == EstadoLanza::Volando) {
 		_velocidad.y += _gravedad * dt;
 
-		// atan2(y, x) da el angulo (en radianes) de la direccion en la que se mueve:
-		// asi la punta sigue la curva (sube apuntando arriba, cae apuntando abajo)
-		float angulo = std::atan2(_velocidad.y,_velocidad.x); // cuántos píxeles avanza la lanza por segundo en x y en y 
-		_forma.setRotation(sf::radians(angulo));              // ejemplo: (700, 0) va hacia la derecha	0° | apunta a la derecha
-		                                                      // (500, 500)	va en diagonal, abajo a la derecha	45°
+		// _velocidad dice cuantos pixeles avanza por segundo en x y en y (hacia donde va).
+		// atan2(y, x) convierte esa direccion en un angulo ° (en radianes):
+		// por ejemplo: (700, 0) = 0° grados derecha, (0, 700) = 90° apunta para abajo.
+		// (-700, 0) = 180° izquierda, (500, 500) = 45° grados diagonal abajo-derecha.
+		// Asi la punta sigue la curva: sube apuntando arriba y cae apuntando abajo.
+		float angulo = std::atan2(_velocidad.y,_velocidad.x); 
+		_forma.setRotation(sf::radians(angulo));                      
 
 		_forma.move(_velocidad * dt);
 	}
@@ -46,8 +48,8 @@ void Lanza::actualizar(float dt, sf::Vector2f posicionJugador) {
 		if (largo > 0) {
 			sf::Vector2f direccion = diferencia / largo;
 			_velocidad = direccion * VELOCIDAD_LANZA;
-			float angulo = std::atan2(_velocidad.y, _velocidad.x);
-			_forma.setRotation(sf::radians(angulo));
+			float angulo = std::atan2(_velocidad.y, _velocidad.x); 
+			_forma.setRotation(sf::radians(angulo)); // apunta hacia el jugador mientras vuelve
 			_forma.move(_velocidad * dt);
 		}
 	}

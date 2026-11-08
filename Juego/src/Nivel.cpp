@@ -7,7 +7,7 @@ sf::Vector2f salidaTamanio(30.f, 120.f);
 // Mapa: cada fila es una sala y cada columna un lado de esa sala.
 // izquierda, derecha, arriba, abajo | 0 = pared cerrada | -1 = fin del juego | -2/TERRENO_A_MANO = hacer el piso de esa sala a mano
 const int CONEXIONES[31][4] = {
-	{0, 0, 0, 0},  // 0: no se usa (asi el numero de fila coincide con el numero de sala)
+	{0, 1, 0, TERRENO_A_MANO},  // 0: no se usa (asi el numero de fila coincide con el numero de sala)
 	{0, 2, 0, 0},  // 1: inicio
 	{1, 3, 0, 0},  // 2
 	{2, 0, 0, 4},  // 3   (arriba ira a la 26)
@@ -32,7 +32,7 @@ void Nivel::actualizar(float dt) {
 
 void Nivel::cargarNivel(int numeroNivel) {
 	for (Obstaculo* o : _obstaculos) { delete o; }
-	_obstaculos.clear(); _plataformas.clear(); _bloques.clear(); _salidas.clear();
+	_obstaculos.clear(); _plataformas.clear(); _bloques.clear(); _salidas.clear(); _coleccionables.clear();
 
 	_numeroNivel = numeroNivel;
 	_respawn = sf::Vector2f(50.f, Y_PISO - ALTO_JUGADOR); // parado sobre el piso
@@ -44,6 +44,10 @@ void Nivel::cargarNivel(int numeroNivel) {
 
 	// posicion y tamanio  (x,y), (ancho,alto)
 	if (numeroNivel == 0) {
+		_bloques.push_back(Bloque(sf::Vector2f(0.f, ALTO_MUNDO-20.f), sf::Vector2f(400.f, 30.f)));
+		_bloques.push_back(Bloque(sf::Vector2f(500.f, ALTO_MUNDO - 20.f), sf::Vector2f(400.f, 30.f)));
+		_coleccionables.push_back(Coleccionable(sf::Vector2f(300.f, 480.f), TipoColeccionable::LlaveAzul));
+		_coleccionables.push_back(Coleccionable(sf::Vector2f(100.f, 480.f), TipoColeccionable::DobleSalto));
 		_bloques.push_back(Bloque(sf::Vector2f(350.f, 400.f), sf::Vector2f(200.f, 40.f)));
 		_bloques.push_back(Bloque(sf::Vector2f(800.f, 300.f), sf::Vector2f(20.f, 100.f), true));
 		_obstaculos.push_back(new Pinche(sf::Vector2f(150.f, Y_PISO - 37.5f)));
@@ -104,6 +108,9 @@ void Nivel::dibujar(sf::RenderWindow& ventana) {
 	for (Salida& s : _salidas) {
 		s.dibujar(ventana);
 	}
+	for (Coleccionable& c : _coleccionables) {
+		c.dibujar(ventana);
+	}
 
 }
 
@@ -128,6 +135,25 @@ const Salida* Nivel::salidaTocada(sf::FloatRect hitboxJugador) const {
 		}
 	}
 	return nullptr;
+}
+
+const Coleccionable* Nivel::coleccionableTocado(sf::FloatRect hitboxJugador) const {
+	for (const Coleccionable& c : _coleccionables) {
+		if (hitboxJugador.findIntersection(c.getHitbox())) {
+			return &c; // retorna &c = la direccion de este coleccionable (un puntero a el)
+		}
+	}
+	return nullptr;
+}
+
+void Nivel::quitarColeccionable(TipoColeccionable tipo) { 
+	// Saca de la sala el coleccionable de ese tipo (cada uno es unico en todo el mapa).
+	for (int i = 0; i < static_cast<int>(_coleccionables.size()); i++) {
+		if (_coleccionables[i].getTipo() == tipo) {
+			_coleccionables.erase(_coleccionables.begin() + i);
+			return;
+		}
+	}
 }
 
 const std::vector<Plataforma>& Nivel::getPlataformas() const {

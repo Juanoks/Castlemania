@@ -5,9 +5,11 @@
 #include "Pinche.h"
 #include "PilarMovil.h"
 #include "Salida.h"
+#include "Constantes.h"
 #include "Plataforma.h"
 #include "Bloque.h"
-#include "Constantes.h"
+#include "Coleccionable.h"
+
 
 class Nivel {
 private:
@@ -16,6 +18,7 @@ private:
 	std::vector<Plataforma> _plataformas;
 	std::vector<Bloque> _bloques;
 	std::vector<Salida> _salidas;
+	std::vector<Coleccionable> _coleccionables;
 	sf::Vector2f _respawn;
 public:
 	Nivel(int numeroNivel);
@@ -24,7 +27,9 @@ public:
 	void dibujar(sf::RenderWindow& ventana);
 	bool jugadorTocoObstaculo(sf::FloatRect hitboxJugador) const;
 	bool jugadorCayoAlVacio(sf::FloatRect hitboxJugador) const;
-	const Salida* salidaTocada(sf::FloatRect hitboxJugador)   const;
+	const Salida* salidaTocada(sf::FloatRect hitboxJugador) const;
+	const Coleccionable* coleccionableTocado(sf::FloatRect hitboxJugador) const;
+	void quitarColeccionable(TipoColeccionable tipo);
 	const std::vector<Plataforma>& getPlataformas() const;
 	const std::vector<Bloque>& getBloques() const;
 	sf::Vector2f getRespawn() const;

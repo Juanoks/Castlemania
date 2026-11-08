@@ -149,6 +149,7 @@
   <ItemGroup>
     <ClCompile Include="src\ArchivoPartidas.cpp" />
     <ClCompile Include="src\Bloque.cpp" />
+    <ClCompile Include="src\Coleccionable.cpp" />
     <ClCompile Include="src\Lanza.cpp" />
     <ClCompile Include="src\Juego.cpp" />
     <ClCompile Include="src\Jugador.cpp" />
@@ -166,6 +167,7 @@
   <ItemGroup>
     <ClInclude Include="include\ArchivoPartidas.h" />
     <ClInclude Include="include\Bloque.h" />
+    <ClInclude Include="include\Coleccionable.h" />
     <ClInclude Include="include\Constantes.h" />
     <ClInclude Include="include\EstadoJuego.h" />
     <ClInclude Include="include\Lanza.h" />

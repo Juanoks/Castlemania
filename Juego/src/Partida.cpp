@@ -2,7 +2,11 @@
 
 // Nivel y Jugador no tienen constructor vacio: por eso se crean en la lista de inicializacion.
 Partida::Partida() : _numeroNivel(0), _nivel(_numeroNivel), _jugador(_nivel.getRespawn()), 
-_terminada(false), _lanzaDisponible(true), _tiempoDeCompletado(0), _cantidadMuertes(0) { }
+_terminada(false), _lanzaDisponible(true), _tiempoDeCompletado(0), _cantidadMuertes(0) {
+	for (int i = 0; i < CANTIDAD_COLECCIONABLES; i++) {
+		_obtenidos[i] = false;
+	}
+}
 
 // un frame de juego. Cada paso esta en su propio metodo (abajo), en el orden en que tiene que pasar.
 void Partida::actualizar(float dt) {
@@ -14,11 +18,12 @@ void Partida::actualizar(float dt) {
 	moverJugador(dt);        // movimiento por ejes y choques
 	revisarMuerte();         // obstaculos o vacio
 	revisarSalida();           // pasar de nivel o terminar la partida
+	revisarColeccionables();
 
 	_tiempoDeCompletado += dt; //sumando la duración de todos los frames da el tiempo total jugado.
 }
 
-void Partida::actualizarLanzas(float dt) { // lanzas: moverlas, clavarlas al tocar un bloque y borrar las que salieron del mundo.
+void Partida::actualizarLanzas(float dt) { // lanzas: moverlas, clavarlas al tocar madera (en otros bloques vuelven).
 	sf::Vector2f centroJugador = _jugador.getHitbox().getCenter();
 	for (Lanza& l : _lanzas) {
 		l.actualizar(dt, centroJugador);
@@ -110,13 +115,33 @@ void Partida::revisarSalida() {
 		else {
 			_numeroNivel = destino;            // la salida decide a que sala se va
 			_nivel.cargarNivel(_numeroNivel);
+			quitarColeccionablesObtenidos();
 			_lanzas.clear();
 			_jugador.reiniciar(entrada);       // aparece donde indica la salida
 		}
 	}
 }
 
-// primero el nivel y despues el jugador, asi el jugador queda dibujado por encima.
+void Partida::revisarColeccionables() { 
+	// si toca un coleccionable: lo marca como obtenido y lo saca de la sala
+	const Coleccionable* coleccionable = _nivel.coleccionableTocado(_jugador.getHitbox());
+	if (coleccionable != nullptr) {
+		TipoColeccionable tipo = coleccionable->getTipo();
+
+		_obtenidos[static_cast<int>(tipo)] = true; // el tipo como numero = su casilla en el arreglo
+		_nivel.quitarColeccionable(tipo);
+	}
+}
+
+void Partida::quitarColeccionablesObtenidos() {
+	for (int i = 0; i < CANTIDAD_COLECCIONABLES; i++) {
+		if (_obtenidos[i]) {
+			_nivel.quitarColeccionable(static_cast <TipoColeccionable>(i));
+		}
+	}
+}
+
+// primero el nivel, después el jugador y por último las lanzas
 void Partida::dibujar(sf::RenderWindow& ventana) {
 	_nivel.dibujar(ventana);
 	_jugador.dibujar(ventana);
@@ -135,6 +160,9 @@ void Partida::reiniciarPartida() {
 	_cantidadMuertes = 0;
 	_lanzas.clear();
 	_lanzaDisponible = true;
+	for (int i = 0; i < CANTIDAD_COLECCIONABLES; i++) {
+		_obtenidos[i] = false;
+	}
 }
 
 
@@ -152,7 +180,7 @@ int Partida::getCantidadMuertes() const {
 }
 
 void Partida::lanzarLanza(sf::Vector2f destino) {
-	if (!_lanzas.empty()) { // si hay lanza disponible
+	if (!_lanzas.empty()) { // si ya hay una lanza en el mapa, el clic la hace volver
 		_lanzas[0].volver();
 		_lanzaDisponible = false;
 		return;

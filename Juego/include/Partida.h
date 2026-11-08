@@ -4,6 +4,7 @@
 #include "Constantes.h"
 #include "Nivel.h"
 #include "Jugador.h"
+#include "Coleccionable.h"
 #include "Lanza.h"
 
 // la partida TIENE un nivel y un jugador, y viven mientras ella viva.
@@ -17,6 +18,7 @@ private:
 	bool _lanzaDisponible;
 	float _tiempoDeCompletado;
 	int _cantidadMuertes;
+	bool _obtenidos[CANTIDAD_COLECCIONABLES]; // (uno por cada tipo del enum de coleccionables, en el mismo orden)
 	
 public:
 	Partida();
@@ -36,4 +38,6 @@ private:
 	void moverJugador(float dt);
 	void revisarMuerte();
 	void revisarSalida();
+	void revisarColeccionables();
+	void quitarColeccionablesObtenidos();
 };
