@@ -15,6 +15,7 @@ void Partida::actualizar(float dt) {
 	}
 	_nivel.actualizar(dt);   // obstaculos (por ejemplo, los pilares que se mueven)
 	actualizarLanzas(dt);   // mover, clavar y borrar las que se fueron
+	_nivel.actualizarBotonesYMecanismos(_lanzas); // activa los botones con una lanza clavada, y los mecanismos de su canal
 	moverJugador(dt);        // movimiento por ejes y choques
 	revisarMuerte();         // obstaculos o vacio
 	revisarSalida();           // pasar de nivel o terminar la partida
@@ -32,18 +33,41 @@ void Partida::actualizarLanzas(float dt) { // lanzas: moverlas, clavarlas al toc
 		if(l.estaClavada() || l.estaVolviendo()){
 			continue; // las lanzas ya clavadas o volviendo no se revisan, las demas se clavan al tocar un bloque
 		}
+		for (const Boton& b : _nivel.getBotones()) {
+			// findIntersection devuelve un std::optional: una "caja" que esta vacia si no hay choque,
+			// o que tiene adentro el rectangulo donde se superponen la lanza y el boton.
+			// auto: deja que el compilador ponga el tipo (std::optional<sf::FloatRect>, que es largo)
+			auto zona = l.getHitbox().findIntersection(b.getHitbox());
+			if (zona) { // si la caja tiene algo, hubo choque
+				l.clavar(*zona);
+				// *zona saca el rectangulo de adentro de la caja (no es un puntero: en un optional, * significa "el valor que tiene")
+				break;
+			}			
+		}
+		if (l.estaClavada()) {
+			continue; // ya se clavo en un boton: no revisar los bloques. esto es por si hay un boton pegado a un bloque
+		}
 		for (const Bloque& b : _nivel.getBloques()) {
 			// si la hitbox de la lanza se cruza con la del bloque; la lanza se clava si es de madera
-			if (l.getHitbox().findIntersection(b.getHitbox())) {
+			auto zona = l.getHitbox().findIntersection(b.getHitbox());
+			if (zona) {
 				if (b.esMadera()) {
-					l.clavar();
-					break;
+						l.clavar(*zona);
+						break;
 				}
 				else {
 					l.volver();
 					break;
 				}
-				
+			}
+		}
+		for (const Mecanismo* m : _nivel.getMecanismos()) {
+			auto zona = l.getHitbox().findIntersection(m->getHitbox());
+			if (zona) {
+				if (m->esSolido()) {
+					l.volver();
+					break;
+				}
 			}
 		}
 	}
@@ -70,12 +94,24 @@ void Partida::moverJugador(float dt) {
 	for (const Bloque& b : _nivel.getBloques()) {
 		_jugador.chocarHorizontal(b.getHitbox());
 	}
+	for (Mecanismo* m : _nivel.getMecanismos()) {
+		if (m->esSolido()) {
+			_jugador.chocarHorizontal(m->getHitbox());
+		}
+	}
 
 	// eje Y: gravedad, despues choques verticales y aterrizajes
 	_jugador.actualizar(dt);
 	for (const Bloque& b : _nivel.getBloques()) {
 		_jugador.chocarVertical(b.getHitbox());
+
 	}
+	for (Mecanismo* m : _nivel.getMecanismos()) {
+		if (m->esSolido()) {
+			_jugador.chocarVertical(m->getHitbox());
+		}
+	}
+
 	for (const Terreno& t : _nivel.getPlataformas()) {
 		_jugador.aterrizarEn(t.getHitbox());
 	}

@@ -55,15 +55,24 @@ void Lanza::actualizar(float dt, sf::Vector2f posicionJugador) {
 	}
 }
 
-void Lanza::clavar() {
+void Lanza::clavar(sf::FloatRect zonaDeChoque) {
+
+	sf::Vector2f punta = zonaDeChoque.getCenter(); // asigna el centro del choque a la variable punta
+	sf::Vector2f centro = punta;
+
 	// si la velocidad de x es mayor a la de y significa que la lanza venia de un costado y se clava en horizontal
 	if (std::abs(_velocidad.x) > std::abs(_velocidad.y)) {
 		_forma.setRotation(sf::degrees(0.f));
+		float signo = (_velocidad.x > 0) ? 1.f : -1.f;  // 1 si iba a la derecha, -1 si iba a la izquierda
+		centro.x -= signo * 16.f;                        // el centro queda 16 px detras de la punta
 	}
 	// si no, la lanza venia desde arriba o abajo y establece la rotacion en vertical.
 	else {
+		float signo = (_velocidad.y > 0) ? 1.f : -1.f;  // 1 si iba cayendo, -1 si iba subiendo
+		centro.y -= signo * 16.f;                       // el centro queda 16 px detras de la punta (arriba o abajo)
 		_forma.setRotation(sf::degrees(90.f));
 	}
+	_forma.setPosition(centro);
 	_velocidad = sf::Vector2f(0.f,0.f);
 	_estado = EstadoLanza::Clavada;
 	

@@ -1,0 +1,49 @@
+PAQUETE DE EFECTOS DE SONIDO - "Punto B"
+========================================
+
+24 efectos retro (estilo chip / 8 bits), sintetizados con codigo.
+Formato: WAV, mono, 44100 Hz, 16 bits. SFML los carga directo con sf::SoundBuffer.
+No usan samples de terceros: no hay licencia que citar en los creditos.
+
+Copia la carpeta "sonidos/" al proyecto, al lado de "fuentes/".
+
+JUGADOR
+  salto.wav              salto normal
+  doble_salto.wav        segundo salto en el aire (mas agudo)
+  aterrizar.wav          al tocar el piso o una plataforma
+  muerte.wav             al morir (pinche, pilar, caida)
+  respawn.wav            al reaparecer
+
+LANZA
+  lanza_lanzar.wav       al tirarla
+  lanza_clavar.wav       se clava en un bloque de madera
+  lanza_rebote.wav       choca un bloque que no es de madera y vuelve sola
+  lanza_llamar.wav       clic para que vuelva al jugador
+  lanza_atrapar.wav      llega a la mano y desaparece
+
+OBJETOS Y MUNDO
+  llave.wav              juntar una llave
+  habilidad.wav          desbloquear doble salto o lanza
+  puerta_abrir.wav       la puerta de la sala 8 se abre con las 4 llaves
+  puerta_cerrada.wav     tocar la puerta sin tener las 4 llaves
+  boton_activar.wav      la lanza se clava en un boton
+  boton_desactivar.wav   el boton se apaga al llamar la lanza
+  guardado.wav           activar un punto de guardado
+  cambio_sala.wav        pasar de una sala a otra (suave, se oye seguido)
+  pilar_golpe.wav        el pilar movil llega al tope
+
+MENU Y FINAL
+  menu_mover.wav         cambiar de opcion
+  menu_seleccionar.wav   confirmar
+  menu_volver.wav        volver atras
+  victoria.wav           pantalla de victoria (2 segundos)
+  nuevo_record.wav       la partida entra en los records
+
+VOLUMEN
+Los sonidos que se repiten mucho (salto, aterrizar, cambio de sala, menu)
+ya vienen mas bajos que los importantes (muerte, victoria, puerta).
+Si alguno molesta igual, se ajusta con setVolume (0 a 100).
+
+CAMBIAR UN SONIDO
+"gen.py" genera todo el paquete (Python con numpy y scipy).
+Cada sonido son 2 o 3 lineas: se cambia la frecuencia o la duracion y se vuelve a correr.

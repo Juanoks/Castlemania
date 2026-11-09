@@ -6,18 +6,23 @@
 #include "PilarMovil.h"
 #include "Salida.h"
 #include "Constantes.h"
+#include "Lanza.h"
 #include "Plataforma.h"
 #include "Bloque.h"
 #include "Coleccionable.h"
+#include "Boton.h"
+#include "Compuerta.h"
 
 
 class Nivel {
 private:
 	int _numeroNivel;
 	std::vector<Obstaculo*> _obstaculos; 
+	std::vector<Mecanismo*> _mecanismos;
 	std::vector<Plataforma> _plataformas;
 	std::vector<Bloque> _bloques;
 	std::vector<Salida> _salidas;
+	std::vector<Boton> _botones;
 	std::vector<Coleccionable> _coleccionables;
 	sf::Vector2f _respawn;
 public:
@@ -32,7 +37,10 @@ public:
 	void quitarColeccionable(TipoColeccionable tipo);
 	const std::vector<Plataforma>& getPlataformas() const;
 	const std::vector<Bloque>& getBloques() const;
+	const std::vector<Boton>& getBotones() const;
+	void actualizarBotonesYMecanismos(const std::vector<Lanza>& lanzas);
 	sf::Vector2f getRespawn() const;
+	const std::vector<Mecanismo*>& getMecanismos() const;
 
 	~Nivel();
 private:

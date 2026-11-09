@@ -149,10 +149,13 @@
   <ItemGroup>
     <ClCompile Include="src\ArchivoPartidas.cpp" />
     <ClCompile Include="src\Bloque.cpp" />
+    <ClCompile Include="src\Boton.cpp" />
     <ClCompile Include="src\Coleccionable.cpp" />
+    <ClCompile Include="src\Compuerta.cpp" />
     <ClCompile Include="src\Lanza.cpp" />
     <ClCompile Include="src\Juego.cpp" />
     <ClCompile Include="src\Jugador.cpp" />
+    <ClCompile Include="src\Mecanismo.cpp" />
     <ClCompile Include="src\MenuPrincipal.cpp" />
     <ClCompile Include="src\Salida.cpp" />
     <ClCompile Include="src\Nivel.cpp" />
@@ -167,11 +170,14 @@
   <ItemGroup>
     <ClInclude Include="include\ArchivoPartidas.h" />
     <ClInclude Include="include\Bloque.h" />
+    <ClInclude Include="include\Boton.h" />
     <ClInclude Include="include\Coleccionable.h" />
+    <ClInclude Include="include\Compuerta.h" />
     <ClInclude Include="include\Constantes.h" />
     <ClInclude Include="include\EstadoJuego.h" />
     <ClInclude Include="include\Lanza.h" />
     <ClInclude Include="include\Jugador.h" />
+    <ClInclude Include="include\Mecanismo.h" />
     <ClInclude Include="include\MenuPrincipal.h" />
     <ClInclude Include="include\Salida.h" />
     <ClInclude Include="include\Nivel.h" />

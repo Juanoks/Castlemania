@@ -13,7 +13,7 @@ public:
 	Lanza(sf::Vector2f origen, sf::Vector2f destino);
 
 	void actualizar(float dt, sf::Vector2f posicionJugador);
-	void clavar();
+	void clavar(sf::FloatRect zonaDeChoque);
 	bool estaClavada() const;
 	void volver();
 	bool estaVolviendo() const;
