@@ -1,38 +1,49 @@
 #include "Coleccionable.h"
 
-Coleccionable::Coleccionable(sf::Vector2f posicion, TipoColeccionable tipoColeccionable) : _tipoColeccionable(tipoColeccionable){
-	_forma.setSize(sf::Vector2f(16.f, 16.f));
-	_forma.setPosition(posicion);
+Coleccionable::Coleccionable(sf::Vector2f posicion, TipoColeccionable tipoColeccionable, const Texturas& texturas)
+	: _tipoColeccionable(tipoColeccionable), _sprite(texturas.get(TipoTextura::LlaveAzul)) {
+
+	// el switch traduce el tipo de coleccionable al tipo de textura que le corresponde
+	TipoTextura tipoTextura = TipoTextura::LlaveAzul;
 	switch (tipoColeccionable) {
 	case TipoColeccionable::LlaveAzul:
-		_forma.setFillColor(sf::Color(100, 180, 255));
+		tipoTextura = TipoTextura::LlaveAzul;
 		break;
 
 	case TipoColeccionable::LlaveAmarilla:
-		_forma.setFillColor(sf::Color::Yellow);
+		tipoTextura = TipoTextura::LlaveAmarilla;
 		break;
 
 	case TipoColeccionable::LlaveVerde:
-		_forma.setFillColor(sf::Color::Green);
+		tipoTextura = TipoTextura::LlaveVerde;
 		break;
 
 	case TipoColeccionable::LlaveRoja:
-		_forma.setFillColor(sf::Color::Red);
+		tipoTextura = TipoTextura::LlaveRoja;
 		break;
 
 	case TipoColeccionable::Lanza:
-		_forma.setFillColor(sf::Color::White);
+		tipoTextura = TipoTextura::HabilidadLanza;
 		break;
 
 	case TipoColeccionable::DobleSalto:
-		_forma.setFillColor(sf::Color::Magenta);
+		tipoTextura = TipoTextura::HabilidadDobleSalto;
 		break;
 	}
 
+	const sf::Texture& textura = texturas.get(tipoTextura);
+	// el true ajusta el recorte del sprite al tamanio de la imagen nueva
+	// (sin el, se quedaria con el de la textura inicial: las llaves miden 32x32 y las habilidades 40x40)
+	_sprite.setTexture(textura, true);
+	_sprite.setPosition(posicion); // no se mueve: alcanza con ubicarlo una vez
+
+	// la hitbox mide lo mismo que la imagen. getSize() devuelve enteros: sf::Vector2f(...) los pasa a floats
+	_forma.setSize(sf::Vector2f(textura.getSize()));
+	_forma.setPosition(posicion);
 }
 
 void Coleccionable::dibujar(sf::RenderWindow& ventana){
-	ventana.draw(_forma);
+	ventana.draw(_sprite);
 }
 
 TipoColeccionable Coleccionable::getTipo() const

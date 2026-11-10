@@ -2,12 +2,15 @@
 #include "Constantes.h"
 #include <cmath>
 // "origen" (el jugador) que sale lanzada hacia "destino" (el mouse)
-Lanza::Lanza(sf::Vector2f origen, sf::Vector2f destino) : _gravedad(600.f), _estado(EstadoLanza::Volando) {
+Lanza::Lanza(sf::Vector2f origen, sf::Vector2f destino, const sf::Texture& textura) 
+	: _gravedad(600.f), _estado(EstadoLanza::Volando), _sprite(textura) {
+
 	_forma.setSize(sf::Vector2f(48.f, 4.f)); 
 
 	// el "punto de agarre" de la lanza es su centro (la mitad del tamanio):
 	// asi gira sobre si misma, y setPosition ubica su centro (no su esquina). algo asi como un "engranaje"
 	_forma.setOrigin(sf::Vector2f(24.f, 2.f));
+	_sprite.setOrigin(sf::Vector2f(24.f, 4.f));
 	_forma.setPosition(origen);
 
 	_forma.setFillColor(sf::Color::White);
@@ -65,12 +68,26 @@ void Lanza::clavar(sf::FloatRect zonaDeChoque) {
 		_forma.setRotation(sf::degrees(0.f));
 		float signo = (_velocidad.x > 0) ? 1.f : -1.f;  // 1 si iba a la derecha, -1 si iba a la izquierda
 		centro.x -= signo * 16.f;                        // el centro queda 16 px detras de la punta
+
+		// la imagen tiene la punta a la derecha (0°): si iba a la izquierda se gira 180° para que la punta quede contra la pared
+		if(_velocidad.x > 0) {
+			_forma.setRotation(sf::degrees(0.f));
+		}
+		else {
+			_forma.setRotation(sf::degrees(180.f));
+		}
 	}
 	// si no, la lanza venia desde arriba o abajo y establece la rotacion en vertical.
 	else {
 		float signo = (_velocidad.y > 0) ? 1.f : -1.f;  // 1 si iba cayendo, -1 si iba subiendo
 		centro.y -= signo * 16.f;                       // el centro queda 16 px detras de la punta (arriba o abajo)
-		_forma.setRotation(sf::degrees(90.f));
+		if (_velocidad.y > 0) {
+			_forma.setRotation(sf::degrees(90.f));
+		}
+		else {
+			_forma.setRotation(sf::degrees(-90.f));
+		}
+		
 	}
 	_forma.setPosition(centro);
 	_velocidad = sf::Vector2f(0.f,0.f);
@@ -91,7 +108,11 @@ bool Lanza::estaVolviendo() const {
 }
 
 void Lanza::dibujar(sf::RenderWindow& ventana) {
-	ventana.draw(_forma);
+	// _forma es la hitbox (la que se mueve y choca); el sprite solo copia su posición y rotación para dibujarse encima
+	_sprite.setPosition(_forma.getPosition());
+	_sprite.setRotation(_forma.getRotation());
+	// le pide a la forma su posicion y rotacion y se la da a sprite
+	ventana.draw(_sprite);
 }
 
 sf::FloatRect Lanza::getHitbox() const {

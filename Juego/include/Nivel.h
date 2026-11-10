@@ -13,6 +13,7 @@
 #include "Boton.h"
 #include "Compuerta.h"
 #include "Sonidos.h"
+#include "Texturas.h"
 
 
 class Nivel {
@@ -27,8 +28,9 @@ private:
 	std::vector<Coleccionable> _coleccionables;
 	sf::Vector2f _respawn;
 	Sonidos& _sonidos; 
+	const Texturas& _texturas;
 public:
-	Nivel(int numeroNivel, Sonidos& sonidos);
+	Nivel(int numeroNivel, Sonidos& sonidos, const Texturas& texturas);
 	void actualizar(float dt);
 	void cargarNivel(int numeroNivel, bool puertaAbierta = false);
 	void dibujar(sf::RenderWindow& ventana);

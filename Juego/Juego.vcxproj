@@ -167,6 +167,7 @@
     <ClCompile Include="src\RegistroPartida.cpp" />
     <ClCompile Include="src\Sonidos.cpp" />
     <ClCompile Include="src\Terreno.cpp" />
+    <ClCompile Include="src\Texturas.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="include\ArchivoPartidas.h" />
@@ -190,6 +191,7 @@
     <ClInclude Include="include\RegistroPartida.h" />
     <ClInclude Include="include\Sonidos.h" />
     <ClInclude Include="include\Terreno.h" />
+    <ClInclude Include="include\Texturas.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

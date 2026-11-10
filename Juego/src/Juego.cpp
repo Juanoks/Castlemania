@@ -10,6 +10,7 @@
 #include "EstadoJuego.h"
 #include "Partida.h"
 #include "Sonidos.h"
+#include "Texturas.h"
 
 // convierte segundos (con decimales) en texto con formato minutos:segundos
 std::string ajustarTiempo(float segundos) {
@@ -68,7 +69,7 @@ int main() {
 		std::cout << "No se pudo cargar la fuente";
 		return -1;
 	}
-	Sonidos sonidos;
+	Sonidos sonidos; Texturas texturas;
 	MenuPrincipal menuPrincipal(fuente);
 
 
@@ -82,7 +83,7 @@ int main() {
 
 	EstadoJuego estadoActual = EstadoJuego::Menu;
 
-	Partida partida(sonidos); // el nivel, el jugador, el progreso de la partida en curso y sonidos
+	Partida partida(sonidos, texturas); // el nivel, el jugador, el progreso de la partida en curso y sonidos
 	ArchivoPartidas registro;
 
 	// cronometro para medir cuánto dura cada frame.
@@ -192,14 +193,11 @@ int main() {
 					}
 				}
 
-
 				if (tecla->code == sf::Keyboard::Key::Escape) {
 					estadoActual = EstadoJuego::Menu;
 					sonidos.reproducir(TipoSonido::MenuVolver);
 				}
-
 			}
-
 		}
 
 		dt = tiempo.restart().asSeconds(); // cuanto paso desde el frame anterior (y reinicia el cronómetro)
