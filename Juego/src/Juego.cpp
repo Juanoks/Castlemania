@@ -69,6 +69,21 @@ int main() {
 	}
 	MenuPrincipal menuPrincipal(fuente);
 
+	sf::Text instrucciones(fuente, "", 15);
+	instrucciones.setString(
+		"INSTRUCCIONES\n\n\n\n\n"
+		"MOVIMIENTO\n\n\n"
+		"- A / D o Flechas: Movimientos horizontales\n\n"
+		"- W o Flecha arriba: Saltar\n\n\n\n"
+		"ACCIONES\n\n\n"
+		"- Click izquierdo: Lanzar\n\n\n\n"
+		"OBJETIVO\n\n\n"
+		"- Explorar los niveles, conseguir llaves\n"
+		"y habilidades, y encontrar las salidas.\n\n\n\n\n\n"
+		"Presiona ESC para volver al menu principal"
+	);
+	instrucciones.setPosition(sf::Vector2f(70.f, 30.f));
+	instrucciones.setFillColor(sf::Color::White);
 
 	sf::Text nombre(fuente, "Integrantes", 30);
 	nombre.setPosition(sf::Vector2f(330.f, 200.f));
@@ -148,6 +163,10 @@ int main() {
 								partida.reiniciarPartida();
 							}
 						}
+						if (menuPrincipal.opcionElegida() == OpcionMenu::Instrucciones) {
+							estadoActual = EstadoJuego::Instrucciones;
+						}
+
 						if (menuPrincipal.opcionElegida() == OpcionMenu::Records) {
 							estadoActual = EstadoJuego::Records;
 
@@ -231,6 +250,9 @@ int main() {
 		switch (estadoActual) {
 		case EstadoJuego::Menu:
 			menuPrincipal.dibujar(ventana);
+			break;
+		case EstadoJuego::Instrucciones:
+			ventana.draw(instrucciones);
 			break;
 		case EstadoJuego::Records:
 			ventana.draw(records);

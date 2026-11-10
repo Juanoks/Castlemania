@@ -14,6 +14,9 @@
 class Nivel {
 private:
 	int _numeroNivel;
+	sf::Texture _texturaFondo; //para guardar imagen en memoria
+	sf::Sprite _fondo; 
+	bool _fondoCargado = false;
 	std::vector<Obstaculo*> _obstaculos; 
 	std::vector<Plataforma> _plataformas;
 	std::vector<Bloque> _bloques;
