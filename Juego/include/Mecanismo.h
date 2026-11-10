@@ -1,5 +1,5 @@
 #pragma once
-#include <SFML/graphics.hpp>
+#include <SFML/Graphics.hpp>
 
 // Clase base (abstracta) de todo lo que se activa con un boton: compuertas, bloques que se mueven, etc.
 // _canal y _activo son protected: las hijas los usan (por ejemplo, para saber si estan abiertas)

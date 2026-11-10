@@ -1,5 +1,5 @@
 #pragma once
-#include <SFML/graphics.hpp>
+#include <SFML/Graphics.hpp>
 
 enum class TipoColeccionable {LlaveAzul, LlaveAmarilla, LlaveVerde, LlaveRoja, Lanza, DobleSalto};
 constexpr int CANTIDAD_COLECCIONABLES = 6; // si se agrega un tipo al enum, hay que actualizar este numero

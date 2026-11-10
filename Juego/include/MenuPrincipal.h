@@ -1,6 +1,6 @@
 #pragma once
 #include <vector>
-#include <SFML/graphics.hpp>
+#include <SFML/Graphics.hpp>
 enum class OpcionMenu {Jugar,Records,Creditos,Salir};
 
 class MenuPrincipal {

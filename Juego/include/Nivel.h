@@ -1,6 +1,6 @@
 #pragma once
 #include <vector>
-#include <SFML/graphics.hpp>
+#include <SFML/Graphics.hpp>
 #include "Obstaculo.h"
 #include "Pinche.h"
 #include "PilarMovil.h"
@@ -12,6 +12,7 @@
 #include "Coleccionable.h"
 #include "Boton.h"
 #include "Compuerta.h"
+#include "Sonidos.h"
 
 
 class Nivel {
@@ -25,8 +26,9 @@ private:
 	std::vector<Boton> _botones;
 	std::vector<Coleccionable> _coleccionables;
 	sf::Vector2f _respawn;
+	Sonidos& _sonidos; 
 public:
-	Nivel(int numeroNivel);
+	Nivel(int numeroNivel, Sonidos& sonidos);
 	void actualizar(float dt);
 	void cargarNivel(int numeroNivel, bool puertaAbierta = false);
 	void dibujar(sf::RenderWindow& ventana);

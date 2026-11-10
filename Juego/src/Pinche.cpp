@@ -1,5 +1,5 @@
 #include "Pinche.h"
-#include <SFML/window.hpp>
+#include <SFML/Window.hpp>
 
 Pinche::Pinche(sf::Vector2f posicion) {
 	_forma.setPointCount(3);

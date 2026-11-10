@@ -1,11 +1,12 @@
 #pragma once
-#include <SFML/graphics.hpp>
+#include <SFML/Graphics.hpp>
 #include <vector>
 #include "Constantes.h"
 #include "Nivel.h"
 #include "Jugador.h"
 #include "Coleccionable.h"
 #include "Lanza.h"
+#include "Sonidos.h"
 
 // la partida TIENE un nivel y un jugador, y viven mientras ella viva.
 class Partida {
@@ -19,9 +20,10 @@ private:
 	float _tiempoDeCompletado;
 	int _cantidadMuertes;
 	bool _obtenidos[CANTIDAD_COLECCIONABLES]; // (uno por cada tipo del enum de coleccionables, en el mismo orden)
+	Sonidos& _sonidos; // referencia (&) al Sonidos de main: es el mismo objeto con otro nombre
 	
 public:
-	Partida();
+	Partida(Sonidos& sonidos);
 
 	void actualizar(float dt);
 	void dibujar(sf::RenderWindow& ventana);

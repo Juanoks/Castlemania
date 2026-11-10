@@ -1,14 +1,15 @@
 #include <iostream>  // Ctrl+K, Ctrl+D para ordenar el codigo
 #include <string>
 #include <vector>
-#include <SFML/graphics.hpp> 
-#include <SFML/window.hpp>
+#include <SFML/Graphics.hpp> 
+#include <SFML/Window.hpp>
 #include <optional>
 #include "ArchivoPartidas.h"
 #include "Constantes.h"
 #include "MenuPrincipal.h"
 #include "EstadoJuego.h"
 #include "Partida.h"
+#include "Sonidos.h"
 
 // convierte segundos (con decimales) en texto con formato minutos:segundos
 std::string ajustarTiempo(float segundos) {
@@ -67,6 +68,7 @@ int main() {
 		std::cout << "No se pudo cargar la fuente";
 		return -1;
 	}
+	Sonidos sonidos;
 	MenuPrincipal menuPrincipal(fuente);
 
 
@@ -80,7 +82,7 @@ int main() {
 
 	EstadoJuego estadoActual = EstadoJuego::Menu;
 
-	Partida partida; // el nivel, el jugador y el progreso de la partida en curso
+	Partida partida(sonidos); // el nivel, el jugador, el progreso de la partida en curso y sonidos
 	ArchivoPartidas registro;
 
 	// cronometro para medir cuánto dura cada frame.
@@ -135,9 +137,11 @@ int main() {
 				if (estadoActual == EstadoJuego::Menu) {
 					if (tecla->code == sf::Keyboard::Key::Up) {
 						menuPrincipal.subir();
+						sonidos.reproducir(TipoSonido::MenuMover);
 					}
 					if (tecla->code == sf::Keyboard::Key::Down) {
 						menuPrincipal.bajar();
+						sonidos.reproducir(TipoSonido::MenuMover);
 					}
 
 					if (tecla->code == sf::Keyboard::Key::Enter) { 
@@ -184,12 +188,14 @@ int main() {
 						if (menuPrincipal.opcionElegida() == OpcionMenu::Salir) {
 							ventana.close();
 						}
+						sonidos.reproducir(TipoSonido::MenuSeleccionar);
 					}
 				}
 
 
 				if (tecla->code == sf::Keyboard::Key::Escape) {
 					estadoActual = EstadoJuego::Menu;
+					sonidos.reproducir(TipoSonido::MenuVolver);
 				}
 
 			}

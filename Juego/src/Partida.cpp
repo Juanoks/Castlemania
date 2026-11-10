@@ -1,8 +1,8 @@
 #include "Partida.h"
 
 // Nivel y Jugador no tienen constructor vacio: por eso se crean en la lista de inicializacion.
-Partida::Partida() : _numeroNivel(0), _nivel(_numeroNivel), _jugador(_nivel.getRespawn()), 
-_terminada(false), _lanzaDisponible(true), _tiempoDeCompletado(0), _cantidadMuertes(0) {
+Partida::Partida(Sonidos& sonidos) : _numeroNivel(0), _nivel(_numeroNivel, sonidos), _jugador(_nivel.getRespawn(), sonidos),
+_terminada(false), _lanzaDisponible(true), _tiempoDeCompletado(0), _cantidadMuertes(0), _sonidos(sonidos) {
 	for (int i = 0; i < CANTIDAD_COLECCIONABLES; i++) {
 		_obtenidos[i] = false;
 	}
@@ -41,6 +41,7 @@ void Partida::actualizarLanzas(float dt) { // lanzas: moverlas, clavarlas al toc
 			if (zona) { // si la caja tiene algo, hubo choque
 				l.clavar(*zona);
 				// *zona saca el rectangulo de adentro de la caja (no es un puntero: en un optional, * significa "el valor que tiene")
+				_sonidos.reproducir(TipoSonido::LanzaClavar);
 				break;
 			}			
 		}
@@ -53,10 +54,12 @@ void Partida::actualizarLanzas(float dt) { // lanzas: moverlas, clavarlas al toc
 			if (zona) {
 				if (b.esMadera()) {
 						l.clavar(*zona);
+						_sonidos.reproducir(TipoSonido::LanzaClavar);
 						break;
 				}
 				else {
 					l.volver();
+					_sonidos.reproducir(TipoSonido::LanzaRebote);
 					break;
 				}
 			}
@@ -66,6 +69,7 @@ void Partida::actualizarLanzas(float dt) { // lanzas: moverlas, clavarlas al toc
 			if (zona) {
 				if (m->esSolido()) {
 					l.volver();
+					_sonidos.reproducir(TipoSonido::LanzaRebote);
 					break;
 				}
 			}
@@ -78,10 +82,11 @@ void Partida::actualizarLanzas(float dt) { // lanzas: moverlas, clavarlas al toc
 		if ((lanzaHitBox.position.y > ALTO_MUNDO || lanzaHitBox.position.x > ANCHO_MUNDO ||
 			lanzaHitBox.position.x + lanzaHitBox.size.x < 0) && !_lanzas[i].estaVolviendo()) {
 			_lanzas.erase(_lanzas.begin() + i);
-		}
+		} 
 		//  2) estaban volviendo y llegaron al jugador
 		else if (_lanzas[i].estaVolviendo() && lanzaHitBox.findIntersection(_jugador.getHitbox())) {
 			_lanzas.erase(_lanzas.begin() + i);
+			_sonidos.reproducir(TipoSonido::LanzaAtrapar);
 		}
 	}
 }
@@ -133,6 +138,7 @@ void Partida::revisarMuerte() {
 	if (_nivel.jugadorTocoObstaculo(_jugador.getHitbox()) || _nivel.jugadorCayoAlVacio(_jugador.getHitbox())) {
 		_jugador.reiniciar(_nivel.getRespawn());
 		_cantidadMuertes++;
+		_sonidos.reproducir(TipoSonido::Muerte);
 	}
 }
 
@@ -147,6 +153,7 @@ void Partida::revisarSalida() {
 
 		if (destino == -1) {
 			_terminada = true;   // salida final: fin del juego
+			_sonidos.reproducir(TipoSonido::Victoria);
 		}
 		else {
 			_numeroNivel = destino;            // la salida decide a que sala se va
@@ -154,6 +161,7 @@ void Partida::revisarSalida() {
 			quitarColeccionablesObtenidos();
 			_lanzas.clear();
 			_jugador.reiniciar(entrada);       // aparece donde indica la salida
+			_sonidos.reproducir(TipoSonido::CambioSala);
 		}
 	}
 }
@@ -167,6 +175,14 @@ void Partida::revisarColeccionables() {
 		_obtenidos[static_cast<int>(tipo)] = true; // el tipo como numero = su casilla en el arreglo
 		_nivel.quitarColeccionable(tipo);
 		if (tipo == TipoColeccionable::DobleSalto){ _jugador.setDobleSalto(true); }
+
+		// las habilidades tienen un sonido distinto al de las llaves
+		if (tipo == TipoColeccionable::DobleSalto || tipo == TipoColeccionable::Lanza) {
+			_sonidos.reproducir(TipoSonido::Habilidad);
+		}
+		else {
+			_sonidos.reproducir(TipoSonido::Llave);
+		}
 	}
 }
 
@@ -232,6 +248,7 @@ void Partida::lanzarLanza(sf::Vector2f destino) {
 	if (!_lanzas.empty()) { // si ya hay una lanza en el mapa, el clic la hace volver
 		_lanzas[0].volver();
 		_lanzaDisponible = false;
+		_sonidos.reproducir(TipoSonido::LanzaLlamar);
 		return;
 	}
 
@@ -242,5 +259,6 @@ void Partida::lanzarLanza(sf::Vector2f destino) {
 	sf::Vector2f centroJugador = _jugador.getHitbox().getCenter();
 	
 	_lanzas.push_back(Lanza(centroJugador,destino));
+	_sonidos.reproducir(TipoSonido::LanzaLanzar);
 	_lanzaDisponible = false;
 }

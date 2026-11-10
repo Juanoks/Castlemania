@@ -165,6 +165,7 @@
     <ClCompile Include="src\Pinche.cpp" />
     <ClCompile Include="src\Plataforma.cpp" />
     <ClCompile Include="src\RegistroPartida.cpp" />
+    <ClCompile Include="src\Sonidos.cpp" />
     <ClCompile Include="src\Terreno.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -187,6 +188,7 @@
     <ClInclude Include="include\Pinche.h" />
     <ClInclude Include="include\Plataforma.h" />
     <ClInclude Include="include\RegistroPartida.h" />
+    <ClInclude Include="include\Sonidos.h" />
     <ClInclude Include="include\Terreno.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

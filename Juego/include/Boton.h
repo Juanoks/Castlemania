@@ -1,5 +1,5 @@
 #pragma once
-#include <SFML/graphics.hpp>
+#include <SFML/Graphics.hpp>
 
 // blanco donde se puede clavar la lanza. Esta activo mientras tenga una lanza clavada.
 // _canal: el numero que lo conecta con sus mecanismos (el boton 1 activa los mecanismos del canal 1).

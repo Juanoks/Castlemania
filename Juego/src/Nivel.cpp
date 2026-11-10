@@ -20,7 +20,7 @@ const int CONEXIONES[31][4] = {
 	{9, 0, 0, 0}   // 10  (derecha ira a la 11)
 };
 
-Nivel::Nivel(int numeroNivel) : _numeroNivel(numeroNivel) {
+Nivel::Nivel(int numeroNivel, Sonidos& sonidos) : _numeroNivel(numeroNivel), _sonidos(sonidos) {
 	cargarNivel(numeroNivel);
 }
 
@@ -192,8 +192,8 @@ const std::vector<Boton>& Nivel::getBotones() const {
 }
 
 void Nivel::actualizarBotonesYMecanismos(const std::vector<Lanza>& lanzas) {
-	// Un boton esta activo si hay una lanza clavada tocandolo.
-	// Se recalcula en cada frame: si la lanza vuelve al jugador, el boton se apaga solo.
+	// un boton esta activo si hay una lanza clavada tocandolo.
+	// se recalcula en cada frame: si la lanza vuelve al jugador, el boton se apaga solo.
 	for (Boton& b : _botones) {
 		bool tocado = false; // se empieza suponiendo que ninguna lanza lo toca
 		for (const Lanza& l : lanzas) {
@@ -201,7 +201,10 @@ void Nivel::actualizarBotonesYMecanismos(const std::vector<Lanza>& lanzas) {
 				tocado = true;
 			}
 		}
-		// afuera del for de las lanzas: asi lo prende (true) o lo apaga (false) segun lo que se encontro
+		// sonido solo cuando el boton CAMBIA de estado (si no, sonaria en todos los frames)
+		if (tocado != b.estaActivo()) {
+			_sonidos.reproducir(tocado ? TipoSonido::BotonActivar : TipoSonido::BotonDesactivar);
+		}
 		b.setActivo(tocado);
 	}
 	// un mecanismo esta activo si alguno de los botones de su canal esta activo.
