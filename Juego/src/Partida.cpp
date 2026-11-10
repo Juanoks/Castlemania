@@ -1,8 +1,8 @@
 #include "Partida.h"
 
 // Nivel y Jugador no tienen constructor vacio: por eso se crean en la lista de inicializacion.
-Partida::Partida() : _numeroNivel(0), _nivel(_numeroNivel), _jugador(_nivel.getRespawn()), 
-_terminada(false), _lanzaDisponible(true), _tiempoDeCompletado(0), _cantidadMuertes(0) {
+Partida::Partida(Sonidos& sonidos, const Texturas& texturas) : _numeroNivel(0), _nivel(_numeroNivel, sonidos, texturas), _jugador(_nivel.getRespawn(), sonidos),
+_terminada(false), _lanzaDisponible(true), _tiempoDeCompletado(0), _cantidadMuertes(0), _sonidos(sonidos), _texturas(texturas) {
 	for (int i = 0; i < CANTIDAD_COLECCIONABLES; i++) {
 		_obtenidos[i] = false;
 	}
@@ -15,6 +15,7 @@ void Partida::actualizar(float dt) {
 	}
 	_nivel.actualizar(dt);   // obstaculos (por ejemplo, los pilares que se mueven)
 	actualizarLanzas(dt);   // mover, clavar y borrar las que se fueron
+	_nivel.actualizarBotonesYMecanismos(_lanzas); // activa los botones con una lanza clavada, y los mecanismos de su canal
 	moverJugador(dt);        // movimiento por ejes y choques
 	revisarMuerte();         // obstaculos o vacio
 	revisarSalida();           // pasar de nivel o terminar la partida
@@ -32,18 +33,45 @@ void Partida::actualizarLanzas(float dt) { // lanzas: moverlas, clavarlas al toc
 		if(l.estaClavada() || l.estaVolviendo()){
 			continue; // las lanzas ya clavadas o volviendo no se revisan, las demas se clavan al tocar un bloque
 		}
+		for (const Boton& b : _nivel.getBotones()) {
+			// findIntersection devuelve un std::optional: una "caja" que esta vacia si no hay choque,
+			// o que tiene adentro el rectangulo donde se superponen la lanza y el boton.
+			// auto: deja que el compilador ponga el tipo (std::optional<sf::FloatRect>, que es largo)
+			auto zona = l.getHitbox().findIntersection(b.getHitbox());
+			if (zona) { // si la caja tiene algo, hubo choque
+				l.clavar(*zona);
+				// *zona saca el rectangulo de adentro de la caja (no es un puntero: en un optional, * significa "el valor que tiene")
+				_sonidos.reproducir(TipoSonido::LanzaClavar);
+				break;
+			}			
+		}
+		if (l.estaClavada()) {
+			continue; // ya se clavo en un boton: no revisar los bloques. esto es por si hay un boton pegado a un bloque
+		}
 		for (const Bloque& b : _nivel.getBloques()) {
 			// si la hitbox de la lanza se cruza con la del bloque; la lanza se clava si es de madera
-			if (l.getHitbox().findIntersection(b.getHitbox())) {
+			auto zona = l.getHitbox().findIntersection(b.getHitbox());
+			if (zona) {
 				if (b.esMadera()) {
-					l.clavar();
-					break;
+						l.clavar(*zona);
+						_sonidos.reproducir(TipoSonido::LanzaClavar);
+						break;
 				}
 				else {
 					l.volver();
+					_sonidos.reproducir(TipoSonido::LanzaRebote);
 					break;
 				}
-				
+			}
+		}
+		for (const Mecanismo* m : _nivel.getMecanismos()) {
+			auto zona = l.getHitbox().findIntersection(m->getHitbox());
+			if (zona) {
+				if (m->esSolido()) {
+					l.volver();
+					_sonidos.reproducir(TipoSonido::LanzaRebote);
+					break;
+				}
 			}
 		}
 	}
@@ -54,10 +82,11 @@ void Partida::actualizarLanzas(float dt) { // lanzas: moverlas, clavarlas al toc
 		if ((lanzaHitBox.position.y > ALTO_MUNDO || lanzaHitBox.position.x > ANCHO_MUNDO ||
 			lanzaHitBox.position.x + lanzaHitBox.size.x < 0) && !_lanzas[i].estaVolviendo()) {
 			_lanzas.erase(_lanzas.begin() + i);
-		}
+		} 
 		//  2) estaban volviendo y llegaron al jugador
 		else if (_lanzas[i].estaVolviendo() && lanzaHitBox.findIntersection(_jugador.getHitbox())) {
 			_lanzas.erase(_lanzas.begin() + i);
+			_sonidos.reproducir(TipoSonido::LanzaAtrapar);
 		}
 	}
 }
@@ -70,12 +99,24 @@ void Partida::moverJugador(float dt) {
 	for (const Bloque& b : _nivel.getBloques()) {
 		_jugador.chocarHorizontal(b.getHitbox());
 	}
+	for (Mecanismo* m : _nivel.getMecanismos()) {
+		if (m->esSolido()) {
+			_jugador.chocarHorizontal(m->getHitbox());
+		}
+	}
 
 	// eje Y: gravedad, despues choques verticales y aterrizajes
 	_jugador.actualizar(dt);
 	for (const Bloque& b : _nivel.getBloques()) {
 		_jugador.chocarVertical(b.getHitbox());
+
 	}
+	for (Mecanismo* m : _nivel.getMecanismos()) {
+		if (m->esSolido()) {
+			_jugador.chocarVertical(m->getHitbox());
+		}
+	}
+
 	for (const Terreno& t : _nivel.getPlataformas()) {
 		_jugador.aterrizarEn(t.getHitbox());
 	}
@@ -97,6 +138,7 @@ void Partida::revisarMuerte() {
 	if (_nivel.jugadorTocoObstaculo(_jugador.getHitbox()) || _nivel.jugadorCayoAlVacio(_jugador.getHitbox())) {
 		_jugador.reiniciar(_nivel.getRespawn());
 		_cantidadMuertes++;
+		_sonidos.reproducir(TipoSonido::Muerte);
 	}
 }
 
@@ -111,6 +153,7 @@ void Partida::revisarSalida() {
 
 		if (destino == -1) {
 			_terminada = true;   // salida final: fin del juego
+			_sonidos.reproducir(TipoSonido::Victoria);
 		}
 		else {
 			_numeroNivel = destino;            // la salida decide a que sala se va
@@ -118,6 +161,7 @@ void Partida::revisarSalida() {
 			quitarColeccionablesObtenidos();
 			_lanzas.clear();
 			_jugador.reiniciar(entrada);       // aparece donde indica la salida
+			_sonidos.reproducir(TipoSonido::CambioSala);
 		}
 	}
 }
@@ -131,6 +175,14 @@ void Partida::revisarColeccionables() {
 		_obtenidos[static_cast<int>(tipo)] = true; // el tipo como numero = su casilla en el arreglo
 		_nivel.quitarColeccionable(tipo);
 		if (tipo == TipoColeccionable::DobleSalto){ _jugador.setDobleSalto(true); }
+
+		// las habilidades tienen un sonido distinto al de las llaves
+		if (tipo == TipoColeccionable::DobleSalto || tipo == TipoColeccionable::Lanza) {
+			_sonidos.reproducir(TipoSonido::Habilidad);
+		}
+		else {
+			_sonidos.reproducir(TipoSonido::Llave);
+		}
 	}
 }
 
@@ -196,6 +248,7 @@ void Partida::lanzarLanza(sf::Vector2f destino) {
 	if (!_lanzas.empty()) { // si ya hay una lanza en el mapa, el clic la hace volver
 		_lanzas[0].volver();
 		_lanzaDisponible = false;
+		_sonidos.reproducir(TipoSonido::LanzaLlamar);
 		return;
 	}
 
@@ -205,6 +258,7 @@ void Partida::lanzarLanza(sf::Vector2f destino) {
 	
 	sf::Vector2f centroJugador = _jugador.getHitbox().getCenter();
 	
-	_lanzas.push_back(Lanza(centroJugador,destino));
+	_lanzas.push_back(Lanza(centroJugador,destino, _texturas.get(TipoTextura::Lanza)));
+	_sonidos.reproducir(TipoSonido::LanzaLanzar);
 	_lanzaDisponible = false;
 }

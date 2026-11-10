@@ -1,8 +1,8 @@
 #include "Jugador.h"
 #include "Constantes.h"
-#include <SFML/window.hpp>
+#include <SFML/Window.hpp>
 
-Jugador::Jugador(sf::Vector2f posicion) : _tieneDobleSalto(false){
+Jugador::Jugador(sf::Vector2f posicion, Sonidos& sonidos) : _tieneDobleSalto(false), _sonidos(sonidos){
 	_forma.setSize(sf::Vector2f(ANCHO_JUGADOR, ALTO_JUGADOR));
 	// Vector2f Es una clase simple que representa un par de números: una coordenada x y una coordenada y.
 	// Vector2f = vector 2D de floats (10.f = float | 10.0 = double) Vector2f espera 2 floats.  
@@ -26,7 +26,8 @@ void Jugador::reiniciar(sf::Vector2f posicion) {
 	_forma.setPosition(posicion);
 	_velocidadY = 0.f;
 	_desplazamientoX = 0.f;
-	_enElSuelo = false;
+	_enElSuelo = true;        // aparece apoyado: asi no suena "aterrizar" al reaparecer o cambiar de sala
+	_estabaEnElSuelo = true;
 	_saltosRestantes = _tieneDobleSalto ? 1 : 0;// "?" es un operador ternario, es como un mini if
 	         									//"_saltosRestantes vale 1 si tiene doble salto, y si no, 0"
 	_saltoApretadoAntes = false;
@@ -51,10 +52,12 @@ void Jugador::mover(float dt) { //“¿que teclas apreto el jugador?” y reacci
 		if (_enElSuelo) {
 			_velocidadY = _fuerzaSalto;
 			_enElSuelo = false;
+			_sonidos.reproducir(TipoSonido::Salto);
 		}
 		else if (_saltosRestantes > 0) {
 			_velocidadY = _fuerzaSalto;
 			_saltosRestantes--;
+			_sonidos.reproducir(TipoSonido::DobleSalto);
 		}
 	}
 	if (acabaDeSoltar && _velocidadY < 0) {
@@ -71,6 +74,7 @@ void Jugador::actualizar(float dt) {
 	//  y después se aplica el movimiento vertical.
 
 	_alturaPiesAnterior = getHitbox().position.y + getHitbox().size.y;
+	_estabaEnElSuelo = _enElSuelo; // se guarda ANTES de reiniciarlo: es lo que paso en el frame anterior
 	_enElSuelo = false;
 	_velocidadY += _gravedad * dt;  // la gravedad cambia la VELOCIDAD
 
@@ -94,6 +98,7 @@ void Jugador::aterrizarEn(sf::FloatRect plataformaHitbox) {
 	_forma.setPosition(sf::Vector2f(_forma.getPosition().x, plataformaHitbox.position.y - getHitbox().size.y));
 	// y = parte de arriba de la plataforma menos el alto del jugador
 	_velocidadY = 0.f;
+	sonarAterrizaje();
 	_enElSuelo = true;
 	_saltosRestantes = _tieneDobleSalto ? 1 : 0;
 }
@@ -132,6 +137,7 @@ void Jugador::chocarVertical(sf::FloatRect bloqueHitbox) {
 	if (_velocidadY > 0) {
 		_forma.setPosition(sf::Vector2f(_forma.getPosition().x, bloqueHitbox.position.y - getHitbox().size.y));
 		_velocidadY = 0.f; // reinicia velocidad de caida
+		sonarAterrizaje();
 		_enElSuelo = true;
 		_saltosRestantes = _tieneDobleSalto ? 1 : 0;
 	}
@@ -162,3 +168,8 @@ sf::FloatRect Jugador::getHitbox() const {
 	return _forma.getGlobalBounds();
 } ///_forma.getGlobalBounds() ya devuelve esa caja armada, ajustada a donde está la forma en este momento.
 
+void Jugador::sonarAterrizaje() {
+	if (!_estabaEnElSuelo) {
+		_sonidos.reproducir(TipoSonido::Aterrizar);
+	}
+}

@@ -1,10 +1,13 @@
 #include "PilarMovil.h"
 
-PilarMovil::PilarMovil(sf::Vector2f posicionInicial, sf::Vector2f tamanio, float limiteIzquierdo, float limiteDerecho, float velocidad) 
-	: _limiteIzquierdo(limiteIzquierdo), _limiteDerecho(limiteDerecho), _velocidad(velocidad){
+PilarMovil::PilarMovil(sf::Vector2f posicionInicial, sf::Vector2f tamanio, float limiteIzquierdo, float limiteDerecho, float velocidad, const Texturas& texturas) 
+	: _limiteIzquierdo(limiteIzquierdo), _limiteDerecho(limiteDerecho), _velocidad(velocidad), _sprite(texturas.get(TipoTextura::PilarPinches)) {
 	_forma.setSize(tamanio);
 	_forma.setPosition(posicionInicial);
 	_forma.setFillColor(sf::Color::Red);
+
+	sf::Vector2u tamanioImagen = texturas.get(TipoTextura::PilarPinches).getSize();
+	_sprite.setScale(sf::Vector2f(tamanio.x / tamanioImagen.x, tamanio.y / tamanioImagen.y));
 }
 
 void PilarMovil::actualizar(float dt) {
@@ -19,7 +22,9 @@ void PilarMovil::actualizar(float dt) {
 }
 
 void PilarMovil::dibujar(sf::RenderWindow& ventana) {
-	ventana.draw(_forma);
+	// el pilar se mueve: en cada frame el sprite copia la posicion de la forma
+	_sprite.setPosition(_forma.getPosition());
+	ventana.draw(_sprite);
 }
 
 sf::FloatRect PilarMovil::getHitbox() const {

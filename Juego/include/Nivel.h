@@ -1,14 +1,19 @@
 #pragma once
 #include <vector>
-#include <SFML/graphics.hpp>
+#include <SFML/Graphics.hpp>
 #include "Obstaculo.h"
 #include "Pinche.h"
 #include "PilarMovil.h"
 #include "Salida.h"
 #include "Constantes.h"
+#include "Lanza.h"
 #include "Plataforma.h"
 #include "Bloque.h"
 #include "Coleccionable.h"
+#include "Boton.h"
+#include "Compuerta.h"
+#include "Sonidos.h"
+#include "Texturas.h"
 
 
 class Nivel {
@@ -18,13 +23,17 @@ private:
 	sf::Sprite _fondo; 
 	bool _fondoCargado = false;
 	std::vector<Obstaculo*> _obstaculos; 
+	std::vector<Mecanismo*> _mecanismos;
 	std::vector<Plataforma> _plataformas;
 	std::vector<Bloque> _bloques;
 	std::vector<Salida> _salidas;
+	std::vector<Boton> _botones;
 	std::vector<Coleccionable> _coleccionables;
 	sf::Vector2f _respawn;
+	Sonidos& _sonidos; 
+	const Texturas& _texturas;
 public:
-	Nivel(int numeroNivel);
+	Nivel(int numeroNivel, Sonidos& sonidos, const Texturas& texturas);
 	void actualizar(float dt);
 	void cargarNivel(int numeroNivel, bool puertaAbierta = false);
 	void dibujar(sf::RenderWindow& ventana);
@@ -35,7 +44,10 @@ public:
 	void quitarColeccionable(TipoColeccionable tipo);
 	const std::vector<Plataforma>& getPlataformas() const;
 	const std::vector<Bloque>& getBloques() const;
+	const std::vector<Boton>& getBotones() const;
+	void actualizarBotonesYMecanismos(const std::vector<Lanza>& lanzas);
 	sf::Vector2f getRespawn() const;
+	const std::vector<Mecanismo*>& getMecanismos() const;
 
 	~Nivel();
 private:

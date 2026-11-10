@@ -1,5 +1,5 @@
 #pragma once
-#include <SFML/graphics.hpp>
+#include <SFML/Graphics.hpp>
 
 class Obstaculo {
 public: //permite que diferentes obstáculos implementen sus propios comportamientos

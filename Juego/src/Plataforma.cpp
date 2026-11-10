@@ -1,7 +1,5 @@
 #include "Plataforma.h"
 
-Plataforma::Plataforma(sf::Vector2f posicion, sf::Vector2f tamanio)
-	: Terreno(posicion, tamanio, sf::Color(120, 80, 40)) {
+Plataforma::Plataforma(sf::Vector2f posicion, sf::Vector2f tamanio, const Texturas& texturas)
+	: Terreno(posicion, tamanio, texturas.get(TipoTextura::Plataforma)) {
 }
-
-

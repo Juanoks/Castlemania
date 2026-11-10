@@ -1,5 +1,6 @@
 #pragma once
-#include <SFML/graphics.hpp>
+#include <SFML/Graphics.hpp>
+#include "Sonidos.h"
 
 class Jugador {
 private:
@@ -12,13 +13,17 @@ private:
     int _saltosRestantes;
     float _alturaPiesAnterior;
     bool _enElSuelo;
+    bool _estabaEnElSuelo; 
     bool _saltoApretadoAntes;
     bool _tieneDobleSalto;
     float _cortarSalto;
     float _velocidadMaximaCaida;
+    Sonidos& _sonidos;
+
+    void sonarAterrizaje(); 
 
 public:
-    Jugador(sf::Vector2f posicion);
+    Jugador(sf::Vector2f posicion, Sonidos& sonidos);
 
     void dibujar(sf::RenderWindow& ventana);
     void reiniciar(sf::Vector2f posicion);
