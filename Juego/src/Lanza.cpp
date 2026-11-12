@@ -1,6 +1,7 @@
 #include "Lanza.h"
 #include "Constantes.h"
 #include <cmath>
+
 // "origen" (el jugador) que sale lanzada hacia "destino" (el mouse)
 Lanza::Lanza(sf::Vector2f origen, sf::Vector2f destino, const sf::Texture& textura) 
 	: _gravedad(600.f), _estado(EstadoLanza::Volando), _sprite(textura) {

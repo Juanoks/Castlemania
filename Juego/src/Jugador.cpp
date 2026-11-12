@@ -2,7 +2,8 @@
 #include "Constantes.h"
 #include <SFML/Window.hpp>
 
-Jugador::Jugador(sf::Vector2f posicion, Sonidos& sonidos) : _tieneDobleSalto(false), _sonidos(sonidos){
+Jugador::Jugador(sf::Vector2f posicion, Sonidos& sonidos, const sf::Texture& textura) 
+	: _tieneDobleSalto(false), _sonidos(sonidos), _sprite(textura) {
 	_forma.setSize(sf::Vector2f(ANCHO_JUGADOR, ALTO_JUGADOR));
 	// Vector2f Es una clase simple que representa un par de números: una coordenada x y una coordenada y.
 	// Vector2f = vector 2D de floats (10.f = float | 10.0 = double) Vector2f espera 2 floats.  
@@ -18,7 +19,8 @@ Jugador::Jugador(sf::Vector2f posicion, Sonidos& sonidos) : _tieneDobleSalto(fal
 }
 
 void Jugador::dibujar(sf::RenderWindow& ventana) {
-	ventana.draw(_forma);
+	_sprite.setPosition(_forma.getPosition());
+	ventana.draw(_sprite);
 }
 
 void Jugador::reiniciar(sf::Vector2f posicion) {

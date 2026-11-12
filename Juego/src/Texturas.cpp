@@ -8,7 +8,7 @@ Texturas::Texturas() {
 		"bloque.png", "bloque_madera.png", "plataforma.png",
 		"llave_azul_aura.png", "llave_amarilla_aura.png", "llave_verde_aura.png", "llave_roja_aura.png",
 		"habilidad_lanza_aura.png", "habilidad_doble_salto_aura.png",
-		"compuerta_cerrada.png", "compuerta_abierta.png"
+		"compuerta_cerrada.png", "compuerta_abierta.png", "jugador.png"
 	};
 	for (int i = 0; i < CANTIDAD_TEXTURAS; i++) {
 		if (!_texturas[i].loadFromFile("sprites/" + archivos[i])) {

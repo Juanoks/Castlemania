@@ -4,10 +4,10 @@
 enum class TipoTextura {
 	Lanza, Pinche, PilarPinches, BotonInactivo, BotonActivo, Bloque, BloqueMadera, Plataforma,
 	LlaveAzul, LlaveAmarilla, LlaveVerde, LlaveRoja, HabilidadLanza, HabilidadDobleSalto,
-	CompuertaCerrada, CompuertaAbierta
+	CompuertaCerrada, CompuertaAbierta, Jugador
 };
 
-constexpr int CANTIDAD_TEXTURAS = 16; // si se agrega un tipo al enum, hay que actualizar este numero
+constexpr int CANTIDAD_TEXTURAS = 17; // si se agrega un tipo al enum, hay que actualizar este numero
 
 class Texturas {
 private:

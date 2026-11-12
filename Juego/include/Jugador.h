@@ -18,12 +18,13 @@ private:
     bool _tieneDobleSalto;
     float _cortarSalto;
     float _velocidadMaximaCaida;
+    sf::Sprite _sprite;
     Sonidos& _sonidos;
 
     void sonarAterrizaje(); 
 
 public:
-    Jugador(sf::Vector2f posicion, Sonidos& sonidos);
+    Jugador(sf::Vector2f posicion, Sonidos& sonidos, const sf::Texture& textura);
 
     void dibujar(sf::RenderWindow& ventana);
     void reiniciar(sf::Vector2f posicion);

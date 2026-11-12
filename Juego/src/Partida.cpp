@@ -1,7 +1,7 @@
 #include "Partida.h"
 
 // Nivel y Jugador no tienen constructor vacio: por eso se crean en la lista de inicializacion.
-Partida::Partida(Sonidos& sonidos, const Texturas& texturas) : _numeroNivel(0), _nivel(_numeroNivel, sonidos, texturas), _jugador(_nivel.getRespawn(), sonidos),
+Partida::Partida(Sonidos& sonidos, const Texturas& texturas) : _numeroNivel(1), _nivel(_numeroNivel, sonidos, texturas), _jugador(_nivel.getRespawn(), sonidos),
 _terminada(false), _lanzaDisponible(true), _tiempoDeCompletado(0), _cantidadMuertes(0), _sonidos(sonidos), _texturas(texturas) {
 	for (int i = 0; i < CANTIDAD_COLECCIONABLES; i++) {
 		_obtenidos[i] = false;
