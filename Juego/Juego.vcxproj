@@ -157,6 +157,7 @@
     <ClCompile Include="src\Jugador.cpp" />
     <ClCompile Include="src\Mecanismo.cpp" />
     <ClCompile Include="src\MenuPrincipal.cpp" />
+    <ClCompile Include="src\Musica.cpp" />
     <ClCompile Include="src\Salida.cpp" />
     <ClCompile Include="src\Nivel.cpp" />
     <ClCompile Include="src\Obstaculo.cpp" />
@@ -181,6 +182,7 @@
     <ClInclude Include="include\Jugador.h" />
     <ClInclude Include="include\Mecanismo.h" />
     <ClInclude Include="include\MenuPrincipal.h" />
+    <ClInclude Include="include\Musica.h" />
     <ClInclude Include="include\Salida.h" />
     <ClInclude Include="include\Nivel.h" />
     <ClInclude Include="include\Obstaculo.h" />

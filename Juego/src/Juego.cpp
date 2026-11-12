@@ -9,8 +9,10 @@
 #include "MenuPrincipal.h"
 #include "EstadoJuego.h"
 #include "Partida.h"
-#include "Sonidos.h"
 #include "Texturas.h"
+#include "Sonidos.h"
+#include "Musica.h"
+
 
 // convierte segundos (con decimales) en texto con formato minutos:segundos
 std::string ajustarTiempo(float segundos) {
@@ -69,7 +71,7 @@ int main() {
 		std::cout << "No se pudo cargar la fuente";
 		return -1;
 	}
-	Sonidos sonidos; Texturas texturas;
+	Sonidos sonidos; Texturas texturas; Musica musica;
 	MenuPrincipal menuPrincipal(fuente);
 
 	sf::Text instrucciones(fuente, "", 15);
@@ -220,6 +222,12 @@ int main() {
 		}
 
 		dt = tiempo.restart().asSeconds(); // cuanto paso desde el frame anterior (y reinicia el cronómetro)
+
+		// se llama en cada frame: reproducir no hace nada si ya suena esa musica,
+		// asi que alcanza con decir que musica corresponde a cada estado
+		if (estadoActual == EstadoJuego::Jugando) { musica.reproducir(TipoMusica::Juego); }
+		else if (estadoActual == EstadoJuego::Victoria) { musica.reproducir(TipoMusica::Victoria); }
+		else { musica.reproducir(TipoMusica::Menu); }
 
 		switch (estadoActual) {
 		case EstadoJuego::Menu:

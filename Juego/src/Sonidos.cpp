@@ -24,7 +24,6 @@ Sonidos::Sonidos() {
 		}
 		// crea el reproductor de este sonido, conectado a su buffer (queda en la misma posicion i)
 		_sonidos.push_back(sf::Sound(_buffers[i]));
-		
 	}
 }
 
