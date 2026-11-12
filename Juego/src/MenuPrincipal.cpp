@@ -3,15 +3,17 @@
 MenuPrincipal::MenuPrincipal(const sf::Font& fuente) : _titulo(fuente,"Punto B", 40){
 	_seleccion = 0; // arranca en jugar
 	_opciones.push_back(sf::Text(fuente, "Jugar", 25));
+	_opciones.push_back(sf::Text(fuente, "Instrucciones", 25));
 	_opciones.push_back(sf::Text(fuente, "Records", 25));
 	_opciones.push_back(sf::Text(fuente, "Creditos", 25));
 	_opciones.push_back(sf::Text(fuente, "Salir", 25));
 
 	_titulo.setPosition(sf::Vector2f(330.f, 50.f));		  // Titulo
-	_opciones[0].setPosition(sf::Vector2f(330.f, 180.f)); // Jugar
-	_opciones[1].setPosition(sf::Vector2f(330.f, 260.f)); // Records
-	_opciones[2].setPosition(sf::Vector2f(330.f, 340.f)); // Creditos
-	_opciones[3].setPosition(sf::Vector2f(330.f, 420.f)); // Salir
+	_opciones[0].setPosition(sf::Vector2f(400.f, 180.f)); // Jugar
+	_opciones[1].setPosition(sf::Vector2f(320.f, 250.f)); // Instrucciones
+	_opciones[2].setPosition(sf::Vector2f(385.f, 320.f)); // Records
+	_opciones[3].setPosition(sf::Vector2f(370.f, 390.f)); // Creditos
+	_opciones[4].setPosition(sf::Vector2f(402.f, 460.f)); // Salir
 }
 
 // sube la seleccion, sin pasar de la primera opción

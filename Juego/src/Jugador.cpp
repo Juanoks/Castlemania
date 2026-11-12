@@ -37,13 +37,16 @@ void Jugador::reiniciar(sf::Vector2f posicion) {
 
 void Jugador::mover(float dt) { //“¿que teclas apreto el jugador?” y reaccionar a eso.
 	sf::Vector2f movimiento(0.f, 0.f);
-	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::A)) {
+	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::A) ||
+		sf::Keyboard::isKeyPressed(sf::Keyboard::Key::Left)) {
 		movimiento.x -= _velocidadX * dt;
 	}
-	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::D)) {
+	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::D) ||
+		sf::Keyboard::isKeyPressed(sf::Keyboard::Key::Right)) {
 		movimiento.x += _velocidadX * dt;
 	}
-	bool wApretada = sf::Keyboard::isKeyPressed(sf::Keyboard::Key::W);
+	bool wApretada = sf::Keyboard::isKeyPressed(sf::Keyboard::Key::W) ||
+		sf::Keyboard::isKeyPressed(sf::Keyboard::Key::Up);
 	bool acabaDeApretar = wApretada && !_saltoApretadoAntes;
 	bool acabaDeSoltar = !wApretada && _saltoApretadoAntes;
 	_saltoApretadoAntes = wApretada;

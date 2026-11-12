@@ -2,7 +2,7 @@
 #include <SFML/Graphics.hpp>
 
 class Obstaculo {
-public:
+public: //permite que diferentes obstáculos implementen sus propios comportamientos
 	virtual void actualizar(float dt){}
 	virtual sf::FloatRect getHitbox() const = 0;
 	virtual void dibujar(sf::RenderWindow& ventana) = 0;
