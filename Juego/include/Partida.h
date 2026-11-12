@@ -33,6 +33,7 @@ public:
 	bool termino() const;
 	float getTiempoDeCompletado() const;
 	int getCantidadMuertes() const;
+	int getNumeroNivel() const;
 
 	void lanzarLanza(sf::Vector2f destino);
 

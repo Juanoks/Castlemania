@@ -242,6 +242,11 @@ int Partida::getCantidadMuertes() const {
 	return _cantidadMuertes;
 }
 
+int Partida::getNumeroNivel() const
+{
+	return _numeroNivel;
+}
+
 void Partida::lanzarLanza(sf::Vector2f destino) {
 	if (!tiene(TipoColeccionable::Lanza)) { // si no tenes la lanza
 		return;

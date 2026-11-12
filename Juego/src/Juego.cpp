@@ -92,11 +92,17 @@ int main() {
 
 	sf::Text nombre(fuente, "Integrantes", 30);
 	nombre.setPosition(sf::Vector2f(330.f, 200.f));
+	sf::Text records(fuente, "", 15);
+	records.setPosition(sf::Vector2f(100.f, 80.f));
+
+	sf::Text textoSala(fuente, "", 20);
+	textoSala.setPosition(sf::Vector2f(28.f, 28.f));
+	textoSala.setOutlineColor(sf::Color::Black);   // color del borde
+	textoSala.setOutlineThickness(2.f);            // grosor del borde, en pixeles
+
 	sf::Text victoria(fuente, "", 30);
 	victoria.setPosition(sf::Vector2f(250.f, 200.f));
 	victoria.setFillColor(sf::Color::Magenta);
-	sf::Text records(fuente, "", 15);
-	records.setPosition(sf::Vector2f(100.f, 80.f));
 
 	EstadoJuego estadoActual = EstadoJuego::Menu;
 
@@ -274,6 +280,8 @@ int main() {
 			break;
 		case EstadoJuego::Jugando:
 			partida.dibujar(ventana);
+			textoSala.setString("Sala " + std::to_string(partida.getNumeroNivel()));
+			ventana.draw(textoSala);
 			break;
 		case EstadoJuego::Victoria:
 			partida.dibujar(ventana);
