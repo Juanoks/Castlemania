@@ -27,7 +27,7 @@ Nivel::Nivel(int numeroNivel, Sonidos& sonidos, const Texturas& texturas)
 	: _numeroNivel(numeroNivel),
 	_sonidos(sonidos),
 	_texturas(texturas),
-	_fondo(_texturaFondo) {
+	_fondo(_texturas.get(TipoTextura::FondoGeneral)) {
 
 	cargarNivel(numeroNivel);
 }
@@ -52,16 +52,20 @@ void Nivel::cargarNivel(int numeroNivel, bool puertaAbierta) {
 	_numeroNivel = numeroNivel;
 	_respawn = sf::Vector2f(50.f, Y_PISO - ALTO_JUGADOR); // parado sobre el piso
 
-	// Construimos el nombre del archivo segun la sala, convierte la seleccion de la imagen a un string para traer la imagen para cada nivel
-	std::string ruta = "imagenes/fondo" + std::to_string(numeroNivel) + ".png";
-	_fondoCargado = _texturaFondo.loadFromFile(ruta);
-	if (_fondoCargado) {
-		_fondo.setTexture(_texturaFondo, true);
-		_fondo.setPosition(sf::Vector2f(0.f, 0.f));
-		sf::Vector2u tamanio = _texturaFondo.getSize(); // Obtenemos el tamaño original de la imagen
-		_fondo.setScale(sf::Vector2f(ANCHO_MUNDO / tamanio.x, ALTO_MUNDO / tamanio.y)); // Ajustamos el fondo al tamaño del mundo
-		
+	TipoTextura tipoFondo = TipoTextura::FondoGeneral;
+	// casi todas las salas usan el fondo general; algunas zonas especiales tienen el suyo
+	if (numeroNivel == 8) {
+		tipoFondo = TipoTextura::FondoPuerta;
 	}
+	else if (numeroNivel == 30) {
+		tipoFondo = TipoTextura::FondoFinal;
+	}
+	// el true ajusta el recorte del sprite al tamanio de la imagen nueva
+	_fondo.setTexture(_texturas.get(tipoFondo), true);
+	sf::Vector2u tamanio = _texturas.get(tipoFondo).getSize();
+	// setScale no recibe un tamanio sino un multiplicador: lo que quiero que mida / lo que mide la imagen.
+	_fondo.setScale(sf::Vector2f(ANCHO_MUNDO / tamanio.x, ALTO_MUNDO / tamanio.y));
+
 
 	paredIzquierda(CONEXIONES[numeroNivel][0]);
 	paredDerecha(CONEXIONES[numeroNivel][1]);
@@ -225,10 +229,8 @@ void Nivel::cargarNivel(int numeroNivel, bool puertaAbierta) {
 }
 
 void Nivel::dibujar(sf::RenderWindow& ventana) {
+	ventana.draw(_fondo);
 
-	if (_fondoCargado) { // cargamos primero el fondo
-		ventana.draw(_fondo);
-	}
 	for (Obstaculo* o : _obstaculos) {
 		o->dibujar(ventana);
 	}

@@ -3,11 +3,17 @@
 #include <SFML/Window.hpp>
 
 Jugador::Jugador(sf::Vector2f posicion, Sonidos& sonidos, const sf::Texture& textura) 
-	: _tieneDobleSalto(false), _sonidos(sonidos), _sprite(textura) {
+	: _tieneDobleSalto(false), _sprite(textura), _sonidos(sonidos) {
+
 	_forma.setSize(sf::Vector2f(ANCHO_JUGADOR, ALTO_JUGADOR));
 	// Vector2f Es una clase simple que representa un par de números: una coordenada x y una coordenada y.
 	// Vector2f = vector 2D de floats (10.f = float | 10.0 = double) Vector2f espera 2 floats.  
-	_forma.setFillColor(sf::Color::Blue);
+	
+	// la imagen mide 50x80: al 75% queda de 37.5x60 (el alto coincide con ALTO_JUGADOR)
+	_sprite.setScale(sf::Vector2f(0.75f, 0.75f));
+	// origen en el medio de los pies de la imagen (mitad del ancho, todo el alto). Se mide sobre la imagen
+	// original, sin escala. Asi el sprite se ubica por los pies, y al espejarlo gira sobre si mismo.
+	_sprite.setOrigin(sf::Vector2f(25.f, 80.f));
 
 	_velocidadX = 300.f;
 	_gravedad = 980.f;
@@ -19,7 +25,9 @@ Jugador::Jugador(sf::Vector2f posicion, Sonidos& sonidos, const sf::Texture& tex
 }
 
 void Jugador::dibujar(sf::RenderWindow& ventana) {
-	_sprite.setPosition(_forma.getPosition());
+	// los pies del dibujo van en el medio de los pies de la hitbox (centro en x, parte de abajo en y)
+	sf::FloatRect hitbox = getHitbox();
+	_sprite.setPosition(sf::Vector2f(hitbox.getCenter().x, hitbox.position.y + hitbox.size.y));
 	ventana.draw(_sprite);
 }
 
@@ -43,7 +51,7 @@ void Jugador::mover(float dt) { //“¿que teclas apreto el jugador?” y reacci
 	}
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::D) ||
 		sf::Keyboard::isKeyPressed(sf::Keyboard::Key::Right)) {
-		movimiento.x += _velocidadX * dt;
+		movimiento.x += _velocidadX * dt;	
 	}
 	bool wApretada = sf::Keyboard::isKeyPressed(sf::Keyboard::Key::W) ||
 		sf::Keyboard::isKeyPressed(sf::Keyboard::Key::Up);
@@ -69,6 +77,14 @@ void Jugador::mover(float dt) { //“¿que teclas apreto el jugador?” y reacci
 	_forma.move(movimiento); //Para mover la _forma, las clases sf::RectangleShape (y en general las formas de SFML)...
 	//tienen un método move(Vector2f) que le suma un desplazamiento a la posición actual.
 	_desplazamientoX = movimiento.x;
+
+	if (_desplazamientoX > 0) {
+		_sprite.setScale(sf::Vector2f(0.75f, 0.75f));
+	}
+	// la escala negativa en x espeja el dibujo; como el origen esta en el centro de los pies, gira sobre si mismo.
+	else if (_desplazamientoX < 0) {
+		_sprite.setScale(sf::Vector2f(-0.75, 0.75));
+	}
 }
 
 void Jugador::actualizar(float dt) {

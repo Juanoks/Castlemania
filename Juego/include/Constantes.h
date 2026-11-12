@@ -6,8 +6,10 @@ constexpr unsigned int FPS = 60; // cuadros por segundo (limite de la ventana)
 
 constexpr int MAX_RECORDS = 5; // maximo de records a mostrar en la pantalla de Records
 
-constexpr float ANCHO_JUGADOR = 24.f;
-constexpr float ALTO_JUGADOR = 40.f;
+// tamanio de la HITBOX del jugador. El sprite (50x80) se dibuja al 75%: 37.5x60,
+// y el cuerpo visible mide unos 30 de ancho, asi que la hitbox coincide con lo que se ve.
+constexpr float ANCHO_JUGADOR = 30.f;
+constexpr float ALTO_JUGADOR = 60.f;
 
 constexpr float GROSOR_PARED = 20.f;
 constexpr float TAMANIO_HUECO = 80.f;
