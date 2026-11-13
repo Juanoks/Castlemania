@@ -12,6 +12,7 @@
 #include "Coleccionable.h"
 #include "Boton.h"
 #include "Compuerta.h"
+#include "PuertaFinal.h"
 #include "Sonidos.h"
 #include "Texturas.h"
 
@@ -27,25 +28,34 @@ private:
 	std::vector<Boton> _botones;
 	std::vector<Coleccionable> _coleccionables;
 	sf::Vector2f _respawn;
+	std::vector<PuertaFinal> _puertas;
 	Sonidos& _sonidos; 
 	const Texturas& _texturas;
 	sf::Sprite _fondo;
 public:
 	Nivel(int numeroNivel, Sonidos& sonidos, const Texturas& texturas);
+
 	void actualizar(float dt);
-	void cargarNivel(int numeroNivel, bool puertaAbierta = false);
-	void dibujar(sf::RenderWindow& ventana);
+	void cargarNivel(int numeroNivel);
+	void dibujar(sf::RenderWindow& ventana, const bool llaves[]);
+
+	// hitbox
 	bool jugadorTocoObstaculo(sf::FloatRect hitboxJugador) const;
 	bool jugadorCayoAlVacio(sf::FloatRect hitboxJugador) const;
 	const Salida* salidaTocada(sf::FloatRect hitboxJugador) const;
 	const Coleccionable* coleccionableTocado(sf::FloatRect hitboxJugador) const;
-	void quitarColeccionable(TipoColeccionable tipo);
+
+	// getters
 	const std::vector<Plataforma>& getPlataformas() const;
 	const std::vector<Bloque>& getBloques() const;
 	const std::vector<Boton>& getBotones() const;
-	void actualizarBotonesYMecanismos(const std::vector<Lanza>& lanzas);
+	const std::vector<PuertaFinal>& getPuertas() const;
 	sf::Vector2f getRespawn() const;
 	const std::vector<Mecanismo*>& getMecanismos() const;
+
+	void quitarColeccionable(TipoColeccionable tipo);
+	void actualizarBotonesYMecanismos(const std::vector<Lanza>& lanzas);
+	void actualizarPuertas(sf::FloatRect hitboxJugador, bool tieneLasLlaves);
 
 	~Nivel();
 private:

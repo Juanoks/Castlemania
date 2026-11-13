@@ -41,13 +41,13 @@ void Nivel::actualizar(float dt) {
 	}
 }
 
-void Nivel::cargarNivel(int numeroNivel, bool puertaAbierta) {
+void Nivel::cargarNivel(int numeroNivel) {
 	// Si solo se hace clear(), los objetos creados con new quedan en memoria
 	for (Obstaculo* o : _obstaculos) { delete o; }
 	for (Mecanismo* m : _mecanismos) { delete m; } 
 
 	_obstaculos.clear(); _plataformas.clear(); _bloques.clear(); _salidas.clear(); _coleccionables.clear(); _botones.clear();
-	_mecanismos.clear();
+	_mecanismos.clear(); _puertas.clear();
 
 	_numeroNivel = numeroNivel;
 	_respawn = sf::Vector2f(50.f, Y_PISO - ALTO_JUGADOR); // parado sobre el piso
@@ -194,10 +194,11 @@ void Nivel::cargarNivel(int numeroNivel, bool puertaAbierta) {
 		_mecanismos.push_back(new Compuerta(sf::Vector2f(860.f, Y_PISO - 80.f), sf::Vector2f(20.f, 80.f), 1, _texturas));
 	}
 	else if (numeroNivel == 8) {
-		if (!puertaAbierta) {
-			_bloques.push_back(Bloque(sf::Vector2f
-			(ANCHO_MUNDO - GROSOR_PARED * 2, Y_PISO - TAMANIO_HUECO), sf::Vector2f(GROSOR_PARED, TAMANIO_HUECO), _texturas));
-		}
+		_puertas.push_back(PuertaFinal(sf::Vector2f(ANCHO_MUNDO - 63.f * ESCALA_PUERTA, Y_PISO - 96.f * ESCALA_PUERTA), _texturas));
+		_coleccionables.push_back(Coleccionable(sf::Vector2f(300.f, 480.f), TipoColeccionable::LlaveAzul, _texturas));
+		_coleccionables.push_back(Coleccionable(sf::Vector2f(200.f, 480.f), TipoColeccionable::LlaveAmarilla, _texturas));
+		_coleccionables.push_back(Coleccionable(sf::Vector2f(400.f, 480.f), TipoColeccionable::LlaveVerde, _texturas));
+		_coleccionables.push_back(Coleccionable(sf::Vector2f(500.f, 480.f), TipoColeccionable::LlaveRoja, _texturas));
 	}
 	else if (numeroNivel == 9) {	
 		_respawn = sf::Vector2f(458.f, 130.f - ALTO_JUGADOR); 
@@ -228,7 +229,7 @@ void Nivel::cargarNivel(int numeroNivel, bool puertaAbierta) {
 
 }
 
-void Nivel::dibujar(sf::RenderWindow& ventana) {
+void Nivel::dibujar(sf::RenderWindow& ventana, const bool llaves[]) {
 	ventana.draw(_fondo);
 
 	for (Obstaculo* o : _obstaculos) {
@@ -251,6 +252,9 @@ void Nivel::dibujar(sf::RenderWindow& ventana) {
 	}
 	for (Boton& b : _botones) {
 		b.dibujar(ventana);
+	}
+	for (PuertaFinal& p : _puertas) {
+		p.dibujar(ventana, llaves);
 	}
 
 }
@@ -309,6 +313,11 @@ const std::vector<Boton>& Nivel::getBotones() const {
 	return _botones;
 }
 
+const std::vector<PuertaFinal>& Nivel::getPuertas() const
+{
+	return _puertas;
+}
+
 void Nivel::actualizarBotonesYMecanismos(const std::vector<Lanza>& lanzas) {
 	// un boton esta activo si hay una lanza clavada tocandolo.
 	// se recalcula en cada frame: si la lanza vuelve al jugador, el boton se apaga solo.
@@ -336,6 +345,29 @@ void Nivel::actualizarBotonesYMecanismos(const std::vector<Lanza>& lanzas) {
 		}
 		m->setActivo(hayBotonActivo);
 	}
+}
+
+void Nivel::actualizarPuertas(sf::FloatRect hitboxJugador, bool tieneLasLlaves) {
+	for (PuertaFinal& p : _puertas) {
+		if (p.estaAbierta()) { continue; }
+
+		// la puerta es solida: el jugador nunca llega a pisarse con ella. Por eso "cerca" se mide con una zona
+		// que empieza 40 px antes de la puerta
+		sf::FloatRect zona = p.getHitbox();
+		zona.position.x -= 40.f;
+		zona.size.x += 40.f;
+		bool cerca = hitboxJugador.findIntersection(zona).has_value();
+
+		if (cerca && tieneLasLlaves) {
+			p.abrir();
+			_sonidos.reproducir(TipoSonido::PuertaAbrir);
+		}
+		else if (cerca && !tieneLasLlaves && !p.jugadorEstabaCerca()) {
+			_sonidos.reproducir(TipoSonido::PuertaCerrada);
+		}
+		p.setJugadorCerca(cerca);
+	}
+
 }
 
 sf::Vector2f Nivel::getRespawn() const {

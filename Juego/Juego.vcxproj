@@ -147,6 +147,7 @@
     </Manifest>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="src\PuertaFinal.cpp" />
     <ClCompile Include="src\ArchivoPartidas.cpp" />
     <ClCompile Include="src\Bloque.cpp" />
     <ClCompile Include="src\Boton.cpp" />
@@ -194,6 +195,7 @@
     <ClInclude Include="include\Sonidos.h" />
     <ClInclude Include="include\Terreno.h" />
     <ClInclude Include="include\Texturas.h" />
+    <ClInclude Include="include\PuertaFinal.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

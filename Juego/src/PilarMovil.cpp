@@ -2,6 +2,7 @@
 
 PilarMovil::PilarMovil(sf::Vector2f posicionInicial, sf::Vector2f tamanio, float limiteIzquierdo, float limiteDerecho, float velocidad, const Texturas& texturas) 
 	: _limiteIzquierdo(limiteIzquierdo), _limiteDerecho(limiteDerecho), _velocidad(velocidad), _sprite(texturas.get(TipoTextura::PilarPinches)) {
+
 	_forma.setSize(tamanio);
 	_forma.setPosition(posicionInicial);
 	_forma.setFillColor(sf::Color::Red);

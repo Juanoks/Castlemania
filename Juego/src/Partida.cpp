@@ -2,7 +2,7 @@
 
 // Nivel y Jugador no tienen constructor vacio: por eso se crean en la lista de inicializacion.
 Partida::Partida(Sonidos& sonidos, const Texturas& texturas) 
-: _numeroNivel(1), _nivel(_numeroNivel, sonidos, texturas), _jugador(_nivel.getRespawn(), sonidos, texturas.get(TipoTextura::Jugador)),
+: _numeroNivel(8), _nivel(_numeroNivel, sonidos, texturas), _jugador(_nivel.getRespawn(), sonidos, texturas.get(TipoTextura::Jugador)),
 _terminada(false), _lanzaDisponible(true), _tiempoDeCompletado(0), _cantidadMuertes(0), _sonidos(sonidos), _texturas(texturas) {
 	for (int i = 0; i < CANTIDAD_COLECCIONABLES; i++) {
 		_obtenidos[i] = false;
@@ -18,6 +18,7 @@ void Partida::actualizar(float dt) {
 	actualizarLanzas(dt);   // mover, clavar y borrar las que se fueron
 	_nivel.actualizarBotonesYMecanismos(_lanzas); // activa los botones con una lanza clavada, y los mecanismos de su canal
 	moverJugador(dt);        // movimiento por ejes y choques
+	_nivel.actualizarPuertas(_jugador.getHitbox(), tieneLasLlaves());
 	revisarMuerte();         // obstaculos o vacio
 	revisarSalida();           // pasar de nivel o terminar la partida
 	revisarColeccionables();
@@ -95,6 +96,7 @@ void Partida::actualizarLanzas(float dt) { // lanzas: moverlas, clavarlas al toc
 // jugador: se mueve un eje por vez y despues de cada uno se resuelven los choques de ese eje.
 // (si se moviera en diagonal antes de revisar, no se sabria si choco de costado o desde arriba)
 void Partida::moverJugador(float dt) {
+
 	// eje X: teclas A/D (y el salto), despues choques de costado con los bloques
 	_jugador.mover(dt);
 	for (const Bloque& b : _nivel.getBloques()) {
@@ -103,6 +105,11 @@ void Partida::moverJugador(float dt) {
 	for (Mecanismo* m : _nivel.getMecanismos()) {
 		if (m->esSolido()) {
 			_jugador.chocarHorizontal(m->getHitbox());
+		}
+	}
+	for (const PuertaFinal& p : _nivel.getPuertas()) {
+		if (!p.estaAbierta()) {
+			_jugador.chocarHorizontal(p.getHitbox());
 		}
 	}
 
@@ -117,11 +124,16 @@ void Partida::moverJugador(float dt) {
 			_jugador.chocarVertical(m->getHitbox());
 		}
 	}
+	for (const PuertaFinal& p : _nivel.getPuertas()) { // la puerta final es solida mientras este cerrada 
+		if (!p.estaAbierta()) {
+			_jugador.chocarVertical(p.getHitbox());
+		}
+	}
 
 	for (const Terreno& t : _nivel.getPlataformas()) {
 		_jugador.aterrizarEn(t.getHitbox());
 	}
-
+	
 	// recarga la lanza solo si esta parado sobre un bloque o una plataforma
 	if (_jugador.estaEnElSuelo()) {
 		_lanzaDisponible = true;
@@ -158,7 +170,7 @@ void Partida::revisarSalida() {
 		}
 		else {
 			_numeroNivel = destino;            // la salida decide a que sala se va
-			_nivel.cargarNivel(_numeroNivel, tieneLasLlaves());
+			_nivel.cargarNivel(_numeroNivel);
 			quitarColeccionablesObtenidos();
 			_lanzas.clear();
 			_jugador.reiniciar(entrada);       // aparece donde indica la salida
@@ -207,7 +219,7 @@ bool Partida::tieneLasLlaves() const { // true solo si se agarraron las 4 llaves
 
 // primero el nivel, después el jugador y por último las lanzas
 void Partida::dibujar(sf::RenderWindow& ventana) {
-	_nivel.dibujar(ventana);
+	_nivel.dibujar(ventana, _obtenidos);
 	_jugador.dibujar(ventana);
 	for (Lanza& f : _lanzas) {
 		f.dibujar(ventana);
