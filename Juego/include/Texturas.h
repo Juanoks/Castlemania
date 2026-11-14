@@ -7,10 +7,12 @@ enum class TipoTextura {
 	CompuertaCerrada, CompuertaAbierta, Jugador, FondoGeneral, FondoPuerta, FondoFinal, 
 	// puerta final
 	PuertaCerrada, PuertaCompleta, PuertaAbierta,
-	PuertaCapaAzul, PuertaCapaAmarilla, PuertaCapaVerde, PuertaCapaRoja
+	PuertaCapaAzul, PuertaCapaAmarilla, PuertaCapaVerde, PuertaCapaRoja,
+	// cristales
+	Cristal, CristalRoto, BarreraActiva, BarreraApagada
 };
 
-constexpr int CANTIDAD_TEXTURAS = 27; // si se agrega un tipo al enum, hay que actualizar este numero
+constexpr int CANTIDAD_TEXTURAS = 31; // si se agrega un tipo al enum, hay que actualizar este numero
 
 class Texturas {
 private:

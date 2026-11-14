@@ -47,7 +47,7 @@ void Nivel::cargarNivel(int numeroNivel) {
 	for (Mecanismo* m : _mecanismos) { delete m; } 
 
 	_obstaculos.clear(); _plataformas.clear(); _bloques.clear(); _salidas.clear(); _coleccionables.clear(); _botones.clear();
-	_mecanismos.clear(); _puertas.clear();
+	_mecanismos.clear(); _puertas.clear(); _cristales.clear();
 
 	_numeroNivel = numeroNivel;
 	_respawn = sf::Vector2f(50.f, Y_PISO - ALTO_JUGADOR); // parado sobre el piso
@@ -87,6 +87,12 @@ void Nivel::cargarNivel(int numeroNivel) {
 		_plataformas.push_back(Plataforma(sf::Vector2f(200.f, 300.f), sf::Vector2f(100.f, 20.f), _texturas));
 		_botones.push_back(Boton(sf::Vector2f(500.f, 200.f),1,_texturas));
 		_mecanismos.push_back(new Compuerta(sf::Vector2f(500.f, 320.f), sf::Vector2f(20.f, 80.f), 1, _texturas));
+
+		// PRUEBA de cristales (canal 2, para no mezclarse con el boton y la compuerta del canal 1):
+		// la barrera tapa el paso a la salida derecha y se apaga recien cuando se rompen los dos cristales
+		_cristales.push_back(Cristal(sf::Vector2f(40.f, Y_PISO - 44.f), 2, _texturas));   // en el piso, a la izquierda
+		_cristales.push_back(Cristal(sf::Vector2f(230.f, 300.f - 44.f), 2, _texturas));   // arriba de la plataforma
+		_mecanismos.push_back(new Barrera(sf::Vector2f(870.f, Y_PISO - 80.f), sf::Vector2f(20.f, 80.f), 2, _texturas));
 	}
 
 
@@ -256,6 +262,9 @@ void Nivel::dibujar(sf::RenderWindow& ventana, const bool llaves[]) {
 	for (PuertaFinal& p : _puertas) {
 		p.dibujar(ventana, llaves);
 	}
+	for (Cristal& c : _cristales) {
+		c.dibujar(ventana);
+	}
 
 }
 
@@ -328,22 +337,59 @@ void Nivel::actualizarBotonesYMecanismos(const std::vector<Lanza>& lanzas) {
 				tocado = true;
 			}
 		}
-		// sonido solo cuando el boton CAMBIA de estado (si no, sonaria en todos los frames)
-		if (tocado != b.estaActivo()) {
-			_sonidos.reproducir(tocado ? TipoSonido::BotonActivar : TipoSonido::BotonDesactivar);
-		}
-		b.setActivo(tocado);
+		b.setActivo(tocado); // el sonido lo hace el mecanismo (compuerta) al cambiar: si sonaran los dos, se pisan
 	}
-	// un mecanismo esta activo si alguno de los botones de su canal esta activo.
-	// mismo patron que los botones: se empieza en false, se busca si hay alguno, y al final se avisa.
+
+	for (Cristal& c : _cristales) {
+		if (c.estaRoto()) {
+			continue;
+		}
+		for (const Lanza& l : lanzas) {
+			// no clavada = volando o volviendo: la vuelta tambien rompe cristales
+			if (!l.estaClavada() && l.getHitbox().findIntersection(c.getHitbox())) {
+				c.romper();
+				// ¿queda algun cristal entero de este canal? si no queda ninguno, este era el ultimo
+				bool quedaAlguno = false;
+				for (const Cristal& otro : _cristales) {
+					if (otro.getCanal() == c.getCanal() && !otro.estaRoto()) {
+						quedaAlguno = true;
+					}
+				}
+				_sonidos.reproducir(quedaAlguno ? TipoSonido::CristalRomper : TipoSonido::BarreraApagar);
+			}
+		}
+	}
+
+	// un mecanismo se activa si hay un boton activo de su canal, o si su canal tiene cristales y estan todos rotos.
 	for (Mecanismo* m : _mecanismos) {
-		bool hayBotonActivo = false;
+
+		bool hayBotonActivo = false; 
+		bool hayCristales = false;  
+		bool todosRotos = true;      
+
 		for (Boton& b : _botones) {
 			if (b.estaActivo() && b.getCanal() == m->getCanal()) {
 				hayBotonActivo = true;
 			}
 		}
-		m->setActivo(hayBotonActivo);
+
+		for (Cristal& c : _cristales) {
+			if (c.getCanal() == m->getCanal()) {
+				hayCristales = true;
+				if (!c.estaRoto()) {
+					todosRotos = false;
+				}
+			}
+			
+		}
+		// hayCristales hace falta: si el canal no tiene ninguno, todosRotos queda en true y sin esto
+
+		bool activo = hayBotonActivo || (hayCristales && todosRotos);
+		// sonido solo cuando CAMBIA de estado, y solo para los de botones:
+		if (activo != m->estaActivo() && !hayCristales) {
+			_sonidos.reproducir(activo ? TipoSonido::CompuertaAbrir : TipoSonido::CompuertaCerrar);
+		}
+		m->setActivo(activo);
 	}
 }
 

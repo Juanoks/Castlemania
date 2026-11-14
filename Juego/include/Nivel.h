@@ -12,6 +12,8 @@
 #include "Coleccionable.h"
 #include "Boton.h"
 #include "Compuerta.h"
+#include "Cristal.h"
+#include "Barrera.h"
 #include "PuertaFinal.h"
 #include "Sonidos.h"
 #include "Texturas.h"
@@ -26,6 +28,7 @@ private:
 	std::vector<Bloque> _bloques;
 	std::vector<Salida> _salidas;
 	std::vector<Boton> _botones;
+	std::vector<Cristal> _cristales;
 	std::vector<Coleccionable> _coleccionables;
 	sf::Vector2f _respawn;
 	std::vector<PuertaFinal> _puertas;
