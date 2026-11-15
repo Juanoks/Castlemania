@@ -18,10 +18,16 @@ private:
     bool _tieneDobleSalto;
     float _cortarSalto;
     float _velocidadMaximaCaida;
+
     sf::Sprite _sprite;
+    float _tiempoAnimacion; // para saber cuándo pasar al siguiente cuadro de correr
+    int _cuadroCorrer;  // de 0 a 3, cuál de los 4 de correr toca
+    float _tiempoLanzando; // cuanto queda mostrando el cuadro de lanzar
+
     Sonidos& _sonidos;
 
     void sonarAterrizaje(); 
+    int elegirCuadro() const;
 
 public:
     Jugador(sf::Vector2f posicion, Sonidos& sonidos, const sf::Texture& textura);
@@ -34,6 +40,7 @@ public:
     void chocarHorizontal(sf::FloatRect bloqueHitbox);
     void chocarVertical(sf::FloatRect bloqueHitbox);
     bool estaEnElSuelo() const;
+    void animarLanzamiento(float destinoX);
     void setDobleSalto(bool tieneDobleSalto);
     sf::FloatRect getHitbox() const;
 };

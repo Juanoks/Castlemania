@@ -277,6 +277,7 @@ void Partida::lanzarLanza(sf::Vector2f destino) {
 	sf::Vector2f centroJugador = _jugador.getHitbox().getCenter();
 	
 	_lanzas.push_back(Lanza(centroJugador,destino, _texturas.get(TipoTextura::Lanza)));
+	_jugador.animarLanzamiento(destino.x);
 	_sonidos.reproducir(TipoSonido::LanzaLanzar);
 	_lanzaDisponible = false;
 }

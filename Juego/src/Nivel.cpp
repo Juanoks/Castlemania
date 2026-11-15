@@ -362,7 +362,7 @@ void Nivel::actualizarBotonesYMecanismos(const std::vector<Lanza>& lanzas) {
 
 	// un mecanismo se activa si hay un boton activo de su canal, o si su canal tiene cristales y estan todos rotos.
 	for (Mecanismo* m : _mecanismos) {
-
+		
 		bool hayBotonActivo = false; 
 		bool hayCristales = false;  
 		bool todosRotos = true;      
@@ -382,7 +382,7 @@ void Nivel::actualizarBotonesYMecanismos(const std::vector<Lanza>& lanzas) {
 			}
 			
 		}
-		// hayCristales hace falta: si el canal no tiene ninguno, todosRotos queda en true y sin esto
+		// hayCristales: si el canal no tiene cristales, todosRotos queda en true; sin esto se abririan las compuertas de botones
 
 		bool activo = hayBotonActivo || (hayCristales && todosRotos);
 		// sonido solo cuando CAMBIA de estado, y solo para los de botones:
