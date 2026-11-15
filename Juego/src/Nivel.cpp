@@ -188,6 +188,7 @@ void Nivel::cargarNivel(int numeroNivel, bool puertaAbierta) {
 		_obstaculos.push_back(new Pinche(sf::Vector2f(584.f, Y_PISO - 37.5f), _texturas));
 		_obstaculos.push_back(new Pinche(sf::Vector2f(628.f, Y_PISO - 37.5f), _texturas));
 		_obstaculos.push_back(new Pinche(sf::Vector2f(672.f, Y_PISO - 37.5f), _texturas));
+		_obstaculos.push_back(new PilarMovil(sf::Vector2f(500.f, 200.f), sf::Vector2f(40.f, 80.f), 200.f, 400.f, 150.f, _texturas, true)); // pilar vertical
 		_botones.push_back(Boton(sf::Vector2f(604.f, 440.f), 1, _texturas)); 
 
 		_bloques.push_back(Bloque(sf::Vector2f(860.f, 20.f), sf::Vector2f(20.f, 420.f), _texturas)); 
