@@ -147,6 +147,9 @@
     </Manifest>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="src\Barrera.cpp" />
+    <ClCompile Include="src\Cristal.cpp" />
+    <ClCompile Include="src\PuertaFinal.cpp" />
     <ClCompile Include="src\ArchivoPartidas.cpp" />
     <ClCompile Include="src\Bloque.cpp" />
     <ClCompile Include="src\Boton.cpp" />
@@ -172,11 +175,13 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="include\ArchivoPartidas.h" />
+    <ClInclude Include="include\Barrera.h" />
     <ClInclude Include="include\Bloque.h" />
     <ClInclude Include="include\Boton.h" />
     <ClInclude Include="include\Coleccionable.h" />
     <ClInclude Include="include\Compuerta.h" />
     <ClInclude Include="include\Constantes.h" />
+    <ClInclude Include="include\Cristal.h" />
     <ClInclude Include="include\EstadoJuego.h" />
     <ClInclude Include="include\Lanza.h" />
     <ClInclude Include="include\Jugador.h" />
@@ -194,6 +199,8 @@
     <ClInclude Include="include\Sonidos.h" />
     <ClInclude Include="include\Terreno.h" />
     <ClInclude Include="include\Texturas.h" />
+    <ClInclude Include="include\PuertaFinal.h" />
+    <ClInclude Include="src\ArchivoPartidas.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

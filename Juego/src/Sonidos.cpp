@@ -12,9 +12,11 @@ Sonidos::Sonidos() {
 		"lanza_lanzar.wav", "lanza_clavar.wav", "lanza_rebote.wav", "lanza_llamar.wav", "lanza_atrapar.wav",
 		// objetos y mundo
 		"llave.wav", "habilidad.wav", "puerta_abrir.wav", "puerta_cerrada.wav", "boton_activar.wav", "boton_desactivar.wav",
-		"guardado.wav", "cambio_sala.wav", "pilar_golpe.wav",
+		"guardado.wav", "cambio_sala.wav",
 		// menu y final
-		"menu_mover.wav", "menu_seleccionar.wav", "menu_volver.wav", "victoria.wav", "nuevo_record.wav"
+		"menu_mover.wav", "menu_seleccionar.wav", "menu_volver.wav", "victoria.wav", "nuevo_record.wav",
+		// mecanismos, cristales y puerta final
+		"compuerta_abrir.wav", "compuerta_cerrar.wav", "cristal_romper.wav", "barrera_apagar.wav", "llave_colocar.wav"
 	};
 
 	// carga cada archivo en su buffer (en la misma posicion que su valor del enum)

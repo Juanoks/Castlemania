@@ -159,11 +159,11 @@ int main() {
 				
 				// selecciona las opciones del menu
 				if (estadoActual == EstadoJuego::Menu) {
-					if (tecla->code == sf::Keyboard::Key::Up) {
+					if (tecla->code == sf::Keyboard::Key::Up || tecla->code == sf::Keyboard::Key::W) {
 						menuPrincipal.subir();
 						sonidos.reproducir(TipoSonido::MenuMover);
 					}
-					if (tecla->code == sf::Keyboard::Key::Down) {
+					if (tecla->code == sf::Keyboard::Key::Down || tecla->code == sf::Keyboard::Key::S) {
 						menuPrincipal.bajar();
 						sonidos.reproducir(TipoSonido::MenuMover);
 					}

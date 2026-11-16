@@ -3,7 +3,7 @@
 #include <SFML/Window.hpp>
 
 Jugador::Jugador(sf::Vector2f posicion, Sonidos& sonidos, const sf::Texture& textura) 
-	: _tieneDobleSalto(false), _sprite(textura), _sonidos(sonidos) {
+	: _tieneDobleSalto(false), _sprite(textura), _tiempoAnimacion(0.f), _cuadroCorrer(0), _tiempoLanzando(0.f), _sonidos(sonidos) {
 
 	_forma.setSize(sf::Vector2f(ANCHO_JUGADOR, ALTO_JUGADOR));
 	// Vector2f Es una clase simple que representa un par de números: una coordenada x y una coordenada y.
@@ -14,6 +14,7 @@ Jugador::Jugador(sf::Vector2f posicion, Sonidos& sonidos, const sf::Texture& tex
 	// origen en el medio de los pies de la imagen (mitad del ancho, todo el alto). Se mide sobre la imagen
 	// original, sin escala. Asi el sprite se ubica por los pies, y al espejarlo gira sobre si mismo.
 	_sprite.setOrigin(sf::Vector2f(25.f, 80.f));
+	_sprite.setTextureRect(sf::IntRect({ 0, 0 }, { 50, 80 })); // el cuadro 0
 
 	_velocidadX = 300.f;
 	_gravedad = 980.f;
@@ -28,6 +29,7 @@ void Jugador::dibujar(sf::RenderWindow& ventana) {
 	// los pies del dibujo van en el medio de los pies de la hitbox (centro en x, parte de abajo en y)
 	sf::FloatRect hitbox = getHitbox();
 	_sprite.setPosition(sf::Vector2f(hitbox.getCenter().x, hitbox.position.y + hitbox.size.y));
+	_sprite.setTextureRect(sf::IntRect({ elegirCuadro() * 50, 0 }, { 50, 80 })); // el cuadro n empieza en x = n * 50
 	ventana.draw(_sprite);
 }
 
@@ -45,19 +47,18 @@ void Jugador::reiniciar(sf::Vector2f posicion) {
 
 void Jugador::mover(float dt) { //“¿que teclas apreto el jugador?” y reaccionar a eso.
 	sf::Vector2f movimiento(0.f, 0.f);
-	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::A) ||
-		sf::Keyboard::isKeyPressed(sf::Keyboard::Key::Left)) {
+	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::A) || sf::Keyboard::isKeyPressed(sf::Keyboard::Key::Left)) {
 		movimiento.x -= _velocidadX * dt;
 	}
-	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::D) ||
-		sf::Keyboard::isKeyPressed(sf::Keyboard::Key::Right)) {
+	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::D) || sf::Keyboard::isKeyPressed(sf::Keyboard::Key::Right)) {
 		movimiento.x += _velocidadX * dt;	
 	}
-	bool wApretada = sf::Keyboard::isKeyPressed(sf::Keyboard::Key::W) ||
-		sf::Keyboard::isKeyPressed(sf::Keyboard::Key::Up);
+	bool wApretada = sf::Keyboard::isKeyPressed(sf::Keyboard::Key::W) || sf::Keyboard::isKeyPressed(sf::Keyboard::Key::Up);
+
 	bool acabaDeApretar = wApretada && !_saltoApretadoAntes;
 	bool acabaDeSoltar = !wApretada && _saltoApretadoAntes;
 	_saltoApretadoAntes = wApretada;
+
 	if (acabaDeApretar) {
 		if (_enElSuelo) {
 			_velocidadY = _fuerzaSalto;
@@ -99,6 +100,18 @@ void Jugador::actualizar(float dt) {
 	if (_velocidadY > _velocidadMaximaCaida) { _velocidadY = _velocidadMaximaCaida; } // tope de caida: evita caer cada vez mas rapido
 
 	_forma.move(sf::Vector2f(0.f, _velocidadY * dt)); // la velocidad cambia la POSICION
+
+	// animacion de correr: cada 0.1 segundos pasa al siguiente cuadro
+	_tiempoAnimacion += dt;
+	if (_tiempoAnimacion >= 0.1f) {
+		_tiempoAnimacion -= 0.1f;                  // se resta (no se pone en 0) para no perder lo que sobro
+		_cuadroCorrer = (_cuadroCorrer + 1) % 4;   // 0,1,2,3,0,1... el % hace que despues del 3 vuelva a 0
+	}
+
+	// el cuadro de lanzar se muestra un ratito y despues se apaga solo
+	if (_tiempoLanzando > 0) {
+		_tiempoLanzando -= dt;
+	}
 }
 
 void Jugador::aterrizarEn(sf::FloatRect plataformaHitbox) {
@@ -170,6 +183,17 @@ bool Jugador::estaEnElSuelo() const {
 	return _enElSuelo;
 }
 
+void Jugador::animarLanzamiento(float destinoX) { // muestra el cuadro de lanzar un ratito (elegirCuadro lo prioriza mientras _tiempoLanzando > 0)
+	_tiempoLanzando = 0.2f;
+	// mira hacia donde tira: si no, tirando para atras se veria el brazo extendido para el otro lado
+	if (destinoX < getHitbox().getCenter().x) {
+		_sprite.setScale(sf::Vector2f(-0.75f, 0.75f));
+	}
+	else {
+		_sprite.setScale(sf::Vector2f(0.75f, 0.75f));
+	}
+}
+
 void Jugador::setDobleSalto(bool tieneDobleSalto) {
 	_tieneDobleSalto = tieneDobleSalto;
 }
@@ -190,4 +214,14 @@ void Jugador::sonarAterrizaje() {
 	if (!_estabaEnElSuelo) {
 		_sonidos.reproducir(TipoSonido::Aterrizar);
 	}
+}
+
+int Jugador::elegirCuadro() const { // elige el sprite del personaje en base a lo que hace el jugador
+	if (_tiempoLanzando > 0) { return 7; } // tira la lanza
+	if (!estaEnElSuelo()) {
+		if (_velocidadY < 0) { return 5; } // si no esta en el suelo y su posicion en Y disminuye: subiendo
+		else { return 6; } // si no: cayendo
+	}
+	if (_desplazamientoX != 0) { return 1 + _cuadroCorrer; } // aca no se que hace exactamente. entiendo que si el personaje se mueve pone 1 y algo mas
+	else { return 0; }
 }
