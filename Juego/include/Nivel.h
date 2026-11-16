@@ -54,6 +54,7 @@ public:
 	const std::vector<Boton>& getBotones() const;
 	const std::vector<PuertaFinal>& getPuertas() const;
 	sf::Vector2f getRespawn() const;
+	void setRespawn(sf::Vector2f posicion);
 	const std::vector<Mecanismo*>& getMecanismos() const;
 
 	void quitarColeccionable(TipoColeccionable tipo);
@@ -63,9 +64,9 @@ public:
 	~Nivel();
 private:
 	// por omision: huecos de las paredes pegados al piso, y los de techo y piso centrados
-	void paredDerecha(int destino = 0, float inicioHueco = Y_PISO - TAMANIO_HUECO);
-	void paredIzquierda(int destino = 0, float inicioHueco = Y_PISO - TAMANIO_HUECO);
-	void techo(int destino = 0, float inicioHueco = (ANCHO_MUNDO - TAMANIO_HUECO) / 2);
-	void piso(int destino = 0, float inicioHueco = (ANCHO_MUNDO - TAMANIO_HUECO) / 2);
+	void paredDerecha(int destino = 0, float inicioHueco = Y_PISO - TAMANIO_HUECO, float huecoDestino = -1.f);
+	void paredIzquierda(int destino = 0, float inicioHueco = Y_PISO - TAMANIO_HUECO, float huecoDestino = -1.f);
+	void techo(int destino = 0, float inicioHueco = (ANCHO_MUNDO - TAMANIO_HUECO) / 2, float huecoDestino = -1.f);
+	void piso(int destino = 0, float inicioHueco = (ANCHO_MUNDO - TAMANIO_HUECO) / 2, float huecoDestino = -1.f);
 
 };

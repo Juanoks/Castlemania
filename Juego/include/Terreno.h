@@ -8,6 +8,8 @@ private:
 public:
 	Terreno(sf::Vector2f posicion, sf::Vector2f tamanio, const sf::Texture& textura);
 
+	void setColor(sf::Color color);
+
 	void dibujar(sf::RenderWindow& ventana);
 	sf::FloatRect getHitbox() const;
 };

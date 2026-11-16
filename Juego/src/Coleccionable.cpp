@@ -35,10 +35,16 @@ Coleccionable::Coleccionable(sf::Vector2f posicion, TipoColeccionable tipoColecc
 	// el true ajusta el recorte del sprite al tamanio de la imagen nueva
 	// (sin el, se quedaria con el de la textura inicial: las llaves miden 32x32 y las habilidades 40x40)
 	_sprite.setTexture(textura, true);
-	_sprite.setPosition(posicion); // no se mueve: alcanza con ubicarlo una vez
 
-	// la hitbox mide lo mismo que la imagen. getSize() devuelve enteros: sf::Vector2f(...) los pasa a floats
-	_forma.setSize(sf::Vector2f(textura.getSize()));
+	// la lanza (habilidad) y doble salto se ve mas grande a diferencia de las llaves
+	float escala = 1.f;
+	if (tipoColeccionable == TipoColeccionable::Lanza || tipoColeccionable == TipoColeccionable::DobleSalto) {
+		escala = 1.5f;
+	}
+	_sprite.setScale(sf::Vector2f(escala, escala));
+	_forma.setSize(sf::Vector2f(textura.getSize()) * escala); // la hitbox crece igual que el dibujo
+
+	_sprite.setPosition(posicion); // no se mueve: alcanza con ubicarlo una vez
 	_forma.setPosition(posicion);
 }
 

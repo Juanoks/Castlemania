@@ -11,6 +11,10 @@ Terreno::Terreno(sf::Vector2f posicion, sf::Vector2f tamanio, const sf::Texture&
 
 }
 
+void Terreno::setColor(sf::Color color) {
+	_sprite.setColor(color);
+}
+
 void Terreno::dibujar(sf::RenderWindow& ventana) {
 	ventana.draw(_sprite);
 }

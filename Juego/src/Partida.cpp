@@ -2,7 +2,7 @@
 
 // Nivel y Jugador no tienen constructor vacio: por eso se crean en la lista de inicializacion.
 Partida::Partida(Sonidos& sonidos, const Texturas& texturas) 
-: _numeroNivel(0), _nivel(_numeroNivel, sonidos, texturas), _jugador(_nivel.getRespawn(), sonidos, texturas.get(TipoTextura::Jugador)),
+: _numeroNivel(1), _nivel(_numeroNivel, sonidos, texturas), _jugador(_nivel.getRespawn(), sonidos, texturas.get(TipoTextura::Jugador)),
 _terminada(false), _lanzaDisponible(true), _tiempoDeCompletado(0), _cantidadMuertes(0), _sonidos(sonidos), _texturas(texturas) {
 	for (int i = 0; i < CANTIDAD_COLECCIONABLES; i++) {
 		_obtenidos[i] = false;
@@ -148,7 +148,16 @@ void Partida::moverJugador(float dt) {
 
 // si toca un obstaculo o se cae al vacio: vuelve al respawn y suma una muerte.
 void Partida::revisarMuerte() {
-	if (_nivel.jugadorTocoObstaculo(_jugador.getHitbox()) || _nivel.jugadorCayoAlVacio(_jugador.getHitbox())) {
+	// se achica un poco la hitbox del jugador con los obstaculos para que se sienta mas comodo
+	sf::FloatRect jugadorHitbox = _jugador.getHitbox();
+	const float margenDanio = 6.f;
+
+	jugadorHitbox.position.x += margenDanio; // se achica margenDanio hacia adentro x crece hacia la derecha
+	jugadorHitbox.position.y += margenDanio; // se achica margenDanio hacia adentro y crece hacia abajo
+	jugadorHitbox.size.x -= margenDanio * 2.f; 
+	jugadorHitbox.size.y -= margenDanio * 2.f;
+
+	if (_nivel.jugadorTocoObstaculo(jugadorHitbox) || _nivel.jugadorCayoAlVacio(_jugador.getHitbox())) {
 		_jugador.reiniciar(_nivel.getRespawn());
 		_cantidadMuertes++;
 		_sonidos.reproducir(TipoSonido::Muerte);
@@ -174,6 +183,7 @@ void Partida::revisarSalida() {
 			quitarColeccionablesObtenidos();
 			_lanzas.clear();
 			_jugador.reiniciar(entrada);       // aparece donde indica la salida
+			_nivel.setRespawn(entrada);        // y si muere en esta sala, reaparece ahi mismo (donde entro)
 			_sonidos.reproducir(TipoSonido::CambioSala);
 		}
 	}
@@ -280,4 +290,13 @@ void Partida::lanzarLanza(sf::Vector2f destino) {
 	_jugador.animarLanzamiento(destino.x);
 	_sonidos.reproducir(TipoSonido::LanzaLanzar);
 	_lanzaDisponible = false;
+}
+
+void Partida::recargarSala() { // vuelve a cargar la sala actual
+	sf::Vector2f respawn = _nivel.getRespawn(); // se guarda: cargarNivel lo vuelve al de por defecto
+	_nivel.cargarNivel(_numeroNivel);
+	_nivel.setRespawn(respawn);
+	quitarColeccionablesObtenidos();
+	_lanzas.clear();
+	_jugador.reiniciar(respawn);
 }

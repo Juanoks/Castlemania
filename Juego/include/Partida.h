@@ -37,6 +37,8 @@ public:
 
 	void lanzarLanza(sf::Vector2f destino);
 
+	void recargarSala();
+
 private:
 	// partes de actualizar()
 	void actualizarLanzas(float dt);

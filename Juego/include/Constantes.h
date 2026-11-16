@@ -22,3 +22,6 @@ constexpr int MAX_LANZAS = 1; // lanzas que pueden existir a la vez (al lanzar o
 
 constexpr int CANTIDAD_LLAVES = 4; // azul, amarilla, verde y roja
 
+// herramientas para armar salas: coordenadas del mouse, grilla (G) y recargar la sala (R).
+// poner en true si se quiere usar
+constexpr bool MODO_DEBUG = false;

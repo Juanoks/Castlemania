@@ -100,6 +100,31 @@ int main() {
 	textoSala.setOutlineColor(sf::Color::Black);   // color del borde
 	textoSala.setOutlineThickness(2.f);            // grosor del borde, en pixeles
 
+	//                         ---- herramientas para armar salas (solo con MODO_DEBUG) ----
+	// 
+	// texto con las coordenadas del mouse en el mundo, al lado del cursor
+	sf::Text textoMouse(fuente, "", 10);
+	textoMouse.setOutlineColor(sf::Color::Black);
+	textoMouse.setOutlineThickness(2.f);
+
+	// grilla: una linea cada 20 px (tenue) y cada 100 px (mas marcada). Se arma una sola vez y se dibuja con G
+	bool mostrarGrilla = false;
+	sf::VertexArray grilla(sf::PrimitiveType::Lines);
+	for (int x = 0; x <= static_cast<int>(ANCHO_MUNDO); x += 20) {
+		sf::Color color = (x % 100 == 0) ? sf::Color(255, 255, 255, 110) : sf::Color(255, 255, 255, 35);
+		grilla.append(sf::Vertex{ sf::Vector2f(static_cast<float>(x), 0.f), color });
+		grilla.append(sf::Vertex{ sf::Vector2f(static_cast<float>(x), ALTO_MUNDO), color });
+	}
+	for (int y = 0; y <= static_cast<int>(ALTO_MUNDO); y += 20) {
+		sf::Color color = (y % 100 == 0) ? sf::Color(255, 255, 255, 110) : sf::Color(255, 255, 255, 35);
+		grilla.append(sf::Vertex{ sf::Vector2f(0.f, static_cast<float>(y)), color });
+		grilla.append(sf::Vertex{ sf::Vector2f(ANCHO_MUNDO, static_cast<float>(y)), color });
+	}
+	// numeros de la grilla (cada 100), para no tener que contar lineas
+	sf::Text numeroGrilla(fuente, "", 8);
+	numeroGrilla.setOutlineColor(sf::Color::Black);
+	numeroGrilla.setOutlineThickness(1.f);
+
 	sf::Text victoria(fuente, "", 30);
 	victoria.setPosition(sf::Vector2f(250.f, 200.f));
 	victoria.setFillColor(sf::Color::Magenta);
@@ -224,6 +249,15 @@ int main() {
 					estadoActual = EstadoJuego::Menu;
 					sonidos.reproducir(TipoSonido::MenuVolver);
 				}
+				// herramientas para armar salas
+				if (MODO_DEBUG && estadoActual == EstadoJuego::Jugando) {
+					if (tecla->code == sf::Keyboard::Key::R) {
+						partida.recargarSala(); // vuelve a cargar la sala 
+					}
+					if (tecla->code == sf::Keyboard::Key::G) {
+						mostrarGrilla = !mostrarGrilla; // prende y apaga la grilla
+					}
+				}
 			}
 		}
 
@@ -282,6 +316,28 @@ int main() {
 			partida.dibujar(ventana);
 			textoSala.setString("Sala " + std::to_string(partida.getNumeroNivel()));
 			ventana.draw(textoSala);
+
+			if (MODO_DEBUG) {
+				if (mostrarGrilla) {
+					ventana.draw(grilla);
+					// los numeros de las lineas marcadas (cada 100): arriba los de x, a la izquierda los de y
+					for (int x = 100; x < static_cast<int>(ANCHO_MUNDO); x += 100) {
+						numeroGrilla.setString(std::to_string(x));
+						numeroGrilla.setPosition(sf::Vector2f(x + 2.f, 4.f));
+						ventana.draw(numeroGrilla);
+					}
+					for (int y = 100; y < static_cast<int>(ALTO_MUNDO); y += 100) {
+						numeroGrilla.setString(std::to_string(y));
+						numeroGrilla.setPosition(sf::Vector2f(4.f, y + 2.f));
+						ventana.draw(numeroGrilla);
+					}
+				}
+				// coordenadas del mouse en el mundo 
+				sf::Vector2f mouse = ventana.mapPixelToCoords(sf::Mouse::getPosition(ventana));
+				textoMouse.setString(std::to_string(static_cast<int>(mouse.x)) + ", " + std::to_string(static_cast<int>(mouse.y)));
+				textoMouse.setPosition(sf::Vector2f(mouse.x + 14.f, mouse.y + 14.f)); // al lado del cursor, sin taparlo
+				ventana.draw(textoMouse);
+			}
 			break;
 		case EstadoJuego::Victoria:
 			partida.dibujar(ventana);
