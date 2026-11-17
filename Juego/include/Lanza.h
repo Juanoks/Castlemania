@@ -14,7 +14,7 @@ public:
 	Lanza(sf::Vector2f origen, sf::Vector2f destino, const sf::Texture& textura);
 
 	void actualizar(float dt, sf::Vector2f posicionJugador);
-	void clavar(sf::FloatRect zonaDeChoque);
+	void clavar(sf::FloatRect zonaDeChoque, sf::FloatRect objetivo);
 	bool estaClavada() const;
 	void volver();
 	bool estaVolviendo() const;

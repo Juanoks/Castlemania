@@ -13,7 +13,9 @@ Texturas::Texturas() {
 		"puerta_cerrada.png", "puerta_completa.png", "puerta_abierta.png", 
 		"puerta_capa_azul.png", "puerta_capa_amarilla.png", "puerta_capa_verde.png", "puerta_capa_roja.png",
 
-		"cristal.png", "cristal_roto.png", "barrera_activa.png", "barrera_apagada.png"
+		"cristal.png", "cristal_roto.png", "barrera_activa.png", "barrera_apagada.png",
+
+		"puerta_llave_color.png", "puerta_llave_herrajes.png"
 	};
 	for (int i = 0; i < CANTIDAD_TEXTURAS; i++) {
 		if (!_texturas[i].loadFromFile("sprites/" + archivos[i])) {

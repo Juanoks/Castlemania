@@ -5,8 +5,9 @@ Partida::Partida(Sonidos& sonidos, const Texturas& texturas)
 : _numeroNivel(1), _nivel(_numeroNivel, sonidos, texturas), _jugador(_nivel.getRespawn(), sonidos, texturas.get(TipoTextura::Jugador)),
 _terminada(false), _lanzaDisponible(true), _tiempoDeCompletado(0), _cantidadMuertes(0), _sonidos(sonidos), _texturas(texturas) {
 	for (int i = 0; i < CANTIDAD_COLECCIONABLES; i++) {
-		_obtenidos[i] = false;
+		_obtenidos[i] = MODO_DEBUG;
 	}
+	_jugador.setDobleSalto(MODO_DEBUG);
 }
 
 // un frame de juego. Cada paso esta en su propio metodo (abajo), en el orden en que tiene que pasar.
@@ -16,7 +17,7 @@ void Partida::actualizar(float dt) {
 	}
 	_nivel.actualizar(dt);   // obstaculos (por ejemplo, los pilares que se mueven)
 	actualizarLanzas(dt);   // mover, clavar y borrar las que se fueron
-	_nivel.actualizarBotonesYMecanismos(_lanzas); // activa los botones con una lanza clavada, y los mecanismos de su canal
+	_nivel.actualizarBotonesYMecanismos(_lanzas, tiene(TipoColeccionable::LlaveAzul), tiene(TipoColeccionable::LlaveAmarilla), tiene(TipoColeccionable::LlaveVerde)); // activa los botones con una lanza clavada, y los mecanismos de su canal y las puertas de llave
 	moverJugador(dt);        // movimiento por ejes y choques
 	_nivel.actualizarPuertas(_jugador.getHitbox(), tieneLasLlaves());
 	revisarMuerte();         // obstaculos o vacio
@@ -41,7 +42,7 @@ void Partida::actualizarLanzas(float dt) { // lanzas: moverlas, clavarlas al toc
 			// auto: deja que el compilador ponga el tipo (std::optional<sf::FloatRect>, que es largo)
 			auto zona = l.getHitbox().findIntersection(b.getHitbox());
 			if (zona) { // si la caja tiene algo, hubo choque
-				l.clavar(*zona);
+				l.clavar(*zona, b.getHitbox());
 				// *zona saca el rectangulo de adentro de la caja (no es un puntero: en un optional, * significa "el valor que tiene")
 				_sonidos.reproducir(TipoSonido::LanzaClavar);
 				break;
@@ -55,9 +56,10 @@ void Partida::actualizarLanzas(float dt) { // lanzas: moverlas, clavarlas al toc
 			auto zona = l.getHitbox().findIntersection(b.getHitbox());
 			if (zona) {
 				if (b.esMadera()) {
-						l.clavar(*zona);
-						_sonidos.reproducir(TipoSonido::LanzaClavar);
-						break;
+
+					l.clavar(*zona, b.getHitbox());
+					_sonidos.reproducir(TipoSonido::LanzaClavar);
+					break;
 				}
 				else {
 					l.volver();

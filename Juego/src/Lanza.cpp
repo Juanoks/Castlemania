@@ -1,6 +1,7 @@
 #include "Lanza.h"
 #include "Constantes.h"
 #include <cmath>
+#include <algorithm>
 
 // "origen" (el jugador) que sale lanzada hacia "destino" (el mouse)
 Lanza::Lanza(sf::Vector2f origen, sf::Vector2f destino, const sf::Texture& textura) 
@@ -59,13 +60,20 @@ void Lanza::actualizar(float dt, sf::Vector2f posicionJugador) {
 	}
 }
 
-void Lanza::clavar(sf::FloatRect zonaDeChoque) {
+void Lanza::clavar(sf::FloatRect zonaDeChoque, sf::FloatRect objetivo) {
 
 	sf::Vector2f punta = zonaDeChoque.getCenter(); // asigna el centro del choque a la variable punta
 	sf::Vector2f centro = punta;
 
-	// si la velocidad de x es mayor a la de y significa que la lanza venia de un costado y se clava en horizontal
-	if (std::abs(_velocidad.x) > std::abs(_velocidad.y)) {
+	// se mira a que borde del objetivo quedo pegada la zona de choque: si queda mas cerca de un costado
+	// que de arriba/abajo, choco de costado (horizontal); si no, cayo arriba o abajo (vertical)
+	float distanciaCostado = std::min(zonaDeChoque.position.x - objetivo.position.x,
+		(objetivo.position.x + objetivo.size.x) - (zonaDeChoque.position.x + zonaDeChoque.size.x));
+	float distanciaArribaAbajo = std::min(zonaDeChoque.position.y - objetivo.position.y,
+		(objetivo.position.y + objetivo.size.y) - (zonaDeChoque.position.y + zonaDeChoque.size.y));
+	// std::min recibe dos valores y devuelve el más chico
+
+	if (distanciaCostado < distanciaArribaAbajo) {
 		_forma.setRotation(sf::degrees(0.f));
 		float signo = (_velocidad.x > 0) ? 1.f : -1.f;  // 1 si iba a la derecha, -1 si iba a la izquierda
 		centro.x -= signo * 16.f;                        // el centro queda 16 px detras de la punta

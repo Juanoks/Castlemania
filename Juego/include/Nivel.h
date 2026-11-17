@@ -14,6 +14,7 @@
 #include "Compuerta.h"
 #include "Cristal.h"
 #include "Barrera.h"
+#include "PuertaLlave.h"
 #include "PuertaFinal.h"
 #include "Sonidos.h"
 #include "Texturas.h"
@@ -58,7 +59,7 @@ public:
 	const std::vector<Mecanismo*>& getMecanismos() const;
 
 	void quitarColeccionable(TipoColeccionable tipo);
-	void actualizarBotonesYMecanismos(const std::vector<Lanza>& lanzas);
+	void actualizarBotonesYMecanismos(const std::vector<Lanza>& lanzas, bool tieneLlaveAzul, bool tieneLlaveAmarilla, bool tieneLlaveVerde);
 	void actualizarPuertas(sf::FloatRect hitboxJugador, bool tieneLasLlaves);
 
 	~Nivel();

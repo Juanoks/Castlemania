@@ -31,6 +31,7 @@ public:
 	void dibujar(sf::RenderWindow& ventana);
 	void reiniciarPartida();
 	bool termino() const;
+
 	float getTiempoDeCompletado() const;
 	int getCantidadMuertes() const;
 	int getNumeroNivel() const;
