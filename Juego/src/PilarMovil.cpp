@@ -1,8 +1,7 @@
 #include "PilarMovil.h"
 
-PilarMovil::PilarMovil(sf::Vector2f posicionInicial, sf::Vector2f tamanio, float limiteIzquierdo, float limiteDerecho, float velocidad, const Texturas& texturas) 
-	: _limiteIzquierdo(limiteIzquierdo), _limiteDerecho(limiteDerecho), _velocidad(velocidad), _sprite(texturas.get(TipoTextura::PilarPinches)) {
-
+PilarMovil::PilarMovil(sf::Vector2f posicionInicial, sf::Vector2f tamanio, float limiteIzquierdo, float limiteDerecho, float velocidad, const Texturas& texturas,bool vertical)
+	: _limiteIzquierdo(limiteIzquierdo), _limiteDerecho(limiteDerecho), _velocidad(velocidad), _sprite(texturas.get(TipoTextura::PilarPinches)), _vertical(vertical) {
 	_forma.setSize(tamanio);
 	_forma.setPosition(posicionInicial);
 	_forma.setFillColor(sf::Color::Red);
@@ -12,13 +11,27 @@ PilarMovil::PilarMovil(sf::Vector2f posicionInicial, sf::Vector2f tamanio, float
 }
 
 void PilarMovil::actualizar(float dt) {
-	_forma.move(sf::Vector2f(_velocidad * dt, 0.f));
-	// se mueve en x; al llegar a un limite (yendo hacia ese lado) invierte la direccion
-	if (_forma.getPosition().x >= _limiteDerecho && _velocidad > 0) {
-		_velocidad = -_velocidad;  // -_velocidad le da el valor opuesto al que tiene
+	if (_vertical) {
+		// Movimiento vertical
+		_forma.move(sf::Vector2f(0.f, _velocidad * dt));
+
+		if (_forma.getPosition().y >= _limiteDerecho && _velocidad > 0) {
+			_velocidad = -_velocidad;
+		}
+
+		if (_forma.getPosition().y <= _limiteIzquierdo && _velocidad < 0) {
+			_velocidad = -_velocidad;
+		}
 	}
-	if (_forma.getPosition().x <= _limiteIzquierdo && _velocidad < 0) {
-		_velocidad = -_velocidad;
+	else {
+		_forma.move(sf::Vector2f(_velocidad * dt, 0.f));
+		// se mueve en x; al llegar a un limite (yendo hacia ese lado) invierte la direccion
+		if (_forma.getPosition().x >= _limiteDerecho && _velocidad > 0) {
+			_velocidad = -_velocidad;  // -_velocidad le da el valor opuesto al que tiene
+		}
+		if (_forma.getPosition().x <= _limiteIzquierdo && _velocidad < 0) {
+			_velocidad = -_velocidad;
+		}
 	}
 }
 
