@@ -14,7 +14,6 @@ public:
 	bool estaActivo() const;
 	void setActivo(bool activo);
 
-	virtual void actualizar(float dt){}
 	virtual void dibujar(sf::RenderWindow&) = 0;
 	virtual sf::FloatRect getHitbox() const = 0;
 	virtual bool esSolido() const = 0;

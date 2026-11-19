@@ -59,6 +59,13 @@ int main() {
 
 	ventana.setFramerateLimit(FPS); //setea los frames
 
+	// icono de la ventana y de la barra de tareas
+	sf::Image icono;
+	bool hayIcono = icono.loadFromFile("sprites/icono.png");
+	if (hayIcono) {
+		ventana.setIcon(icono);
+	}
+
 	// camara: muestra siempre el mundo entero (ANCHO_MUNDO x ALTO_MUNDO),
 	// sin importar el tamaño de la ventana.
 	sf::View vista(sf::FloatRect({ 0.f, 0.f }, { ANCHO_MUNDO, ALTO_MUNDO }));
@@ -74,6 +81,7 @@ int main() {
 	Sonidos sonidos; Texturas texturas; Musica musica;
 	MenuPrincipal menuPrincipal(fuente);
 
+	// instrucciones
 	sf::Text instrucciones(fuente, "", 15);
 	instrucciones.setString(
 		"INSTRUCCIONES\n\n\n\n\n"
@@ -90,8 +98,23 @@ int main() {
 	instrucciones.setPosition(sf::Vector2f(70.f, 30.f));
 	instrucciones.setFillColor(sf::Color::White);
 
-	sf::Text nombre(fuente, "Integrantes", 30);
-	nombre.setPosition(sf::Vector2f(330.f, 200.f));
+	// creditos
+	sf::Text creditos(fuente, "", 15);
+	creditos.setString(
+		"CREDITOS\n\n\n\n"
+		"Integrantes:\n\n"
+		"Juan Ignacio Crettaz\n\n"
+		"Mateo Viviani\n\n\n\n\n\n"
+		"Proyecto desarrollado para la materia\n"
+		"Programacion II\n\n"
+		"UTN - Facultad Regional General Pacheco\n\n"
+		"2026\n\n\n\n"
+		"Hecho con C++ y SFML 3\n\n"
+		"Fuente: \"Press Start 2P\" (licencia OFL)\n\n\n\n"
+		"Presiona ESC para volver al menu principal"
+	);
+	creditos.setPosition(sf::Vector2f(70.f, 30.f));
+
 	sf::Text records(fuente, "", 15);
 	records.setPosition(sf::Vector2f(100.f, 80.f));
 
@@ -178,6 +201,9 @@ int main() {
 
 					// la ventana nueva arranca de cero: hay que volver a configurarla
 					ventana.setFramerateLimit(FPS);
+					if (hayIcono) {
+						ventana.setIcon(icono);
+					}
 					ajustarVista(vista, ventana.getSize());
 					ventana.setView(vista);
 				}
@@ -269,33 +295,17 @@ int main() {
 		else if (estadoActual == EstadoJuego::Victoria) { musica.reproducir(TipoMusica::Victoria); }
 		else { musica.reproducir(TipoMusica::Menu); }
 
-		switch (estadoActual) {
-		case EstadoJuego::Menu:
-
-			break;
-
-		case EstadoJuego::Creditos:
-
-
-			break;
-
-		case EstadoJuego::Jugando:
+		if (estadoActual == EstadoJuego::Jugando) {
 			partida.actualizar(dt);
 
 			if (partida.termino()) {
 				RegistroPartida registroPartida(partida.getTiempoDeCompletado(),partida.getCantidadMuertes());
 				registro.guardar(registroPartida);
 
-
 				estadoActual = EstadoJuego::Victoria;
 				victoria.setString("Gracias por jugar\n\nMuertes: " + std::to_string(partida.getCantidadMuertes()) + 
 					"\n\nTiempo: " + ajustarTiempo(partida.getTiempoDeCompletado()));
 			}
-			break;
-
-		case EstadoJuego::Victoria:		
-
-			break;
 		}
 
 		ventana.clear();			// "Limpiar" la ventana borrando el fotograma anterior
@@ -310,7 +320,7 @@ int main() {
 			ventana.draw(records);
 			break;
 		case EstadoJuego::Creditos:
-			ventana.draw(nombre);
+			ventana.draw(creditos);
 			break;
 		case EstadoJuego::Jugando:
 			partida.dibujar(ventana);

@@ -1,10 +1,5 @@
 #include "Nivel.h"
 #include "Constantes.h"
-#include <string>
-#include <iostream>
-
-// Tamanio de la salida por defecto (un hueco angosto y alto, como la meta de antes)
-sf::Vector2f salidaTamanio(30.f, 120.f);
 
 // Mapa: cada fila es una sala y cada columna un lado de esa sala.
 // izquierda, derecha, arriba, abajo | 0 = pared cerrada | -1 = fin del juego
@@ -18,7 +13,7 @@ const int CONEXIONES[31][4] = {
 	{0, 0, TERRENO_A_MANO, TERRENO_A_MANO},  // 5
 	{0, TERRENO_A_MANO, TERRENO_A_MANO, 0},
 	{TERRENO_A_MANO, 8, 0, 0},  
-	{7, -1, TERRENO_A_MANO, 9},  // 8   sala de la puerta (el techo, a la 23, se arma a mano)
+	{7, 29, TERRENO_A_MANO, 9},  // 8   sala de la puerta (el techo, a la 23, se arma a mano), la puerta lleva a la 29
 	{TERRENO_A_MANO, 10, TERRENO_A_MANO, TERRENO_A_MANO},   // 9: centro del mapa (techo con dos huecos y piso a la 15, a mano)
 	{9, 11, 0, 0},   // 10
 	{10, TERRENO_A_MANO, 0, TERRENO_A_MANO},   // 11: pozo (piso a mano), sale a la derecha sobre el saliente
@@ -38,7 +33,9 @@ const int CONEXIONES[31][4] = {
 	{TERRENO_A_MANO, 0, TERRENO_A_MANO, 0},   // 25: entra arriba a la izquierda (desde la 24), sale por el techo (a la 26)
 	{TERRENO_A_MANO, 0, 0, TERRENO_A_MANO},   // 26: transicion; entra por el piso (desde la 25), sale arriba a la izquierda (a la 27)
 	{TERRENO_A_MANO, TERRENO_A_MANO, 0, 0},   // 27: transicion; tunel de la 26 (derecha) a la 4 (izquierda)
-	{0, TERRENO_A_MANO, 0, TERRENO_A_MANO}   // 28: sala de la llave roja; entra arriba a la derecha (desde la 1), atajo por el piso a la 9
+	{0, TERRENO_A_MANO, 0, TERRENO_A_MANO},   // 28: sala de la llave roja; entra arriba a la derecha (desde la 1), atajo por el piso a la 9
+	{8, 30, 0, 0},   // 29: transicion despues de la puerta final
+	{TERRENO_A_MANO, TERRENO_A_MANO, TERRENO_A_MANO, TERRENO_A_MANO}   // 30: exterior, la salida de la derecha termina el juego
 };
 
 Nivel::Nivel(int numeroNivel, Sonidos& sonidos, const Texturas& texturas)
@@ -53,9 +50,6 @@ Nivel::Nivel(int numeroNivel, Sonidos& sonidos, const Texturas& texturas)
 void Nivel::actualizar(float dt) {
 	for (Obstaculo* o : _obstaculos) {
 		o->actualizar(dt);
-	}
-	for (Mecanismo* m : _mecanismos) {
-		m->actualizar(dt);
 	}
 }
 
@@ -91,6 +85,9 @@ void Nivel::cargarNivel(int numeroNivel) {
 	}
 	else if (numeroNivel == 28) {
 		_fondo.setColor(sf::Color(255, 185, 175)); // rojo
+	}
+	else if (numeroNivel == 29) {
+		_fondo.setColor(sf::Color(0, 0, 0));
 	}
 	else if (numeroNivel == 30) {
 		tipoFondo = TipoTextura::FondoFinal;
@@ -938,6 +935,24 @@ void Nivel::cargarNivel(int numeroNivel) {
 			_bloques.push_back(Bloque(sf::Vector2f(xEstalactita[i], GROSOR_PARED), sf::Vector2f(40.f, 16.f), _texturas));
 			_bloques.push_back(Bloque(sf::Vector2f(xEstalactita[i] + 12.f, GROSOR_PARED + 16.f), sf::Vector2f(16.f, largo[i]), _texturas));
 		}
+	}
+	else if (numeroNivel == 29) {
+		_bloques.push_back(Bloque(sf::Vector2f(GROSOR_PARED, GROSOR_PARED), sf::Vector2f(ANCHO_MUNDO - 2 * GROSOR_PARED, 380.f ), _texturas));
+	}
+	else if (numeroNivel == 30) {
+		_bloques.push_back(Bloque(sf::Vector2f(0.f, Y_PISO), sf::Vector2f(ANCHO_MUNDO, GROSOR_PARED), _texturas));
+		_bloques.back().setColor(sf::Color::Transparent);
+
+		_bloques.push_back(Bloque(sf::Vector2f(0.f, 300.f), sf::Vector2f(GROSOR_PARED, 140.f), _texturas));
+		_bloques.back().setColor(sf::Color(110, 95, 85));
+
+		_salidas.push_back(Salida(sf::Vector2f(0.f, Y_PISO - TAMANIO_HUECO), sf::Vector2f(GROSOR_PARED, TAMANIO_HUECO), 29,
+			sf::Vector2f(ANCHO_MUNDO - GROSOR_PARED - ANCHO_JUGADOR - 10.f, Y_PISO - ALTO_JUGADOR)));
+
+		_bloques.push_back(Bloque(sf::Vector2f(GROSOR_PARED, 300.f), sf::Vector2f(110.f, 140.f), _texturas));
+		_bloques.back().setColor(sf::Color(110, 95, 85));
+
+		_salidas.push_back(Salida(sf::Vector2f(ANCHO_MUNDO - GROSOR_PARED, 0.f), sf::Vector2f(GROSOR_PARED, Y_PISO), -1, sf::Vector2f(0.f, 0.f)));
 	}
 	//proximos niveles
 	

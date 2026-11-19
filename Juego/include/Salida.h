@@ -4,6 +4,7 @@
 class Salida {
 private:
 	sf::RectangleShape _forma;
+	sf::VertexArray _luz;      // los 4 puntos del degrade que marca la salida
 	int _salaDestino;
 	sf::Vector2f _posicionEntrada;
 public:

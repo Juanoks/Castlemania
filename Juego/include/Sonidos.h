@@ -5,19 +5,19 @@
 
 enum class TipoSonido {
 	// jugador
-	Salto, DobleSalto, Aterrizar, Muerte, Respawn,
+	Salto, DobleSalto, Aterrizar, Muerte,
 	// lanza
 	LanzaLanzar, LanzaClavar, LanzaRebote, LanzaLlamar, LanzaAtrapar,
 	// objetos y mundo
-	Llave, Habilidad, PuertaAbrir, PuertaCerrada, BotonActivar, BotonDesactivar,
+	Llave, Habilidad, PuertaAbrir, PuertaCerrada,
 	Guardado, CambioSala,
 	// menu y final
-	MenuMover, MenuSeleccionar, MenuVolver, Victoria, NuevoRecord,
-	// mecanismos, cristales y puerta final (agregados al final para no correr los numeros de los anteriores)
-	CompuertaAbrir, CompuertaCerrar, CristalRomper, BarreraApagar, LlaveColocar
+	MenuMover, MenuSeleccionar, MenuVolver, Victoria,
+	// mecanismos y cristales
+	CompuertaAbrir, CompuertaCerrar, CristalRomper, BarreraApagar
 };
 
-constexpr int CANTIDAD_SONIDOS = 28; // si se agrega un valor al enum, hay que actualizar este numero
+constexpr int CANTIDAD_SONIDOS = 23; // si se agrega un valor al enum, hay que actualizar este numero
 
 // carga todos los efectos una vez y los reproduce por tipo: sonidos.reproducir(TipoSonido::Salto).
 // _buffers[i] guarda el audio del archivo i; _sonidos[i] es el reproductor que usa ese buffer.

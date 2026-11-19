@@ -10,8 +10,6 @@ Boton::Boton(sf::Vector2f posicion, int canal, const Texturas& texturas)
 }
 
 void Boton::setActivo(bool activo) { 
-	// el ternario elige el color segun el estado nuevo: verde activo, rojo inactivo
-	_forma.setFillColor(activo ? sf::Color::Green : sf::Color::Red);
 	_sprite.setTexture(activo ? *_texturaActivo : *_texturaInactivo);
 	_activo = activo;
 }
