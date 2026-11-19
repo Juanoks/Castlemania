@@ -52,7 +52,7 @@ void ajustarVista(sf::View& vista, sf::Vector2u tamanioVentana) {
 }
 
 int main() {
-	sf::RenderWindow ventana(sf::VideoMode({ static_cast<unsigned int>(ANCHO_MUNDO), static_cast<unsigned int>(ALTO_MUNDO) }), "Punto B"); // resolucion y titulo en la ventana
+	sf::RenderWindow ventana(sf::VideoMode({ static_cast<unsigned int>(ANCHO_MUNDO), static_cast<unsigned int>(ALTO_MUNDO) }), "Castlemania"); // resolucion y titulo en la ventana
 	// si ponemos directamente {ANCHO_MUNDO, ALTO_MUNDO}, el compilador se queja porque 
 	// pasar de float a entero puede perder decimales.
 	// hay que convertirlos explicitamente con static_cast<unsigned int>(...)
