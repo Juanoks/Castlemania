@@ -11,14 +11,14 @@ sf::Vector2f salidaTamanio(30.f, 120.f);
 // TERRENO_A_MANO (-2) = ese lado lo arma la sala a mano en cargarNivel (por ejemplo, con el hueco en otro lugar)
 const int CONEXIONES[31][4] = {
 	{0, 1, 0, TERRENO_A_MANO},  // 0: sala de prueba
-	{0, TERRENO_A_MANO, 0, 0},  // 1: inicio.
+	{TERRENO_A_MANO, TERRENO_A_MANO, 0, 0},  // 1: inicio. arriba a la izquierda, la entrada a la sala de la llave roja (a mano)
 	{TERRENO_A_MANO, TERRENO_A_MANO, 0, 0},
 	{TERRENO_A_MANO, TERRENO_A_MANO, 0, 0},  // 3: entra arriba a la izquierda (desde la 2), sale arriba a la derecha (a la 4)
-	{TERRENO_A_MANO, 0, 0, TERRENO_A_MANO},  // 4: entra arriba a la izquierda (desde la 3)
+	{TERRENO_A_MANO, TERRENO_A_MANO, 0, TERRENO_A_MANO},  // 4: entra abajo a la izquierda (desde la 3); arriba a la derecha llega la 27
 	{0, 0, TERRENO_A_MANO, TERRENO_A_MANO},  // 5
 	{0, TERRENO_A_MANO, TERRENO_A_MANO, 0},
 	{TERRENO_A_MANO, 8, 0, 0},  
-	{7, -1, 0, 9},  // 8   sala de la puerta
+	{7, -1, TERRENO_A_MANO, 9},  // 8   sala de la puerta (el techo, a la 23, se arma a mano)
 	{TERRENO_A_MANO, 10, TERRENO_A_MANO, TERRENO_A_MANO},   // 9: centro del mapa (techo con dos huecos y piso a la 15, a mano)
 	{9, 11, 0, 0},   // 10
 	{10, TERRENO_A_MANO, 0, TERRENO_A_MANO},   // 11: pozo (piso a mano), sale a la derecha sobre el saliente
@@ -28,7 +28,17 @@ const int CONEXIONES[31][4] = {
 	{TERRENO_A_MANO, TERRENO_A_MANO, TERRENO_A_MANO, TERRENO_A_MANO},   // 15: dos salidas a la 16 (derecha) y dos a la 17 (izquierda)
 	{TERRENO_A_MANO, 0, 0, 0},   // 16: dos salidas a la 15 en la pared izquierda
 	{0, TERRENO_A_MANO, 0, 0},   // 17: laberinto; dos salidas a la 15 en la pared derecha
-	{0, 0, TERRENO_A_MANO, TERRENO_A_MANO}   // 18: llave amarilla; se cae desde la 15 y el piso tiene un atajo a la 10
+	{0, 0, TERRENO_A_MANO, TERRENO_A_MANO},   // 18: llave amarilla; se cae desde la 15 y el piso tiene un atajo a la 9
+	{20, TERRENO_A_MANO, 0, 0},   // 19: camino verde; entra a media altura desde la 9, sale abajo a la izquierda (a la 20)
+	{TERRENO_A_MANO, 19, 0, 0},   // 20: entra abajo a la derecha (desde la 19), sale arriba a la izquierda (a la 21)
+	{TERRENO_A_MANO, TERRENO_A_MANO, 0, 0},   // 21: entra arriba a la derecha (desde la 20), sale abajo a la izquierda (a la 22)
+	{0, TERRENO_A_MANO, 0, TERRENO_A_MANO},   // 22: llave verde; se entra por el puente y el piso tiene el atajo a la 9
+	{0, TERRENO_A_MANO, 0, TERRENO_A_MANO},   // 23: camino rojo; entra por el piso (desde la 8), sale arriba a la derecha (a la 24)
+	{TERRENO_A_MANO, TERRENO_A_MANO, 0, 0},   // 24: entra arriba a la izquierda (desde la 23), sale a media altura a la derecha (a la 25)
+	{TERRENO_A_MANO, 0, TERRENO_A_MANO, 0},   // 25: entra arriba a la izquierda (desde la 24), sale por el techo (a la 26)
+	{TERRENO_A_MANO, 0, 0, TERRENO_A_MANO},   // 26: transicion; entra por el piso (desde la 25), sale arriba a la izquierda (a la 27)
+	{TERRENO_A_MANO, TERRENO_A_MANO, 0, 0},   // 27: transicion; tunel de la 26 (derecha) a la 4 (izquierda)
+	{0, TERRENO_A_MANO, 0, TERRENO_A_MANO}   // 28: sala de la llave roja; entra arriba a la derecha (desde la 1), atajo por el piso a la 9
 };
 
 Nivel::Nivel(int numeroNivel, Sonidos& sonidos, const Texturas& texturas)
@@ -63,14 +73,24 @@ void Nivel::cargarNivel(int numeroNivel) {
 	TipoTextura tipoFondo = TipoTextura::FondoGeneral;
 	_fondo.setColor(sf::Color::White); // sin tinte: cada sala arranca con el fondo normal
 	// casi todas las salas usan el fondo general; algunas zonas especiales tienen el suyo
-	if (numeroNivel == 8) {
+
+	if		(numeroNivel == 6) {
+		_fondo.setColor(sf::Color(48, 58, 90)); // azul oscuro
+	}
+	else if (numeroNivel == 8) {
 		tipoFondo = TipoTextura::FondoPuerta;
 	}
 	else if (numeroNivel == 14) {
-		_fondo.setColor(sf::Color(150, 190, 255)); // azul, como su llave
+		_fondo.setColor(sf::Color(150, 190, 255)); // azul
 	}
 	else if (numeroNivel == 18) {
-		_fondo.setColor(sf::Color(255, 240, 190)); 
+		_fondo.setColor(sf::Color(255, 240, 190));  // amarillo
+	}
+	else if (numeroNivel == 22) {
+		_fondo.setColor(sf::Color(170, 235, 180)); // verde
+	}
+	else if (numeroNivel == 28) {
+		_fondo.setColor(sf::Color(255, 185, 175)); // rojo
 	}
 	else if (numeroNivel == 30) {
 		tipoFondo = TipoTextura::FondoFinal;
@@ -113,8 +133,17 @@ void Nivel::cargarNivel(int numeroNivel) {
 
 
 	if (numeroNivel == 1) {
-		// sala 1 (inicio): una escalera de tres escalones de 80 (el salto llega a 90) 
+		// sala 1 (inicio)
 		paredDerecha(2, 120.f); 
+
+		_bloques.push_back(Bloque(sf::Vector2f(0.f, 0.f), sf::Vector2f(GROSOR_PARED, 80.f), _texturas));
+		_bloques.push_back(Bloque(sf::Vector2f(0.f, 80.f + TAMANIO_HUECO), sf::Vector2f(GROSOR_PARED, 330.f - 80.f - TAMANIO_HUECO), _texturas));
+		_bloques.push_back(Bloque(sf::Vector2f(0.f, 330.f), sf::Vector2f(GROSOR_PARED + 40.f, 40.f), _texturas, true));
+		_bloques.push_back(Bloque(sf::Vector2f(0.f, 370.f), sf::Vector2f(GROSOR_PARED, ALTO_MUNDO - 370.f), _texturas));
+
+		_salidas.push_back(Salida(sf::Vector2f(0.f, 80.f), sf::Vector2f(GROSOR_PARED, TAMANIO_HUECO), 28,
+			sf::Vector2f(ANCHO_MUNDO - GROSOR_PARED - ANCHO_JUGADOR - 10.f, 240.f - ALTO_JUGADOR)));
+		_bloques.push_back(Bloque(sf::Vector2f(0.f, 50.f), sf::Vector2f(80.f, 30.f), _texturas));
 		
 		_bloques.push_back(Bloque(sf::Vector2f(320.f, 440.f), sf::Vector2f(620.f, 80.f), _texturas)); 
 		_bloques.push_back(Bloque(sf::Vector2f(520.f, 360.f), sf::Vector2f(420.f, 80.f), _texturas)); 
@@ -166,6 +195,7 @@ void Nivel::cargarNivel(int numeroNivel) {
 		paredIzquierda(3, Y_PISO - TAMANIO_HUECO, 130.f);
 		techo(0);                 
 		piso(5, 850.f);  
+		paredDerecha(27, 70.f, 220.f); // vuelta del camino rojo: desde la 27 se cae arriba del estante
 
 		_bloques.push_back(Bloque(sf::Vector2f(360.f, 150.f), sf::Vector2f(580.f, 30.f), _texturas));
 
@@ -195,12 +225,21 @@ void Nivel::cargarNivel(int numeroNivel) {
 		techo(5, 20.f);
 		
 		_bloques.push_back(Bloque(sf::Vector2f(100.f, 20.f), sf::Vector2f(20.f, 200.f), _texturas));
+		_bloques.push_back(Bloque(sf::Vector2f(ANCHO_MUNDO - 120.f, 20.f), sf::Vector2f(20.f, 200.f), _texturas)); 
 
+		// pedestal 
 		_bloques.push_back(Bloque(sf::Vector2f((ANCHO_MUNDO - 240.f) / 2, Y_PISO - 40.f), sf::Vector2f(240.f, 40.f), _texturas));
-		_bloques.back().setColor(sf::Color(255, 210, 120));
-		_bloques.push_back(Bloque(sf::Vector2f((ANCHO_MUNDO - 80.f) / 2, Y_PISO - 40.f - 40.f), sf::Vector2f(80.f, 40.f), _texturas));
-		_bloques.back().setColor(sf::Color(255, 210, 120));
-		_coleccionables.push_back(Coleccionable(sf::Vector2f((ANCHO_MUNDO - 60.f) / 2, 420.f - 40.f), TipoColeccionable::Lanza, _texturas));
+		_bloques.push_back(Bloque(sf::Vector2f((ANCHO_MUNDO - 80.f) / 2, Y_PISO - 80.f), sf::Vector2f(80.f, 40.f), _texturas));
+		_bloques.push_back(Bloque(sf::Vector2f(300.f, Y_PISO - 20.f), sf::Vector2f(60.f, 20.f), _texturas));
+		_bloques.push_back(Bloque(sf::Vector2f(600.f, Y_PISO - 20.f), sf::Vector2f(60.f, 20.f), _texturas));
+
+		_bloques.push_back(Bloque(sf::Vector2f(400.f, 230.f), sf::Vector2f(160.f, 16.f), _texturas));
+		_bloques.push_back(Bloque(sf::Vector2f(412.f, GROSOR_PARED), sf::Vector2f(8.f, 210.f), _texturas));
+		_bloques.push_back(Bloque(sf::Vector2f(540.f, GROSOR_PARED), sf::Vector2f(8.f, 210.f), _texturas));
+		
+		_bloques.push_back(Bloque(sf::Vector2f(250.f, GROSOR_PARED), sf::Vector2f(30.f, 120.f), _texturas));
+		_bloques.push_back(Bloque(sf::Vector2f(680.f, GROSOR_PARED), sf::Vector2f(30.f, 120.f), _texturas));
+		_coleccionables.push_back(Coleccionable(sf::Vector2f(450.f, 370.f), TipoColeccionable::Lanza, _texturas));
 
 		_bloques.push_back(Bloque(sf::Vector2f(880.f,380.f), sf::Vector2f(240.f, 140.f), _texturas,true));
 		paredDerecha(7, 300);
@@ -241,10 +280,10 @@ void Nivel::cargarNivel(int numeroNivel) {
 		_plataformas.push_back(Plataforma(sf::Vector2f(20.f, 230.f), sf::Vector2f(60.f, 10.f), _texturas));
 		_plataformas.push_back(Plataforma(sf::Vector2f(20.f, 100.f), sf::Vector2f(200.f, 10.f), _texturas));
 
-		techo(1, 140.f);
+		techo(23, 140.f, GROSOR_PARED); // en la 23 se aparece en la esquina de abajo a la izquierda
 	}
 	else if (numeroNivel == 9) {	
-		paredIzquierda(20, 290.f);
+		paredIzquierda(19, 290.f);
 
 		_bloques.push_back(Bloque(sf::Vector2f(0.f, 0.f), sf::Vector2f(50.f, GROSOR_PARED), _texturas));
 		_bloques.push_back(Bloque(sf::Vector2f(50.f + TAMANIO_HUECO, 0.f), sf::Vector2f(440.f - 50.f - TAMANIO_HUECO, GROSOR_PARED), _texturas));
@@ -606,14 +645,310 @@ void Nivel::cargarNivel(int numeroNivel) {
 		_bloques.push_back(Bloque(sf::Vector2f(670.f, 460.f), sf::Vector2f(80.f, 30.f), _texturas));
 		_coleccionables.push_back(Coleccionable(sf::Vector2f(694.f, 460.f - 32.f - 6.f), TipoColeccionable::LlaveAmarilla, _texturas));
 	}
+	else if (numeroNivel == 19) {
+		// camino verde
+		paredDerecha(9, 290.f);
+
+		// derecha pasillo de la entrada
+		_bloques.push_back(Bloque(sf::Vector2f(660.f, 370.f), sf::Vector2f(280.f, Y_PISO - 370.f), _texturas));
+		_bloques.push_back(Bloque(sf::Vector2f(660.f, 140.f), sf::Vector2f(280.f, 35.f), _texturas));
+		_bloques.push_back(Bloque(sf::Vector2f(660.f, 175.f), sf::Vector2f(45.f, 60.f), _texturas));
+		_mecanismos.push_back(new Barrera(sf::Vector2f(662.f, 235.f), sf::Vector2f(40.f, 135.f), 1, _texturas));
+		_plataformas.push_back(Plataforma(sf::Vector2f(875.f, 260.f), sf::Vector2f(65.f, 10.f), _texturas));
+		_cristales.push_back(Cristal(sf::Vector2f(895.f, 260.f - 44.f), 1, _texturas));
+
+		// medio
+		_plataformas.push_back(Plataforma(sf::Vector2f(575.f, 147.f), sf::Vector2f(85.f, 10.f), _texturas));
+		_cristales.push_back(Cristal(sf::Vector2f(600.f, 147.f - 44.f), 2, _texturas));
+		_plataformas.push_back(Plataforma(sf::Vector2f(470, 410.f), sf::Vector2f(40.f, 10.f), _texturas));
+		_plataformas.push_back(Plataforma(sf::Vector2f(470, 480.f), sf::Vector2f(40.f, 10.f), _texturas));
+
+		// izquierda
+		_bloques.push_back(Bloque(sf::Vector2f(GROSOR_PARED, 140.f), sf::Vector2f(200.f, 25.f), _texturas));
+		_bloques.push_back(Bloque(sf::Vector2f(220.f, 140.f), sf::Vector2f(50.f, 220.f), _texturas));
+		_bloques.push_back(Bloque(sf::Vector2f(GROSOR_PARED, 326.f), sf::Vector2f(200.f, 34.f), _texturas));
+		
+		_bloques.push_back(Bloque(sf::Vector2f(270.f, 207.f), sf::Vector2f(85.f, 18.f), _texturas));
+		_bloques.push_back(Bloque(sf::Vector2f(355.f, 225.f), sf::Vector2f(12.f, 81.f), _texturas));
+		_bloques.push_back(Bloque(sf::Vector2f(220.f, 306.f), sf::Vector2f(147.f, 54.f), _texturas));
+		_cristales.push_back(Cristal(sf::Vector2f(300.f, 306.f - 44.f), 2, _texturas));
+		_cristales.push_back(Cristal(sf::Vector2f(30.f, 140.f - 44.f), 2, _texturas));
+		_plataformas.push_back(Plataforma(sf::Vector2f(130.f, 230.f), sf::Vector2f(85.f, 10.f), _texturas));
+		_cristales.push_back(Cristal(sf::Vector2f(170.f, 230.f - 44.f), 2, _texturas));
+
+		_mecanismos.push_back(new Barrera(sf::Vector2f(115.f, 360.f), sf::Vector2f(45.f, Y_PISO - 360.f), 2, _texturas));
+	}
+	else if (numeroNivel == 20) {
+		paredIzquierda(21, 135.f);
+
+		// parte 1
+		_bloques.push_back(Bloque(sf::Vector2f(660.f, 400.f), sf::Vector2f(40.f, Y_PISO - 400.f), _texturas, true));
+		cajaConCristal(sf::Vector2f(760.f, 310.f), 1);
+		_plataformas.push_back(Plataforma(sf::Vector2f(860.f, 445.f), sf::Vector2f(70.f, 10.f), _texturas));
+		_plataformas.push_back(Plataforma(sf::Vector2f(860.f, 370.f), sf::Vector2f(70.f, 10.f), _texturas));
+		_plataformas.push_back(Plataforma(sf::Vector2f(860.f, 295.f), sf::Vector2f(70.f, 10.f), _texturas));
+		_mecanismos.push_back(new Barrera(sf::Vector2f(620.f, GROSOR_PARED), sf::Vector2f(20.f, Y_PISO - GROSOR_PARED), 1, _texturas));
+
+		// parte 2
+		_bloques.push_back(Bloque(sf::Vector2f(340.f, GROSOR_PARED), sf::Vector2f(40.f, 200.f), _texturas, true));
+		cajaConCristal(sf::Vector2f(440.f, 230.f), 2);
+		_plataformas.push_back(Plataforma(sf::Vector2f(540.f, 435.f), sf::Vector2f(60.f, 10.f), _texturas));
+		_plataformas.push_back(Plataforma(sf::Vector2f(540.f, 350.f), sf::Vector2f(60.f, 10.f), _texturas));
+		_mecanismos.push_back(new Barrera(sf::Vector2f(320.f, GROSOR_PARED), sf::Vector2f(20.f, Y_PISO - GROSOR_PARED), 2, _texturas));
+
+		// parte 3
+		_bloques.push_back(Bloque(sf::Vector2f(GROSOR_PARED, 400.f), sf::Vector2f(30.f, Y_PISO - 400.f), _texturas, true));
+		cajaConCristal(sf::Vector2f(110.f, 360.f), 3);
+		cajaConCristal(sf::Vector2f(190.f, 295.f), 3);
+		_plataformas.push_back(Plataforma(sf::Vector2f(260.f, 445.f), sf::Vector2f(60.f, 10.f), _texturas));
+		_plataformas.push_back(Plataforma(sf::Vector2f(260.f, 370.f), sf::Vector2f(60.f, 10.f), _texturas));
+		_plataformas.push_back(Plataforma(sf::Vector2f(260.f, 295.f), sf::Vector2f(60.f, 10.f), _texturas));
+		_bloques.push_back(Bloque(sf::Vector2f(GROSOR_PARED, 215.f), sf::Vector2f(160.f, 20.f), _texturas)); 
+		_bloques.push_back(Bloque(sf::Vector2f(GROSOR_PARED, 115.f), sf::Vector2f(160.f, 20.f), _texturas));
+		_mecanismos.push_back(new Barrera(sf::Vector2f(160.f, 135.f), sf::Vector2f(20.f, 80.f), 3, _texturas));
+	}
+	else if (numeroNivel == 21) {
+		paredDerecha(20, 135.f);
+		paredIzquierda(22, 440.f, 260.f); 
+
+		// pared del medio con las cajitas
+		_bloques.push_back(Bloque(sf::Vector2f(450.f, GROSOR_PARED), sf::Vector2f(60.f, 60.f), _texturas));
+		cajaConCristal(sf::Vector2f(450.f, 80.f), 1);
+		_bloques.push_back(Bloque(sf::Vector2f(450.f, 144.f), sf::Vector2f(60.f, 56.f), _texturas));
+		cajaConCristal(sf::Vector2f(450.f, 200.f), 1);
+		_bloques.push_back(Bloque(sf::Vector2f(450.f, 264.f), sf::Vector2f(60.f, 56.f), _texturas));
+		cajaConCristal(sf::Vector2f(450.f, 320.f), 1);
+		_bloques.push_back(Bloque(sf::Vector2f(450.f, 384.f), sf::Vector2f(60.f, 16.f), _texturas));
+
+		// lado izquierdo
+		_bloques.push_back(Bloque(sf::Vector2f(GROSOR_PARED, 230.f), sf::Vector2f(25.f, 110.f), _texturas, true));
+		for (int i = 0; i < 4; i++) {
+			_obstaculos.push_back(new Pinche(sf::Vector2f(230.f + i * 44.f, Y_PISO - 37.5f), _texturas));
+		}
+		_plataformas.push_back(Plataforma(sf::Vector2f(290.f, 450.f), sf::Vector2f(60.f, 10.f), _texturas));
+		_bloques.push_back(Bloque(sf::Vector2f(GROSOR_PARED, 420.f), sf::Vector2f(80.f, 20.f), _texturas));
+		_mecanismos.push_back(new Barrera(sf::Vector2f(80.f, 440.f), sf::Vector2f(20.f, 80.f), 1, _texturas));
+
+		// lado derecho
+		_bloques.push_back(Bloque(sf::Vector2f(860.f, 215.f), sf::Vector2f(80.f, 20.f), _texturas));
+		for (int i = 0; i < 9; i++) {
+			_obstaculos.push_back(new Pinche(sf::Vector2f(560.f + i * 42.f, Y_PISO - 37.5f), _texturas));
+		}
+		_plataformas.push_back(Plataforma(sf::Vector2f(760.f, 290.f), sf::Vector2f(60.f, 10.f), _texturas));
+		_plataformas.push_back(Plataforma(sf::Vector2f(650.f, 460.f), sf::Vector2f(60.f, 10.f), _texturas));
+		_plataformas.push_back(Plataforma(sf::Vector2f(570.f, 400.f), sf::Vector2f(70.f, 10.f), _texturas));
+		_plataformas.push_back(Plataforma(sf::Vector2f(650.f, 325.f), sf::Vector2f(60.f, 10.f), _texturas));
+		_plataformas.push_back(Plataforma(sf::Vector2f(570.f, 247.f), sf::Vector2f(70.f, 10.f), _texturas));
+		_plataformas.push_back(Plataforma(sf::Vector2f(600.f, 180.f), sf::Vector2f(60.f, 10.f), _texturas));
+		_plataformas.push_back(Plataforma(sf::Vector2f(515.f, 118.f), sf::Vector2f(60.f, 10.f), _texturas));
+	}
+	else if (numeroNivel == 22) {
+		// sala de la llave verde
+		paredDerecha(21, 260.f, 440.f);
+
+		// piso con el pozo debajo del puente 
+		_bloques.push_back(Bloque(sf::Vector2f(0.f, Y_PISO), sf::Vector2f(60.f, GROSOR_PARED), _texturas));
+		_bloques.push_back(Bloque(sf::Vector2f(140.f, Y_PISO), sf::Vector2f(395.f, GROSOR_PARED), _texturas));
+		_salidas.push_back(Salida(sf::Vector2f(60.f, Y_PISO), sf::Vector2f(TAMANIO_HUECO, GROSOR_PARED), 9,
+			sf::Vector2f(50.f + (TAMANIO_HUECO - ANCHO_JUGADOR) / 2, GROSOR_PARED + 5.f)));
+
+		// el puente
+		_bloques.push_back(Bloque(sf::Vector2f(740.f, 340.f), sf::Vector2f(200.f, 20.f), _texturas));
+		_bloques.push_back(Bloque(sf::Vector2f(745.f, 360.f), sf::Vector2f(40.f, ALTO_MUNDO - 360.f), _texturas));
+		_plataformas.push_back(Plataforma(sf::Vector2f(585.f, 340.f), sf::Vector2f(155.f, 10.f), _texturas));
+		_bloques.push_back(Bloque(sf::Vector2f(440.f, 340.f), sf::Vector2f(145.f, 20.f), _texturas));
+		_bloques.push_back(Bloque(sf::Vector2f(535.f, 360.f), sf::Vector2f(40.f, ALTO_MUNDO - 360.f), _texturas));
+
+		// piramide escalonada
+		_bloques.push_back(Bloque(sf::Vector2f(180.f, 480.f), sf::Vector2f(200.f, 40.f), _texturas));
+		_bloques.push_back(Bloque(sf::Vector2f(220.f, 440.f), sf::Vector2f(120.f, 40.f), _texturas));
+		_bloques.push_back(Bloque(sf::Vector2f(255.f, 400.f), sf::Vector2f(50.f, 40.f), _texturas));
+		_coleccionables.push_back(Coleccionable(sf::Vector2f(264.f, 400.f - 32.f - 6.f), TipoColeccionable::LlaveVerde, _texturas));
+
+		// cristales de adorno
+		float enterrado = 16.f;
+		_cristales.push_back(Cristal(sf::Vector2f(150.f, Y_PISO - 44.f + enterrado), 99, _texturas));
+		_cristales.push_back(Cristal(sf::Vector2f(190.f, 480.f - 44.f + enterrado), 99, _texturas));
+		_cristales.push_back(Cristal(sf::Vector2f(338.f, 480.f - 44.f + enterrado), 99, _texturas));
+		_cristales.push_back(Cristal(sf::Vector2f(400.f, Y_PISO - 44.f + enterrado), 99, _texturas));
+		_cristales.push_back(Cristal(sf::Vector2f(440.f, Y_PISO - 44.f + 24.f), 99, _texturas));
+		_cristales.push_back(Cristal(sf::Vector2f(470.f, 340.f - 44.f + enterrado), 99, _texturas));
+		_cristales.push_back(Cristal(sf::Vector2f(880.f, 340.f - 44.f + enterrado), 99, _texturas));
+
+		// el fondo del pozo debajo del puente
+		float yPozo[8] = { 512.f, 506.f, 516.f, 508.f, 514.f, 506.f, 512.f, 516.f };
+		for (int i = 0; i < 8; i++) {
+			_cristales.push_back(Cristal(sf::Vector2f(575.f + i * 20.f, yPozo[i]), 99, _texturas));
+		}
+
+		// lampara colgando
+		_bloques.push_back(Bloque(sf::Vector2f(660.f, GROSOR_PARED), sf::Vector2f(4.f, 150.f), _texturas));
+		_bloques.push_back(Bloque(sf::Vector2f(650.f, 170.f), sf::Vector2f(24.f, 16.f), _texturas));
+
+		// estalactitas en el techo:
+		float xEstalactita[5] = { 100.f, 260.f, 420.f, 540.f, 800.f };
+		float largo[5] = { 40.f, 70.f, 30.f, 55.f, 45.f };
+		for (int i = 0; i < 5; i++) {
+			_bloques.push_back(Bloque(sf::Vector2f(xEstalactita[i], GROSOR_PARED), sf::Vector2f(40.f, 16.f), _texturas));
+			_bloques.push_back(Bloque(sf::Vector2f(xEstalactita[i] + 12.f, GROSOR_PARED + 16.f), sf::Vector2f(16.f, largo[i]), _texturas));
+		}
+	}
+	else if (numeroNivel == 23) {
+		// camino rojo
+		piso(8, GROSOR_PARED, 140.f);
+		paredDerecha(24, 110.f);
+
+	
+		_bloques.push_back(Bloque(sf::Vector2f(320.f, 360.f), sf::Vector2f(60.f, Y_PISO - 360.f), _texturas));
+		_bloques.push_back(Bloque(sf::Vector2f(430.f, GROSOR_PARED), sf::Vector2f(40.f, 380.f), _texturas)); 
+
+		_bloques.push_back(Bloque(sf::Vector2f(560.f, 290.f), sf::Vector2f(60.f, 40.f), _texturas));
+		_bloques.push_back(Bloque(sf::Vector2f(560.f, 330.f), sf::Vector2f(60.f, Y_PISO - 330.f), _texturas, true));
+
+	
+		for (int i = 0; i < 5; i++) {
+			_obstaculos.push_back(new Pinche(sf::Vector2f(620.f + i * 40.f, Y_PISO - 37.5f), _texturas));
+		}
+		_obstaculos.push_back(new PilarMovil(sf::Vector2f(705.f, 150.f), sf::Vector2f(30.f, 70.f), 150.f, 330.f, 100.f, _texturas, true));
+		_bloques.push_back(Bloque(sf::Vector2f(820.f, 190.f), sf::Vector2f(ANCHO_MUNDO - GROSOR_PARED - 820.f, Y_PISO - 190.f), _texturas));
+	}
+	else if (numeroNivel == 24) {
+		
+		paredIzquierda(23, 110.f);
+		_bloques.push_back(Bloque(sf::Vector2f(GROSOR_PARED, 190.f), sf::Vector2f(80.f, 20.f), _texturas)); // entrada
+		_bloques.push_back(Bloque(sf::Vector2f(180.f, GROSOR_PARED), sf::Vector2f(50.f, 280.f), _texturas));
+		for (int i = 0; i < 22; i++) {
+			_obstaculos.push_back(new Pinche(sf::Vector2f(30.f + i * 42.f, Y_PISO - 37.5f), _texturas));
+		}
+		_bloques.push_back(Bloque(sf::Vector2f(280.f, 460.f), sf::Vector2f(90.f, 20.f), _texturas));
+
+		// plataformas chicas sobre los pinches.
+		_plataformas.push_back(Plataforma(sf::Vector2f(430.f, 400.f), sf::Vector2f(45.f, 10.f), _texturas));
+		_bloques.push_back(Bloque(sf::Vector2f(500.f, GROSOR_PARED), sf::Vector2f(25.f, 320.f), _texturas));
+		_plataformas.push_back(Plataforma(sf::Vector2f(585.f, 395.f), sf::Vector2f(32.f, 10.f), _texturas));
+		_plataformas.push_back(Plataforma(sf::Vector2f(565.f, 280.f), sf::Vector2f(40.f, 10.f), _texturas));
+		_plataformas.push_back(Plataforma(sf::Vector2f(700.f, 170.f), sf::Vector2f(40.f, 10.f), _texturas));
+		_obstaculos.push_back(new PilarMovil(sf::Vector2f(800.f, 260.f), sf::Vector2f(30.f, 70.f), 120.f, 300.f, 140.f, _texturas, true));
+
+		// salida 
+		paredDerecha(25, 200.f, 74.f); 
+		_bloques.push_back(Bloque(sf::Vector2f(880.f, 280.f), sf::Vector2f(ANCHO_MUNDO - GROSOR_PARED - 880.f, 20.f), _texturas));
+	}
+	else if (numeroNivel == 25) {
+
+		paredIzquierda(24, 74.f, 200.f);
+		techo(26, 440.f);
+
+		// escalera de columnas, cada una con un pinche arriba (menos la de la entrada)
+		_bloques.push_back(Bloque(sf::Vector2f(GROSOR_PARED, 154.f), sf::Vector2f(67.f, Y_PISO - 154.f), _texturas));
+		float yColumna[5] = { 265.f, 328.f, 381.f, 439.f, 495.f };
+		for (int i = 0; i < 5; i++) {
+			float x = 87.f + i * 58.f; // pegadas una al lado de la otra
+			_bloques.push_back(Bloque(sf::Vector2f(x, yColumna[i]), sf::Vector2f(58.f, Y_PISO - yColumna[i]), _texturas));
+			_obstaculos.push_back(new Pinche(sf::Vector2f(x + 7.f, yColumna[i] - 37.5f), _texturas));
+		}
+		for (int i = 0; i < 13; i++) {
+			_obstaculos.push_back(new Pinche(sf::Vector2f(377.f + i * 42.f, Y_PISO - 37.5f), _texturas));
+		}
+
+		// bloques colgando del techo, cada uno con un pinche hacia abajo
+		float xColgante[4] = { 226.f, 272.f, 330.f, 393.f }; // pegados uno al lado del otro (el ultimo es el borde)
+		float largoColgante[3] = { 43.f, 77.f, 125.f };
+		for (int i = 0; i < 3; i++) {
+			float ancho = xColgante[i + 1] - xColgante[i];
+			_bloques.push_back(Bloque(sf::Vector2f(xColgante[i], GROSOR_PARED), sf::Vector2f(ancho, largoColgante[i]), _texturas));
+			_obstaculos.push_back(new Pinche(sf::Vector2f(xColgante[i] + (ancho - 44.f) / 2, GROSOR_PARED + largoColgante[i]), _texturas, 180.f));
+		}
+		_bloques.push_back(Bloque(sf::Vector2f(393.f, 125.f), sf::Vector2f(41.f, 78.f), _texturas));
+		_obstaculos.push_back(new Pinche(sf::Vector2f(392.f, 203.f), _texturas, 180.f));
+
+		// bloque grande con pinches abajo (las plataformas de abajo estan justo a un salto de distancia)
+		_bloques.push_back(Bloque(sf::Vector2f(434.f, 125.f), sf::Vector2f(318.f, 135.f), _texturas));
+		for (int i = 0; i < 7; i++) {
+			_obstaculos.push_back(new Pinche(sf::Vector2f(434.f + i * 45.f, 260.f), _texturas, 180.f));
+		}
+		_plataformas.push_back(Plataforma(sf::Vector2f(474.f, 465.f), sf::Vector2f(64.f, 10.f), _texturas));
+		_plataformas.push_back(Plataforma(sf::Vector2f(706.f, 465.f), sf::Vector2f(69.f, 10.f), _texturas));
+
+		// derecha
+		_bloques.push_back(Bloque(sf::Vector2f(905.f, 255.f), sf::Vector2f(35.f, 135.f), _texturas, true));
+		_plataformas.push_back(Plataforma(sf::Vector2f(752.f, 135.f), sf::Vector2f(188.f, 10.f), _texturas));
+	}
+	else if (numeroNivel == 26) {
+		piso(25, 440.f);
+		paredIzquierda(27, 100.f, 220.f);
+		_bloques.push_back(Bloque(sf::Vector2f(560.f, GROSOR_PARED), sf::Vector2f(380.f, Y_PISO - GROSOR_PARED), _texturas));
+
+		// escalones de abajo
+		float xEscalon[6] = { 20.f, 90.f, 160.f, 230.f, 300.f, 370.f };
+		float yEscalon[6] = { 180.f, 225.f, 285.f, 345.f, 405.f, 465.f };
+		for (int i = 0; i < 6; i++) {
+			_bloques.push_back(Bloque(sf::Vector2f(xEscalon[i], yEscalon[i]), sf::Vector2f(70.f, Y_PISO - yEscalon[i]), _texturas));
+			if (i > 0) {
+				_bloques.push_back(Bloque(sf::Vector2f(xEscalon[i], GROSOR_PARED), sf::Vector2f(70.f, yEscalon[i] - 140.f - GROSOR_PARED), _texturas));
+			}
+		}
+		_bloques.push_back(Bloque(sf::Vector2f(440.f, GROSOR_PARED), sf::Vector2f(120.f, 360.f), _texturas)); // arriba de la entrada
+	}
+	else if (numeroNivel == 27) {
+		paredDerecha(26, 220.f, 100.f);
+		paredIzquierda(4, 220.f, 70.f);
+		_bloques.push_back(Bloque(sf::Vector2f(GROSOR_PARED, GROSOR_PARED), sf::Vector2f(ANCHO_MUNDO - 2 * GROSOR_PARED, 200.f - GROSOR_PARED), _texturas));
+		_bloques.push_back(Bloque(sf::Vector2f(GROSOR_PARED, 300.f), sf::Vector2f(ANCHO_MUNDO - 2 * GROSOR_PARED, Y_PISO - 300.f), _texturas));
+	}
+	else if (numeroNivel == 28) {
+		// sala de la llave roja
+		paredDerecha(1, 160.f, 80.f);
+		piso(9, 80.f, 50.f); // atajo de vuelta: cae a la 9
+
+		// entrada
+		_bloques.push_back(Bloque(sf::Vector2f(760.f, 240.f), sf::Vector2f(180.f, 20.f), _texturas));
+		_bloques.push_back(Bloque(sf::Vector2f(760.f, 260.f), sf::Vector2f(20.f, Y_PISO - 260.f), _texturas));
+		_bloques.push_back(Bloque(sf::Vector2f(780.f, 260.f), sf::Vector2f(160.f, Y_PISO - 260.f), _texturas, true));
+
+		// escalera 
+		for (int i = 0; i < 3; i++) {
+			float alto = 310.f + i * 70.f;
+			_bloques.push_back(Bloque(sf::Vector2f(690.f - i * 70.f, alto), sf::Vector2f(70.f, Y_PISO - alto), _texturas));
+		}
+
+		// altar con la llave
+		_bloques.push_back(Bloque(sf::Vector2f(300.f, 490.f), sf::Vector2f(200.f, 30.f), _texturas));
+		_bloques.push_back(Bloque(sf::Vector2f(330.f, 460.f), sf::Vector2f(140.f, 30.f), _texturas));
+		_bloques.push_back(Bloque(sf::Vector2f(370.f, 430.f), sf::Vector2f(60.f, 30.f), _texturas));
+		_coleccionables.push_back(Coleccionable(sf::Vector2f(384.f, 430.f - 32.f - 6.f), TipoColeccionable::LlaveRoja, _texturas));
+
+		float xColumna[2] = { 240.f, 536.f };
+		for (int i = 0; i < 2; i++) {
+			_bloques.push_back(Bloque(sf::Vector2f(xColumna[i], GROSOR_PARED), sf::Vector2f(24.f, 300.f), _texturas));
+			_bloques.push_back(Bloque(sf::Vector2f(xColumna[i] - 10.f, 320.f), sf::Vector2f(44.f, 12.f), _texturas));
+		}
+
+		// lampara arriba 
+		_bloques.push_back(Bloque(sf::Vector2f(398.f, GROSOR_PARED), sf::Vector2f(4.f, 120.f), _texturas));
+		_bloques.push_back(Bloque(sf::Vector2f(380.f, 140.f), sf::Vector2f(40.f, 14.f), _texturas));
+
+		// marco del hueco del atajo
+		_bloques.push_back(Bloque(sf::Vector2f(60.f, 490.f), sf::Vector2f(20.f, 30.f), _texturas));
+		_bloques.push_back(Bloque(sf::Vector2f(160.f, 490.f), sf::Vector2f(20.f, 30.f), _texturas));
+
+		float xEstalactita[3] = { 100.f, 640.f, 840.f };
+		float largo[3] = { 50.f, 35.f, 60.f };
+		for (int i = 0; i < 3; i++) {
+			_bloques.push_back(Bloque(sf::Vector2f(xEstalactita[i], GROSOR_PARED), sf::Vector2f(40.f, 16.f), _texturas));
+			_bloques.push_back(Bloque(sf::Vector2f(xEstalactita[i] + 12.f, GROSOR_PARED + 16.f), sf::Vector2f(16.f, largo[i]), _texturas));
+		}
+	}
 	//proximos niveles
 	
 	// la sala de la de la lanza y puerta final tiene los bloques teñidos
 	for (Bloque& b : _bloques) {
-		if (numeroNivel == 6) { b.setColor(sf::Color(204, 183, 67)); }
+		if (numeroNivel == 6) { b.setColor(b.esMadera() ? sf::Color(255, 205, 100) : sf::Color(170, 225, 245)); } // piedra celeste | madera dorada
 		if (numeroNivel == 8) { b.setColor(sf::Color(150, 120, 180)); }
-		if (numeroNivel == 14) { b.setColor(sf::Color(160, 185, 230)); } // azul, como su llave
-		if (numeroNivel == 18) { b.setColor(sf::Color(240, 215, 140)); } // amarilla, como su llave
+		if (numeroNivel == 14) { b.setColor(sf::Color(160, 185, 230)); } // azul
+		if (numeroNivel == 18) { b.setColor(sf::Color(240, 215, 140)); } // amarilla
+		if (numeroNivel == 22) { b.setColor(sf::Color(165, 225, 175)); } // verde
+		if (numeroNivel == 28) { b.setColor(sf::Color(235, 155, 145)); } // roja
 	}
 
 }
@@ -623,6 +958,10 @@ void Nivel::dibujar(sf::RenderWindow& ventana, const bool llaves[]) {
 
 	for (Obstaculo* o : _obstaculos) {
 		o->dibujar(ventana);
+	}
+	// los cristales antes que los bloques: asi se pueden enterrar un poco en la piedra
+	for (Cristal& c : _cristales) {
+		c.dibujar(ventana);
 	}
 	for (Plataforma& p : _plataformas) {
 		p.dibujar(ventana);
@@ -645,9 +984,6 @@ void Nivel::dibujar(sf::RenderWindow& ventana, const bool llaves[]) {
 	}
 	for (PuertaFinal& p : _puertas) {
 		p.dibujar(ventana, llaves);
-	}
-	for (Cristal& c : _cristales) {
-		c.dibujar(ventana);
 	}
 
 }
@@ -884,6 +1220,15 @@ void Nivel::techo(int destino, float inicioHueco, float huecoDestino) {
 		_salidas.push_back(Salida(sf::Vector2f(inicioHueco, 0.f),
 			sf::Vector2f(TAMANIO_HUECO, GROSOR_PARED), destino, sf::Vector2f(finDestino + 10.f, Y_PISO - ALTO_JUGADOR)));
 	}
+}
+
+void Nivel::cajaConCristal(sf::Vector2f posicion, int canal) {
+	// cuatro bloques (arriba, abajo, izquierda, derecha) y el cristal en el hueco del medio
+	_bloques.push_back(Bloque(posicion, sf::Vector2f(60.f, 10.f), _texturas));
+	_bloques.push_back(Bloque(sf::Vector2f(posicion.x, posicion.y + 54.f), sf::Vector2f(60.f, 10.f), _texturas));
+	_bloques.push_back(Bloque(sf::Vector2f(posicion.x, posicion.y + 10.f), sf::Vector2f(8.f, 44.f), _texturas));
+	_bloques.push_back(Bloque(sf::Vector2f(posicion.x + 52.f, posicion.y + 10.f), sf::Vector2f(8.f, 44.f), _texturas));
+	_cristales.push_back(Cristal(sf::Vector2f(posicion.x + 14.f, posicion.y + 10.f), canal, _texturas));
 }
 
 void Nivel::piso(int destino, float inicioHueco, float huecoDestino) {

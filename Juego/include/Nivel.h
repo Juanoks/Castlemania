@@ -69,5 +69,7 @@ private:
 	void paredIzquierda(int destino = 0, float inicioHueco = Y_PISO - TAMANIO_HUECO, float huecoDestino = -1.f);
 	void techo(int destino = 0, float inicioHueco = (ANCHO_MUNDO - TAMANIO_HUECO) / 2, float huecoDestino = -1.f);
 	void piso(int destino = 0, float inicioHueco = (ANCHO_MUNDO - TAMANIO_HUECO) / 2, float huecoDestino = -1.f);
+	// cajita de piedra cerrada con un cristal adentro (mide 60x64): solo se rompe con la vuelta de la lanza
+	void cajaConCristal(sf::Vector2f posicion, int canal);
 
 };

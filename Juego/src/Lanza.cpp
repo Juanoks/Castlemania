@@ -12,7 +12,7 @@ Lanza::Lanza(sf::Vector2f origen, sf::Vector2f destino, const sf::Texture& textu
 	// el "punto de agarre" de la lanza es su centro (la mitad del tamanio):
 	// asi gira sobre si misma, y setPosition ubica su centro (no su esquina). algo asi como un "engranaje"
 	_forma.setOrigin(sf::Vector2f(24.f, 2.f));
-	_sprite.setOrigin(sf::Vector2f(24.f, 4.f));
+	_sprite.setOrigin(sf::Vector2f(26.f, 6.f)); 
 	_forma.setPosition(origen);
 
 	_forma.setFillColor(sf::Color::White);
