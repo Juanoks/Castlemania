@@ -7,16 +7,16 @@ Sonidos::Sonidos() {
 	// (la posicion de cada nombre es el numero de su valor en el enum)
 	std::string archivos[CANTIDAD_SONIDOS] = {
 		// jugador
-		"salto.wav", "doble_salto.wav", "aterrizar.wav", "muerte.wav", "respawn.wav",
+		"salto.wav", "doble_salto.wav", "aterrizar.wav", "muerte.wav",
 		// lanza
 		"lanza_lanzar.wav", "lanza_clavar.wav", "lanza_rebote.wav", "lanza_llamar.wav", "lanza_atrapar.wav",
 		// objetos y mundo
-		"llave.wav", "habilidad.wav", "puerta_abrir.wav", "puerta_cerrada.wav", "boton_activar.wav", "boton_desactivar.wav",
+		"llave.wav", "habilidad.wav", "puerta_abrir.wav", "puerta_cerrada.wav",
 		"guardado.wav", "cambio_sala.wav",
 		// menu y final
-		"menu_mover.wav", "menu_seleccionar.wav", "menu_volver.wav", "victoria.wav", "nuevo_record.wav",
-		// mecanismos, cristales y puerta final
-		"compuerta_abrir.wav", "compuerta_cerrar.wav", "cristal_romper.wav", "barrera_apagar.wav", "llave_colocar.wav"
+		"menu_mover.wav", "menu_seleccionar.wav", "menu_volver.wav", "victoria.wav",
+		// mecanismos y cristales
+		"compuerta_abrir.wav", "compuerta_cerrar.wav", "cristal_romper.wav", "barrera_apagar.wav"
 	};
 
 	// carga cada archivo en su buffer (en la misma posicion que su valor del enum)

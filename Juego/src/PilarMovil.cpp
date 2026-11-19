@@ -4,7 +4,6 @@ PilarMovil::PilarMovil(sf::Vector2f posicionInicial, sf::Vector2f tamanio, float
 	: _limiteMinimo(limiteMinimo), _limiteMaximo(limiteMaximo), _velocidad(velocidad), _sprite(texturas.get(TipoTextura::PilarPinches)), _vertical(vertical) {
 	_forma.setSize(tamanio);
 	_forma.setPosition(posicionInicial);
-	_forma.setFillColor(sf::Color::Red);
 
 	sf::Vector2u tamanioImagen = texturas.get(TipoTextura::PilarPinches).getSize();
 	// el sprite gira sobre su centro; en dibujar se ubica en el centro de la forma

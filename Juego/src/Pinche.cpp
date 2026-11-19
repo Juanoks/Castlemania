@@ -1,5 +1,4 @@
 #include "Pinche.h"
-#include <SFML/Window.hpp>
 
 // sf::Sprite no tiene constructor vacio: se crea en la lista de inicializacion con su textura
 Pinche::Pinche(sf::Vector2f posicion, const Texturas& texturas, float angulo) : _sprite(texturas.get(TipoTextura::Pinche)) {
@@ -16,7 +15,6 @@ Pinche::Pinche(sf::Vector2f posicion, const Texturas& texturas, float angulo) : 
 	// (25; 18.75 dentro de su circulo de radio 25), se ubica en el centro y se gira
 	_forma.setPointCount(3);
 	_forma.setRadius(25.f);
-	_forma.setFillColor(sf::Color(150, 150, 150));
 
 	_forma.setOrigin(sf::Vector2f(25.f, 18.75f));
 	_forma.setPosition(centro);

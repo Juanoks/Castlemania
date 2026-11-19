@@ -18,8 +18,8 @@ void Partida::actualizar(float dt) {
 	_nivel.actualizar(dt);   // obstaculos (por ejemplo, los pilares que se mueven)
 	actualizarLanzas(dt);   // mover, clavar y borrar las que se fueron
 	_nivel.actualizarBotonesYMecanismos(_lanzas, tiene(TipoColeccionable::LlaveAzul), tiene(TipoColeccionable::LlaveAmarilla), tiene(TipoColeccionable::LlaveVerde)); // activa los botones con una lanza clavada, y los mecanismos de su canal y las puertas de llave
+	_nivel.actualizarPuertas(_jugador.getHitbox(), tieneLasLlaves()); // antes de mover: si se vuelve a la sala 8 con las llaves, la puerta se abre antes de chocarla
 	moverJugador(dt);        // movimiento por ejes y choques
-	_nivel.actualizarPuertas(_jugador.getHitbox(), tieneLasLlaves());
 	revisarMuerte();         // obstaculos o vacio
 	revisarSalida();           // pasar de nivel o terminar la partida
 	revisarColeccionables();
@@ -160,7 +160,7 @@ void Partida::revisarMuerte() {
 	jugadorHitbox.size.y -= margenDanio * 2.f;
 
 	if (_nivel.jugadorTocoObstaculo(jugadorHitbox) || _nivel.jugadorCayoAlVacio(_jugador.getHitbox())) {
-		_jugador.reiniciar(_nivel.getRespawn());
+		recargarSala();
 		_cantidadMuertes++;
 		_sonidos.reproducir(TipoSonido::Muerte);
 	}

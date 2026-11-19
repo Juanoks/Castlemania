@@ -15,7 +15,6 @@ Lanza::Lanza(sf::Vector2f origen, sf::Vector2f destino, const sf::Texture& textu
 	_sprite.setOrigin(sf::Vector2f(26.f, 6.f)); 
 	_forma.setPosition(origen);
 
-	_forma.setFillColor(sf::Color::White);
 	
 
 	// vector que va del jugador al mouse (su largo depende de qué tan lejos esté el mouse)
@@ -74,7 +73,6 @@ void Lanza::clavar(sf::FloatRect zonaDeChoque, sf::FloatRect objetivo) {
 	// std::min recibe dos valores y devuelve el más chico
 
 	if (distanciaCostado < distanciaArribaAbajo) {
-		_forma.setRotation(sf::degrees(0.f));
 		float signo = (_velocidad.x > 0) ? 1.f : -1.f;  // 1 si iba a la derecha, -1 si iba a la izquierda
 		centro.x -= signo * 16.f;                        // el centro queda 16 px detras de la punta
 
