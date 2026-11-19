@@ -1,6 +1,18 @@
 #include "MenuPrincipal.h"
+#include "Constantes.h"
 
-MenuPrincipal::MenuPrincipal(const sf::Font& fuente) : _titulo(fuente,"Punto B", 40){
+MenuPrincipal::MenuPrincipal(const sf::Font& fuente) : _fondo(_texturaFondo), _titulo(fuente,"Punto B", 40){
+	if (_texturaFondo.loadFromFile("sprites/fondo_menu.png")) {
+		_fondo.setTexture(_texturaFondo, true);
+
+		sf::Vector2u tamanioImagen = _texturaFondo.getSize();
+
+		_fondo.setScale(sf::Vector2f(
+			static_cast<float>(ANCHO_MUNDO) / tamanioImagen.x,
+			static_cast<float>(ALTO_MUNDO) / tamanioImagen.y
+		));
+	}
+
 	_seleccion = 0; // arranca en jugar
 	_opciones.push_back(sf::Text(fuente, "Jugar", 25));
 	_opciones.push_back(sf::Text(fuente, "Instrucciones", 25));
@@ -39,6 +51,7 @@ OpcionMenu MenuPrincipal::opcionElegida() const {
 
 // dibuja el título y las opciones, con la seleccionada en amarillo
 void MenuPrincipal::dibujar(sf::RenderWindow& ventana) {
+	ventana.draw(_fondo);
 	ventana.draw(_titulo);
 	for (int i = 0; i < _opciones.size(); i++) {
 		if (i == _seleccion) {

@@ -8,6 +8,8 @@ private:
 	std::vector<sf::Text> _opciones;
 	int _seleccion;
 	sf::Text _titulo;
+	sf::Texture _texturaFondo;
+	sf::Sprite _fondo;
 public:
 	MenuPrincipal(const sf::Font& fuente);
 
