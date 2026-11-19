@@ -1,7 +1,7 @@
 #include "MenuPrincipal.h"
 #include "Constantes.h"
 
-MenuPrincipal::MenuPrincipal(const sf::Font& fuente) : _fondo(_texturaFondo), _titulo(fuente,"Punto B", 40){
+MenuPrincipal::MenuPrincipal(const sf::Font& fuente) : _fondo(_texturaFondo), _titulo(fuente,"Castlemania", 40){
 	if (_texturaFondo.loadFromFile("sprites/fondo_menu.png")) {
 		_fondo.setTexture(_texturaFondo, true);
 
@@ -20,12 +20,12 @@ MenuPrincipal::MenuPrincipal(const sf::Font& fuente) : _fondo(_texturaFondo), _t
 	_opciones.push_back(sf::Text(fuente, "Creditos", 25));
 	_opciones.push_back(sf::Text(fuente, "Salir", 25));
 
-	_titulo.setPosition(sf::Vector2f(330.f, 50.f));		  // Titulo
-	_opciones[0].setPosition(sf::Vector2f(400.f, 180.f)); // Jugar
-	_opciones[1].setPosition(sf::Vector2f(320.f, 250.f)); // Instrucciones
-	_opciones[2].setPosition(sf::Vector2f(385.f, 320.f)); // Records
-	_opciones[3].setPosition(sf::Vector2f(370.f, 390.f)); // Creditos
-	_opciones[4].setPosition(sf::Vector2f(402.f, 460.f)); // Salir
+	_titulo.setPosition(sf::Vector2f(270.f, 50.f));		  // Titulo
+	_opciones[0].setPosition(sf::Vector2f(410.f, 180.f)); // Jugar
+	_opciones[1].setPosition(sf::Vector2f(330.f, 250.f)); // Instrucciones
+	_opciones[2].setPosition(sf::Vector2f(395.f, 320.f)); // Records
+	_opciones[3].setPosition(sf::Vector2f(380.f, 390.f)); // Creditos
+	_opciones[4].setPosition(sf::Vector2f(412.f, 460.f)); // Salir
 }
 
 // sube la seleccion, sin pasar de la primera opción
