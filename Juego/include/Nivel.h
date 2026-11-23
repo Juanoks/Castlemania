@@ -18,6 +18,7 @@
 #include "PuertaFinal.h"
 #include "Sonidos.h"
 #include "Texturas.h"
+#include "Decoracion.h"
 
 
 class Nivel {
@@ -36,6 +37,7 @@ private:
 	Sonidos& _sonidos; 
 	const Texturas& _texturas;
 	sf::Sprite _fondo;
+	std::vector<Decoracion> _decoraciones;
 public:
 	Nivel(int numeroNivel, Sonidos& sonidos, const Texturas& texturas);
 

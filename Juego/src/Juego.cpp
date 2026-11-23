@@ -28,6 +28,36 @@ std::string ajustarTiempo(float segundos) {
 	return tiempo;
 }
 
+// lee todos los records del archivo, los ordena por tiempo 
+// y devuelve el texto con los mejores MAX_RECORDS
+std::string armarTextoRecords(ArchivoPartidas& registro) {
+	// pasar los registros del archivo a un vector
+	std::vector<RegistroPartida> lista;
+	int cantidad = registro.contarRegistros();
+	for (int i = 0; i < cantidad; i++) {
+		lista.push_back(registro.leer(i));
+	}
+
+	// ordenarlos de menor a mayor tiempo
+	for (int p = 0; p < static_cast<int>(lista.size()) - 1; p++) {
+		for (int j = 0; j < static_cast<int>(lista.size()) - 1 - p; j++) {
+			if (lista[j].getTiempo() > lista[j + 1].getTiempo()) {
+				RegistroPartida aux = lista[j];
+				lista[j] = lista[j + 1];
+				lista[j + 1] = aux;
+			}
+		}
+	}
+
+	// armar el texto con los primeros
+	std::string texto = "RECORDS\n\n";
+	for (int i = 0; i < static_cast<int>(lista.size()) && i < MAX_RECORDS; i++) {
+		texto += "Tiempo: " + ajustarTiempo(lista[i].getTiempo()) +
+			" | Muertes: " + std::to_string(lista[i].getMuertes()) + "\n";
+	}
+	return texto;
+}
+
 // ajusta la camara para que el mundo entre en una ventana de ese tamaño
 // sin deformarse: lo que sobra queda en negro (letterbox).
 void ajustarVista(sf::View& vista, sf::Vector2u tamanioVentana) {
@@ -48,7 +78,7 @@ void ajustarVista(sf::View& vista, sf::Vector2u tamanioVentana) {
 		viewport.size.y = proporcionVentana / proporcionMundo;
 		viewport.position.y = (1 - viewport.size.y) / 2;
 	}
-	vista.setViewport(viewport);
+	vista.setViewport(viewport);	
 }
 
 int main() {
@@ -123,7 +153,7 @@ int main() {
 	textoSala.setOutlineColor(sf::Color::Black);   // color del borde
 	textoSala.setOutlineThickness(2.f);            // grosor del borde, en pixeles
 
-	//                         ---- herramientas para armar salas (solo con MODO_DEBUG) ----
+	// ---- herramientas para armar salas (solo con MODO_DEBUG) ----
 	// 
 	// texto con las coordenadas del mouse en el mundo, al lado del cursor
 	sf::Text textoMouse(fuente, "", 10);
@@ -233,34 +263,9 @@ int main() {
 
 						if (menuPrincipal.opcionElegida() == OpcionMenu::Records) {
 							estadoActual = EstadoJuego::Records;
-
-							int recordsRegistro = registro.contarRegistros();
-							std::vector<RegistroPartida> lista;
-							std::string texto = "RECORDS\n\n";
-							for (int i = 0; i < recordsRegistro; i++) {
-								RegistroPartida registrosP = registro.leer(i);
-								lista.push_back(registrosP);
-							}
-
-							for (int p = 0; p < static_cast<int>(lista.size()) - 1; p++) {
-								for (int j = 0; j < static_cast<int>(lista.size()) - 1; j++) {        // recorre los pares de vecinos
-									if (lista[j].getTiempo() > lista[j+1].getTiempo()) {  
-										RegistroPartida aux = lista[j];     
-										lista[j] = lista[j+1];                
-										lista[j + 1] = aux;          
-									}
-								}
-							}
-
-							for (int i = 0; i < lista.size() && i < MAX_RECORDS; i++) {
-								texto += "Tiempo: " + ajustarTiempo(lista[i].getTiempo()) +
-									" | Muertes: " + std::to_string(lista[i].getMuertes()) + "\n";
-							}
-
-
-							// a la variable "texto" se le asigna RECORDS y cada Tiempo y Muerte en el registro
-							records.setString(texto);
+							records.setString(armarTextoRecords(registro));
 						}
+
 						if (menuPrincipal.opcionElegida() == OpcionMenu::Creditos) {
 							estadoActual = EstadoJuego::Creditos;
 						}
@@ -314,9 +319,11 @@ int main() {
 			menuPrincipal.dibujar(ventana);
 			break;
 		case EstadoJuego::Instrucciones:
+			menuPrincipal.dibujarFondo(ventana);
 			ventana.draw(instrucciones);
 			break;
 		case EstadoJuego::Records:
+			menuPrincipal.dibujarFondo(ventana);
 			ventana.draw(records);
 			break;
 		case EstadoJuego::Creditos:
@@ -342,10 +349,15 @@ int main() {
 						ventana.draw(numeroGrilla);
 					}
 				}
-				// coordenadas del mouse en el mundo 
+				// coordenadas del mouse en el mundo                     |>da la posición del mouse en píxeles de la ventana.
 				sf::Vector2f mouse = ventana.mapPixelToCoords(sf::Mouse::getPosition(ventana));
+				// mapPixelToCoords la convierte a coordenadas del mundo, pasando por la cámara.
+
+				// arma el texto
 				textoMouse.setString(std::to_string(static_cast<int>(mouse.x)) + ", " + std::to_string(static_cast<int>(mouse.y)));
-				textoMouse.setPosition(sf::Vector2f(mouse.x + 14.f, mouse.y + 14.f)); // al lado del cursor, sin taparlo
+
+				// lo ubica
+				textoMouse.setPosition(sf::Vector2f(mouse.x + 14.f, mouse.y + 14.f)); // al lado de donde esta el mouse
 				ventana.draw(textoMouse);
 			}
 			break;

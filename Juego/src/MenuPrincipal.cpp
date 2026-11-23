@@ -49,9 +49,13 @@ OpcionMenu MenuPrincipal::opcionElegida() const {
 	// el static_cast hace falta porque un enum class no se convierte solo desde un int.
 }
 
+void MenuPrincipal::dibujarFondo(sf::RenderWindow& ventana){
+	ventana.draw(_fondo);
+}
+
 // dibuja el título y las opciones, con la seleccionada en amarillo
 void MenuPrincipal::dibujar(sf::RenderWindow& ventana) {
-	ventana.draw(_fondo);
+	dibujarFondo(ventana);
 	ventana.draw(_titulo);
 	for (int i = 0; i < _opciones.size(); i++) {
 		if (i == _seleccion) {

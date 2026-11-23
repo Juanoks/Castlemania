@@ -222,6 +222,6 @@ int Jugador::elegirCuadro() const { // elige el sprite del personaje en base a l
 		if (_velocidadY < 0) { return 5; } // si no esta en el suelo y su posicion en Y disminuye: subiendo
 		else { return 6; } // si no: cayendo
 	}
-	if (_desplazamientoX != 0) { return 1 + _cuadroCorrer; } // aca no se que hace exactamente. entiendo que si el personaje se mueve pone 1 y algo mas
+	if (_desplazamientoX != 0) { return 1 + _cuadroCorrer; } // corriendo: los cuadros 1 a 4 de la imagen; _cuadroCorrer va de 0 a 3
 	else { return 0; }
 }

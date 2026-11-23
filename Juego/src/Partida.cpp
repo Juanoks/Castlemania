@@ -191,17 +191,16 @@ void Partida::revisarSalida() {
 	}
 }
 
-void Partida::revisarColeccionables() { 
-	// si toca un coleccionable: lo marca como obtenido y lo saca de la sala
+void Partida::revisarColeccionables() {
 	const Coleccionable* coleccionable = _nivel.coleccionableTocado(_jugador.getHitbox());
 	if (coleccionable != nullptr) {
 		TipoColeccionable tipo = coleccionable->getTipo();
 
-		_obtenidos[static_cast<int>(tipo)] = true; // el tipo como numero = su casilla en el arreglo
-		_nivel.quitarColeccionable(tipo);
-		if (tipo == TipoColeccionable::DobleSalto){ _jugador.setDobleSalto(true); }
+		_obtenidos[static_cast<int>(tipo)] = true; // queda guardado en Partida: sobrevive al cambio de sala
+		_nivel.quitarColeccionable(tipo);          // desaparece de la sala actual
+		if (tipo == TipoColeccionable::DobleSalto) { _jugador.setDobleSalto(true); } 
 
-		// las habilidades tienen un sonido distinto al de las llaves
+		// habilidades y llaves suenan distinto
 		if (tipo == TipoColeccionable::DobleSalto || tipo == TipoColeccionable::Lanza) {
 			_sonidos.reproducir(TipoSonido::Habilidad);
 		}
@@ -215,6 +214,7 @@ void Partida::quitarColeccionablesObtenidos() {
 	for (int i = 0; i < CANTIDAD_COLECCIONABLES; i++) {
 		if (_obtenidos[i]) {
 			_nivel.quitarColeccionable(static_cast <TipoColeccionable>(i));
+			//el enum class no convierte solo entre int y enum, así que se usa static_cast,
 		}
 	}
 }

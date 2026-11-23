@@ -15,7 +15,6 @@ Lanza::Lanza(sf::Vector2f origen, sf::Vector2f destino, const sf::Texture& textu
 	_sprite.setOrigin(sf::Vector2f(26.f, 6.f)); 
 	_forma.setPosition(origen);
 
-	
 
 	// vector que va del jugador al mouse (su largo depende de qué tan lejos esté el mouse)
 	sf::Vector2f diferencia = destino - origen;
@@ -32,31 +31,31 @@ Lanza::Lanza(sf::Vector2f origen, sf::Vector2f destino, const sf::Texture& textu
 
 void Lanza::actualizar(float dt, sf::Vector2f posicionJugador) {
 	if (_estado == EstadoLanza::Volando) {
+		// la gravedad cambia la velocidad en y: por eso la lanza hace una curva
 		_velocidad.y += _gravedad * dt;
 
-		// _velocidad dice cuantos pixeles avanza por segundo en x y en y (hacia donde va).
-		// atan2(y, x) convierte esa direccion en un angulo ° (en radianes):
-		// por ejemplo: (700, 0) = 0° grados derecha, (0, 700) = 90° apunta para abajo.
-		// (-700, 0) = 180° izquierda, (500, 500) = 45° grados diagonal abajo-derecha.
-		// Asi la punta sigue la curva: sube apuntando arriba y cae apuntando abajo.
-		float angulo = std::atan2(_velocidad.y,_velocidad.x); 
-		_forma.setRotation(sf::radians(angulo));                      
+		// _velocidad dice hacia donde va. atan2(y, x) convierte esa direccion en un angulo, en radianes.
+		// equivale a: (700, 0) = 0° derecha, (0, 700) = 90° abajo, (-700, 0) = 180° izquierda,
+		// (500, 500) = 45° diagonal abajo-derecha. Asi la punta sigue la curva.
+		float angulo = std::atan2(_velocidad.y, _velocidad.x);
+		_forma.setRotation(sf::radians(angulo)); // sf::radians: le dice a SFML que el angulo esta en radianes
 
 		_forma.move(_velocidad * dt);
 	}
-	// mismo calculo que el constructor, pero en cada frame porque el jugador se mueve
-	// de la lanza al jugador.
+	// volviendo: sin gravedad, en linea recta hacia el jugador.
+	// es el mismo calculo que el constructor, pero se repite en cada frame porque el jugador se mueve.
 	else if (_estado == EstadoLanza::Volviendo) {
-		sf::Vector2f diferencia = posicionJugador - getHitbox().getCenter();
+		sf::Vector2f diferencia = posicionJugador - getHitbox().getCenter(); // de la lanza al jugador
 		float largo = std::sqrt((diferencia.x * diferencia.x) + (diferencia.y * diferencia.y));
 		if (largo > 0) {
-			sf::Vector2f direccion = diferencia / largo;
+			sf::Vector2f direccion = diferencia / largo; // largo 1: solo la direccion
 			_velocidad = direccion * VELOCIDAD_LANZA;
-			float angulo = std::atan2(_velocidad.y, _velocidad.x); 
+			float angulo = std::atan2(_velocidad.y, _velocidad.x);
 			_forma.setRotation(sf::radians(angulo)); // apunta hacia el jugador mientras vuelve
 			_forma.move(_velocidad * dt);
 		}
 	}
+	// clavada: no se mueve
 }
 
 void Lanza::clavar(sf::FloatRect zonaDeChoque, sf::FloatRect objetivo) {

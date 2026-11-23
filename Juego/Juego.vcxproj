@@ -152,6 +152,7 @@
   <ItemGroup>
     <ClCompile Include="src\Barrera.cpp" />
     <ClCompile Include="src\Cristal.cpp" />
+    <ClCompile Include="src\Decoracion.cpp" />
     <ClCompile Include="src\PuertaFinal.cpp" />
     <ClCompile Include="src\ArchivoPartidas.cpp" />
     <ClCompile Include="src\Bloque.cpp" />
@@ -186,6 +187,7 @@
     <ClInclude Include="include\Compuerta.h" />
     <ClInclude Include="include\Constantes.h" />
     <ClInclude Include="include\Cristal.h" />
+    <ClInclude Include="include\Decoracion.h" />
     <ClInclude Include="include\EstadoJuego.h" />
     <ClInclude Include="include\Lanza.h" />
     <ClInclude Include="include\Jugador.h" />

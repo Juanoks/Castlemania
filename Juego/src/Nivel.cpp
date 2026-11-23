@@ -7,33 +7,33 @@
 const int CONEXIONES[31][4] = {
 	{0, 1, 0, TERRENO_A_MANO},  // 0: sala de prueba
 	{TERRENO_A_MANO, TERRENO_A_MANO, 0, 0},  // 1: inicio. arriba a la izquierda, la entrada a la sala de la llave roja (a mano)
-	{TERRENO_A_MANO, TERRENO_A_MANO, 0, 0},
-	{TERRENO_A_MANO, TERRENO_A_MANO, 0, 0},  // 3: entra arriba a la izquierda (desde la 2), sale arriba a la derecha (a la 4)
-	{TERRENO_A_MANO, TERRENO_A_MANO, 0, TERRENO_A_MANO},  // 4: entra abajo a la izquierda (desde la 3); arriba a la derecha llega la 27
+	{TERRENO_A_MANO, TERRENO_A_MANO, 0, 0},  // 2
+	{TERRENO_A_MANO, TERRENO_A_MANO, 0, 0},  // 3: 
+	{TERRENO_A_MANO, TERRENO_A_MANO, 0, TERRENO_A_MANO},  // 4: 
 	{0, 0, TERRENO_A_MANO, TERRENO_A_MANO},  // 5
-	{0, TERRENO_A_MANO, TERRENO_A_MANO, 0},
-	{TERRENO_A_MANO, 8, 0, 0},  
-	{7, 29, TERRENO_A_MANO, 9},  // 8   sala de la puerta (el techo, a la 23, se arma a mano), la puerta lleva a la 29
-	{TERRENO_A_MANO, 10, TERRENO_A_MANO, TERRENO_A_MANO},   // 9: centro del mapa (techo con dos huecos y piso a la 15, a mano)
+	{0, TERRENO_A_MANO, TERRENO_A_MANO, 0}, // 6
+	{TERRENO_A_MANO, 8, 0, 0},  // 7
+	{7, 29, TERRENO_A_MANO, 9},  // 8   sala de la puerta 
+	{TERRENO_A_MANO, 10, TERRENO_A_MANO, TERRENO_A_MANO},   // 9: centro del mapa 
 	{9, 11, 0, 0},   // 10
-	{10, TERRENO_A_MANO, 0, TERRENO_A_MANO},   // 11: pozo (piso a mano), sale a la derecha sobre el saliente
+	{10, TERRENO_A_MANO, 0, TERRENO_A_MANO},   // 11
 	{TERRENO_A_MANO, TERRENO_A_MANO, 0, TERRENO_A_MANO},   // 12: puente a media altura, de la 11 a la 13
 	{TERRENO_A_MANO, TERRENO_A_MANO, 0, 0},   // 13: entra abajo a la izquierda (desde la 12), sale arriba a la derecha (a la 14)
 	{TERRENO_A_MANO, 0, 0, TERRENO_A_MANO},   // 14: llave azul; el piso tiene un atajo que cae a la 10, al lado de la 9
 	{TERRENO_A_MANO, TERRENO_A_MANO, TERRENO_A_MANO, TERRENO_A_MANO},   // 15: dos salidas a la 16 (derecha) y dos a la 17 (izquierda)
 	{TERRENO_A_MANO, 0, 0, 0},   // 16: dos salidas a la 15 en la pared izquierda
 	{0, TERRENO_A_MANO, 0, 0},   // 17: laberinto; dos salidas a la 15 en la pared derecha
-	{0, 0, TERRENO_A_MANO, TERRENO_A_MANO},   // 18: llave amarilla; se cae desde la 15 y el piso tiene un atajo a la 9
-	{20, TERRENO_A_MANO, 0, 0},   // 19: camino verde; entra a media altura desde la 9, sale abajo a la izquierda (a la 20)
-	{TERRENO_A_MANO, 19, 0, 0},   // 20: entra abajo a la derecha (desde la 19), sale arriba a la izquierda (a la 21)
-	{TERRENO_A_MANO, TERRENO_A_MANO, 0, 0},   // 21: entra arriba a la derecha (desde la 20), sale abajo a la izquierda (a la 22)
-	{0, TERRENO_A_MANO, 0, TERRENO_A_MANO},   // 22: llave verde; se entra por el puente y el piso tiene el atajo a la 9
-	{0, TERRENO_A_MANO, 0, TERRENO_A_MANO},   // 23: camino rojo; entra por el piso (desde la 8), sale arriba a la derecha (a la 24)
-	{TERRENO_A_MANO, TERRENO_A_MANO, 0, 0},   // 24: entra arriba a la izquierda (desde la 23), sale a media altura a la derecha (a la 25)
-	{TERRENO_A_MANO, 0, TERRENO_A_MANO, 0},   // 25: entra arriba a la izquierda (desde la 24), sale por el techo (a la 26)
-	{TERRENO_A_MANO, 0, 0, TERRENO_A_MANO},   // 26: transicion; entra por el piso (desde la 25), sale arriba a la izquierda (a la 27)
-	{TERRENO_A_MANO, TERRENO_A_MANO, 0, 0},   // 27: transicion; tunel de la 26 (derecha) a la 4 (izquierda)
-	{0, TERRENO_A_MANO, 0, TERRENO_A_MANO},   // 28: sala de la llave roja; entra arriba a la derecha (desde la 1), atajo por el piso a la 9
+	{0, 0, TERRENO_A_MANO, TERRENO_A_MANO},   // 18: llave amarilla
+	{20, TERRENO_A_MANO, 0, 0},   // 19: camino verde
+	{TERRENO_A_MANO, 19, 0, 0},   // 20:
+	{TERRENO_A_MANO, TERRENO_A_MANO, 0, 0},   // 21: 
+	{0, TERRENO_A_MANO, 0, TERRENO_A_MANO},   // 22: llave verde
+	{0, TERRENO_A_MANO, 0, TERRENO_A_MANO},   // 23: camino rojo
+	{TERRENO_A_MANO, TERRENO_A_MANO, 0, 0},   // 24
+	{TERRENO_A_MANO, 0, TERRENO_A_MANO, 0},   // 25
+	{TERRENO_A_MANO, 0, 0, TERRENO_A_MANO},   // 26
+	{TERRENO_A_MANO, TERRENO_A_MANO, 0, 0},   // 27
+	{0, TERRENO_A_MANO, 0, TERRENO_A_MANO},   // 28: sala de la llave roja
 	{8, 30, 0, 0},   // 29: transicion despues de la puerta final
 	{TERRENO_A_MANO, TERRENO_A_MANO, TERRENO_A_MANO, TERRENO_A_MANO}   // 30: exterior, la salida de la derecha termina el juego
 };
@@ -59,7 +59,7 @@ void Nivel::cargarNivel(int numeroNivel) {
 	for (Mecanismo* m : _mecanismos) { delete m; } 
 
 	_obstaculos.clear(); _plataformas.clear(); _bloques.clear(); _salidas.clear(); _coleccionables.clear(); _botones.clear();
-	_mecanismos.clear(); _puertas.clear(); _cristales.clear();
+	_mecanismos.clear(); _puertas.clear(); _cristales.clear(); _decoraciones.clear();
 
 	_numeroNivel = numeroNivel;
 	_respawn = sf::Vector2f(50.f, Y_PISO - ALTO_JUGADOR); // parado sobre el piso
@@ -132,6 +132,9 @@ void Nivel::cargarNivel(int numeroNivel) {
 	if (numeroNivel == 1) {
 		// sala 1 (inicio)
 		paredDerecha(2, 120.f); 
+
+		_decoraciones.push_back(Decoracion(sf::Vector2f(80.f, 380.f), TipoDecoracion::CartelMover, _texturas));
+		_decoraciones.push_back(Decoracion(sf::Vector2f(320.f, 310.f), TipoDecoracion::CartelSaltar, _texturas));
 
 		_bloques.push_back(Bloque(sf::Vector2f(0.f, 0.f), sf::Vector2f(GROSOR_PARED, 80.f), _texturas));
 		_bloques.push_back(Bloque(sf::Vector2f(0.f, 80.f + TAMANIO_HUECO), sf::Vector2f(GROSOR_PARED, 330.f - 80.f - TAMANIO_HUECO), _texturas));
@@ -221,6 +224,8 @@ void Nivel::cargarNivel(int numeroNivel) {
 	else if (numeroNivel == 6) {
 		techo(5, 20.f);
 		
+		_decoraciones.push_back(Decoracion(sf::Vector2f(700.f, 400.f), TipoDecoracion::CartelLanza, _texturas));
+
 		_bloques.push_back(Bloque(sf::Vector2f(100.f, 20.f), sf::Vector2f(20.f, 200.f), _texturas));
 		_bloques.push_back(Bloque(sf::Vector2f(ANCHO_MUNDO - 120.f, 20.f), sf::Vector2f(20.f, 200.f), _texturas)); 
 
@@ -243,6 +248,8 @@ void Nivel::cargarNivel(int numeroNivel) {
 	}
 	else if (numeroNivel == 7) { 
 		paredIzquierda(6, 300.f);
+
+		_decoraciones.push_back(Decoracion(sf::Vector2f(370.f, 260.f), TipoDecoracion::CartelLanzaPiso, _texturas));
 		
 		_bloques.push_back(Bloque(sf::Vector2f(20.f, 380.f), sf::Vector2f(80.f, 200.f), _texturas)); // entrada
 		_bloques.push_back(Bloque(sf::Vector2f(200.f, 100.f), sf::Vector2f(30.f, 417.f), _texturas, true));
@@ -971,6 +978,10 @@ void Nivel::cargarNivel(int numeroNivel) {
 void Nivel::dibujar(sf::RenderWindow& ventana, const bool llaves[]) {
 	ventana.draw(_fondo);
 
+	for (Decoracion& d : _decoraciones) {
+		d.dibujar(ventana);
+	}
+
 	for (Obstaculo* o : _obstaculos) {
 		o->dibujar(ventana);
 	}
@@ -1000,7 +1011,6 @@ void Nivel::dibujar(sf::RenderWindow& ventana, const bool llaves[]) {
 	for (PuertaFinal& p : _puertas) {
 		p.dibujar(ventana, llaves);
 	}
-
 }
 
 bool Nivel::jugadorTocoObstaculo(sf::FloatRect hitboxJugador) const {
@@ -1237,15 +1247,6 @@ void Nivel::techo(int destino, float inicioHueco, float huecoDestino) {
 	}
 }
 
-void Nivel::cajaConCristal(sf::Vector2f posicion, int canal) {
-	// cuatro bloques (arriba, abajo, izquierda, derecha) y el cristal en el hueco del medio
-	_bloques.push_back(Bloque(posicion, sf::Vector2f(60.f, 10.f), _texturas));
-	_bloques.push_back(Bloque(sf::Vector2f(posicion.x, posicion.y + 54.f), sf::Vector2f(60.f, 10.f), _texturas));
-	_bloques.push_back(Bloque(sf::Vector2f(posicion.x, posicion.y + 10.f), sf::Vector2f(8.f, 44.f), _texturas));
-	_bloques.push_back(Bloque(sf::Vector2f(posicion.x + 52.f, posicion.y + 10.f), sf::Vector2f(8.f, 44.f), _texturas));
-	_cristales.push_back(Cristal(sf::Vector2f(posicion.x + 14.f, posicion.y + 10.f), canal, _texturas));
-}
-
 void Nivel::piso(int destino, float inicioHueco, float huecoDestino) {
 
 	if (huecoDestino < 0) { huecoDestino = inicioHueco; }
@@ -1266,4 +1267,13 @@ void Nivel::piso(int destino, float inicioHueco, float huecoDestino) {
 			sf::Vector2f(TAMANIO_HUECO, alto), destino,
 			sf::Vector2f(huecoDestino + (TAMANIO_HUECO - ANCHO_JUGADOR) / 2, GROSOR_PARED + 5.f)));
 	}
+}
+
+void Nivel::cajaConCristal(sf::Vector2f posicion, int canal) {
+	// cuatro bloques (arriba, abajo, izquierda, derecha) y el cristal en el hueco del medio
+	_bloques.push_back(Bloque(posicion, sf::Vector2f(60.f, 10.f), _texturas));
+	_bloques.push_back(Bloque(sf::Vector2f(posicion.x, posicion.y + 54.f), sf::Vector2f(60.f, 10.f), _texturas));
+	_bloques.push_back(Bloque(sf::Vector2f(posicion.x, posicion.y + 10.f), sf::Vector2f(8.f, 44.f), _texturas));
+	_bloques.push_back(Bloque(sf::Vector2f(posicion.x + 52.f, posicion.y + 10.f), sf::Vector2f(8.f, 44.f), _texturas));
+	_cristales.push_back(Cristal(sf::Vector2f(posicion.x + 14.f, posicion.y + 10.f), canal, _texturas));
 }

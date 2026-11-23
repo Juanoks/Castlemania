@@ -16,6 +16,7 @@ public:
 	void subir();
 	void bajar();
 	OpcionMenu opcionElegida() const;
+	void dibujarFondo(sf::RenderWindow& ventana);
 	void dibujar(sf::RenderWindow& ventana);
 };
 

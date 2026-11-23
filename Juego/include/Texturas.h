@@ -10,11 +10,13 @@ enum class TipoTextura {
 	PuertaCapaAzul, PuertaCapaAmarilla, PuertaCapaVerde, PuertaCapaRoja,
 	// cristales
 	Cristal, CristalRoto, BarreraActiva, BarreraApagada,
-	// puertas de llave (la capa de color se tiñe con setColor; los herrajes se dibujan encima sin teñir)
-	PuertaLlaveColor, PuertaLlaveHerrajes
+	// puertas de llave (la capa de color se tiñe con setColor)
+	PuertaLlaveColor, PuertaLlaveHerrajes,
+	// decoraciones
+	CartelMover, CartelSaltar, CartelLanza, CartelLanzaPiso
 };
 
-constexpr int CANTIDAD_TEXTURAS = 33; // si se agrega un tipo al enum, hay que actualizar este numero
+constexpr int CANTIDAD_TEXTURAS = 37; // si se agrega un tipo al enum, hay que actualizar este numero
 
 class Texturas {
 private:

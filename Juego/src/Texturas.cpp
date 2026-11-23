@@ -15,7 +15,9 @@ Texturas::Texturas() {
 
 		"cristal.png", "cristal_roto.png", "barrera_activa.png", "barrera_apagada.png",
 
-		"puerta_llave_color.png", "puerta_llave_herrajes.png"
+		"puerta_llave_color.png", "puerta_llave_herrajes.png",
+
+		"cartel_mover.png", "cartel_saltar.png", "cartel_lanza.png", "cartel_lanza_piso.png"
 	};
 	for (int i = 0; i < CANTIDAD_TEXTURAS; i++) {
 		if (!_texturas[i].loadFromFile("sprites/" + archivos[i])) {
