@@ -1,4 +1,4 @@
-# Punto B
+# Castlemania
 
 Juego de plataformas de precisión en 2D, hecho en C++ con SFML 3.1 para la materia
 Programación 2. El jugador recorre un mapa de salas conectadas, esquivando obstáculos y
