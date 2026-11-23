@@ -3,7 +3,9 @@
 
 MenuPrincipal::MenuPrincipal(const sf::Font& fuente) : _fondo(_texturaFondo), _titulo(fuente,"Castlemania", 40){
 	if (_texturaFondo.loadFromFile("sprites/fondo_menu.png")) {
+
 		_fondo.setTexture(_texturaFondo, true);
+		_fondo.setColor(sf::Color(170, 170, 170));
 
 		sf::Vector2u tamanioImagen = _texturaFondo.getSize();
 
@@ -12,6 +14,8 @@ MenuPrincipal::MenuPrincipal(const sf::Font& fuente) : _fondo(_texturaFondo), _t
 			static_cast<float>(ALTO_MUNDO) / tamanioImagen.y
 		));
 	}
+	_titulo.setOutlineColor(sf::Color::Black);
+	_titulo.setOutlineThickness(3.f);
 
 	_seleccion = 0; // arranca en jugar
 	_opciones.push_back(sf::Text(fuente, "Jugar", 25));
@@ -19,6 +23,11 @@ MenuPrincipal::MenuPrincipal(const sf::Font& fuente) : _fondo(_texturaFondo), _t
 	_opciones.push_back(sf::Text(fuente, "Records", 25));
 	_opciones.push_back(sf::Text(fuente, "Creditos", 25));
 	_opciones.push_back(sf::Text(fuente, "Salir", 25));
+
+	for (int i = 0; i < _opciones.size(); i++) {
+		_opciones[i].setOutlineColor(sf::Color::Black);
+		_opciones[i].setOutlineThickness(2.f);
+	}
 
 	_titulo.setPosition(sf::Vector2f(270.f, 50.f));		  // Titulo
 	_opciones[0].setPosition(sf::Vector2f(410.f, 180.f)); // Jugar

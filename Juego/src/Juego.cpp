@@ -114,19 +114,20 @@ int main() {
 	// instrucciones
 	sf::Text instrucciones(fuente, "", 15);
 	instrucciones.setString(
-		"INSTRUCCIONES\n\n\n\n\n"
+		"INSTRUCCIONES\n\n\n\n"
 		"MOVIMIENTO\n\n\n"
 		"- A / D o Flechas: Movimientos horizontales\n\n"
-		"- W o Flecha arriba: Saltar\n\n\n\n"
+		"- W o Flecha arriba: Saltar\n\n\n"
 		"ACCIONES\n\n\n"
-		"- Click izquierdo: Lanzar\n\n\n\n"
-		"OBJETIVO\n\n\n"
-		"- Explorar los niveles, conseguir llaves\n"
-		"y habilidades, y encontrar las salidas.\n\n\n\n\n\n"
-		"Presiona ESC para volver al menu principal"
+		"- Click izquierdo: Lanzar / llamar\n\n\n"
+		"OPCIONES\n\n\n"
+		"- F11: Pantalla completa\n\n"
+		"- ESC: Volver al menu\n\n\n\n"
 	);
 	instrucciones.setPosition(sf::Vector2f(70.f, 30.f));
 	instrucciones.setFillColor(sf::Color::White);
+	instrucciones.setOutlineColor(sf::Color::Black);
+	instrucciones.setOutlineThickness(2.f);
 
 	// creditos
 	sf::Text creditos(fuente, "", 15);
@@ -147,11 +148,13 @@ int main() {
 
 	sf::Text records(fuente, "", 15);
 	records.setPosition(sf::Vector2f(100.f, 80.f));
+	records.setOutlineColor(sf::Color::Black); // color del borde
+	records.setOutlineThickness(2.f);	// grosor del borde, en pixeles
 
 	sf::Text textoSala(fuente, "", 20);
 	textoSala.setPosition(sf::Vector2f(28.f, 28.f));
-	textoSala.setOutlineColor(sf::Color::Black);   // color del borde
-	textoSala.setOutlineThickness(2.f);            // grosor del borde, en pixeles
+	textoSala.setOutlineColor(sf::Color::Black);   
+	textoSala.setOutlineThickness(2.f);            
 
 	// ---- herramientas para armar salas (solo con MODO_DEBUG) ----
 	// 
@@ -222,11 +225,11 @@ int main() {
 
 					if (pantallaCompleta) {
 						// pantalla completa con la resolución del monitor
-						ventana.create(sf::VideoMode::getDesktopMode(), "Punto B", sf::State::Fullscreen);
+						ventana.create(sf::VideoMode::getDesktopMode(), "Castlemania", sf::State::Fullscreen);
 					}
 					else {
 						// vuelve a la ventana normal, del tamaño del mundo
-						ventana.create(sf::VideoMode({ static_cast<unsigned int>(ANCHO_MUNDO), static_cast<unsigned int>(ALTO_MUNDO) }), "Punto B");
+						ventana.create(sf::VideoMode({ static_cast<unsigned int>(ANCHO_MUNDO), static_cast<unsigned int>(ALTO_MUNDO) }), "Castlemania");
 					}
 
 					// la ventana nueva arranca de cero: hay que volver a configurarla
