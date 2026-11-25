@@ -302,15 +302,15 @@ void Nivel::cargarNivel(int numeroNivel) {
 		// cada camino se marca con el color de su llave 
 		const sf::Color azul(100, 180, 255), amarilla(245, 205, 60), verde(80, 200, 90);
 
-		// derecha: llave azul. Techito sobre la salida
+		// derecha: llave azul. 
 		_bloques.push_back(Bloque(sf::Vector2f(ANCHO_MUNDO - GROSOR_PARED - 40.f, Y_PISO - TAMANIO_HUECO - 20.f), sf::Vector2f(60.f, 20.f), _texturas));
 		_bloques.back().setColor(azul);
 
-		// izquierda: llave verde. Techito sobre la salida
+		// izquierda: llave verde.
 		_bloques.push_back(Bloque(sf::Vector2f(0.f, 270.f), sf::Vector2f(GROSOR_PARED + 40.f, 20.f), _texturas));
 		_bloques.back().setColor(verde);
 
-		// abajo: llave amarilla. Dos postes a los costados del hueco del piso
+		// abajo: llave amarilla. 
 		_bloques.push_back(Bloque(sf::Vector2f((ANCHO_MUNDO - TAMANIO_HUECO) / 2 - 20.f, Y_PISO - 30.f), sf::Vector2f(20.f, 30.f), _texturas));
 		_bloques.back().setColor(amarilla);
 		_bloques.push_back(Bloque(sf::Vector2f((ANCHO_MUNDO + TAMANIO_HUECO) / 2, Y_PISO - 30.f), sf::Vector2f(20.f, 30.f), _texturas));
@@ -333,12 +333,14 @@ void Nivel::cargarNivel(int numeroNivel) {
 		_bloques.push_back(Bloque(sf::Vector2f(240.f, 235.f), sf::Vector2f(200.f, 30.f), _texturas)); 
 		_bloques.push_back(Bloque(sf::Vector2f(240.f, 265.f), sf::Vector2f(40.f, 80.f), _texturas));  
 		_bloques.push_back(Bloque(sf::Vector2f(240.f, 345.f), sf::Vector2f(200.f, 30.f), _texturas));
+		_decoraciones.push_back(Decoracion(sf::Vector2f(460.f, 257.f), TipoDecoracion::CartelDobleSalto, _texturas));
 		_coleccionables.push_back(Coleccionable(sf::Vector2f(290.f, 345.f - 60.f), TipoColeccionable::DobleSalto, _texturas));
 
 		_mecanismos.push_back(new PuertaLlave(sf::Vector2f(360.f, 265.f), CANAL_PUERTA_VERDE, sf::Color(80, 200, 90), _texturas));
 		_mecanismos.push_back(new PuertaLlave(sf::Vector2f(390.f, 265.f), CANAL_PUERTA_AMARILLA, sf::Color(245, 205, 60), _texturas));
 		_mecanismos.push_back(new PuertaLlave(sf::Vector2f(420.f, 265.f), CANAL_PUERTA_AZUL, sf::Color(100, 180, 255), _texturas));
 
+		
 		_plataformas.push_back(Plataforma(sf::Vector2f(440.f, 345.f), sf::Vector2f(300.f, 10.f), _texturas));
 	}
 	else if (numeroNivel == 10) {

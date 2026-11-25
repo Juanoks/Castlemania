@@ -48,3 +48,15 @@ RegistroPartida ArchivoPartidas::leer(int pos) {
 
 	return registroP;
 }
+
+bool ArchivoPartidas::borrar() {
+
+	FILE* p;
+
+	p = fopen(_nombre.c_str(), "wb");
+	if (p == nullptr) { return false; }
+
+	fclose(p);
+
+	return true;
+}

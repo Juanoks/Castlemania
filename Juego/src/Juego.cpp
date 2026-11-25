@@ -53,9 +53,14 @@ std::string armarTextoRecords(ArchivoPartidas& registro) {
 	std::string texto = "RECORDS\n\n";
 	for (int i = 0; i < static_cast<int>(lista.size()) && i < MAX_RECORDS; i++) {
 		texto += "Tiempo: " + ajustarTiempo(lista[i].getTiempo()) +
-			" | Muertes: " + std::to_string(lista[i].getMuertes()) + "\n";
+			" | Muertes: " + std::to_string(lista[i].getMuertes()) + "\n\n";
 	}
 	return texto;
+}
+
+void bordeYGrosor(sf::Text& texto, float grosor = 2.f, sf::Color color=sf::Color::Black) {
+	texto.setOutlineColor(color); // color del borde
+	texto.setOutlineThickness(grosor); // grosor del borde, en pixeles
 }
 
 // ajusta la camara para que el mundo entre en una ventana de ese tamaño
@@ -126,8 +131,8 @@ int main() {
 	);
 	instrucciones.setPosition(sf::Vector2f(70.f, 30.f));
 	instrucciones.setFillColor(sf::Color::White);
-	instrucciones.setOutlineColor(sf::Color::Black);
-	instrucciones.setOutlineThickness(2.f);
+
+	bordeYGrosor(instrucciones);
 
 	// creditos
 	sf::Text creditos(fuente, "", 15);
@@ -148,20 +153,27 @@ int main() {
 
 	sf::Text records(fuente, "", 15);
 	records.setPosition(sf::Vector2f(100.f, 80.f));
-	records.setOutlineColor(sf::Color::Black); // color del borde
-	records.setOutlineThickness(2.f);	// grosor del borde, en pixeles
+	bordeYGrosor(records);
+
+	sf::Text ayudaRecords(fuente, "Presiona B para borrar records\n\nPresiona ESC para volver al menu principal", 15);
+	ayudaRecords.setPosition(sf::Vector2f(100.f, 460.f));
+	bordeYGrosor(ayudaRecords);
+
+	sf::Text confirmacion(fuente, "SEGURO QUE QUIERE BORRAR LOS RECORDS? Y: si / N: no", 15);
+	confirmacion.setPosition(sf::Vector2f(100.f, 460.f));
+	bordeYGrosor(confirmacion);
+
+	bool confirmadoBorrado = false;
 
 	sf::Text textoSala(fuente, "", 20);
 	textoSala.setPosition(sf::Vector2f(28.f, 28.f));
-	textoSala.setOutlineColor(sf::Color::Black);   
-	textoSala.setOutlineThickness(2.f);            
+	bordeYGrosor(textoSala);         
 
 	// ---- herramientas para armar salas (solo con MODO_DEBUG) ----
 	// 
 	// texto con las coordenadas del mouse en el mundo, al lado del cursor
 	sf::Text textoMouse(fuente, "", 10);
-	textoMouse.setOutlineColor(sf::Color::Black);
-	textoMouse.setOutlineThickness(2.f);
+	bordeYGrosor(textoMouse);
 
 	// grilla: una linea cada 20 px (tenue) y cada 100 px (mas marcada). Se arma una sola vez y se dibuja con G
 	bool mostrarGrilla = false;
@@ -178,12 +190,12 @@ int main() {
 	}
 	// numeros de la grilla (cada 100), para no tener que contar lineas
 	sf::Text numeroGrilla(fuente, "", 8);
-	numeroGrilla.setOutlineColor(sf::Color::Black);
-	numeroGrilla.setOutlineThickness(1.f);
+	bordeYGrosor(numeroGrilla,1.f);
 
 	sf::Text victoria(fuente, "", 30);
 	victoria.setPosition(sf::Vector2f(250.f, 200.f));
 	victoria.setFillColor(sf::Color::Magenta);
+	bordeYGrosor(victoria);
 
 	EstadoJuego estadoActual = EstadoJuego::Menu;
 
@@ -282,7 +294,24 @@ int main() {
 				if (tecla->code == sf::Keyboard::Key::Escape) {
 					estadoActual = EstadoJuego::Menu;
 					sonidos.reproducir(TipoSonido::MenuVolver);
+					confirmadoBorrado = false;
 				}
+
+				// borrar records con la B en la pantalla de records
+				if (estadoActual == EstadoJuego::Records && tecla->code == sf::Keyboard::Key::B) {
+					confirmadoBorrado = true;
+				}
+
+				if (estadoActual == EstadoJuego::Records && confirmadoBorrado == true &&tecla->code == sf::Keyboard::Key::Y){
+					registro.borrar();
+					records.setString(armarTextoRecords(registro));
+					confirmadoBorrado = false;
+				}
+
+				if (estadoActual == EstadoJuego::Records && confirmadoBorrado == true && tecla->code == sf::Keyboard::Key::N) {
+					confirmadoBorrado = false;
+				}
+
 				// herramientas para armar salas
 				if (MODO_DEBUG && estadoActual == EstadoJuego::Jugando) {
 					if (tecla->code == sf::Keyboard::Key::R) {
@@ -328,6 +357,12 @@ int main() {
 		case EstadoJuego::Records:
 			menuPrincipal.dibujarFondo(ventana);
 			ventana.draw(records);
+			if (confirmadoBorrado == true) {
+				ventana.draw(confirmacion);
+			}
+			else {
+				ventana.draw(ayudaRecords);
+			}
 			break;
 		case EstadoJuego::Creditos:
 			ventana.draw(creditos);

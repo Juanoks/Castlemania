@@ -16,6 +16,9 @@ Decoracion::Decoracion(sf::Vector2f posicion, TipoDecoracion tipoDecoracion, con
 	case TipoDecoracion::CartelLanzaPiso:
 		_sprite.setTexture(texturas.get(TipoTextura::CartelLanzaPiso), true);
 		break;
+	case TipoDecoracion::CartelDobleSalto:
+		_sprite.setTexture(texturas.get(TipoTextura::CartelDobleSalto), true);
+		break;
 	}
 
 	_sprite.setPosition(posicion);

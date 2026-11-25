@@ -11,5 +11,6 @@ public:
 	bool guardar(RegistroPartida registroP);
 	int contarRegistros();
 	RegistroPartida leer(int pos);
+	bool borrar();
 };
 

@@ -2,7 +2,7 @@
 #include <SFML/Graphics.hpp>
 #include "Texturas.h"
 
-enum class TipoDecoracion { CartelMover, CartelSaltar, CartelLanza, CartelLanzaPiso };
+enum class TipoDecoracion { CartelMover, CartelSaltar, CartelLanza, CartelLanzaPiso, CartelDobleSalto };
 
 class Decoracion {
 private:
