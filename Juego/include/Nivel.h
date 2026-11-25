@@ -71,7 +71,39 @@ private:
 	void paredIzquierda(int destino = 0, float inicioHueco = Y_PISO - TAMANIO_HUECO, float huecoDestino = -1.f);
 	void techo(int destino = 0, float inicioHueco = (ANCHO_MUNDO - TAMANIO_HUECO) / 2, float huecoDestino = -1.f);
 	void piso(int destino = 0, float inicioHueco = (ANCHO_MUNDO - TAMANIO_HUECO) / 2, float huecoDestino = -1.f);
-	// cajita de piedra cerrada con un cristal adentro (mide 60x64): solo se rompe con la vuelta de la lanza
+	// cajita de piedra cerrada con un cristal adentro
 	void cajaConCristal(sf::Vector2f posicion, int canal);
+
+	void cargarSala0();
+	void cargarSala1();
+	void cargarSala2();
+	void cargarSala3();
+	void cargarSala4();
+	void cargarSala5();
+	void cargarSala6();
+	void cargarSala7();
+	void cargarSala8();
+	void cargarSala9();
+	void cargarSala10();
+	void cargarSala11();
+	void cargarSala12();
+	void cargarSala13();
+	void cargarSala14();
+	void cargarSala15();
+	void cargarSala16();
+	void cargarSala17();
+	void cargarSala18();
+	void cargarSala19();
+	void cargarSala20();
+	void cargarSala21();
+	void cargarSala22();
+	void cargarSala23();
+	void cargarSala24();
+	void cargarSala25();
+	void cargarSala26();
+	void cargarSala27();
+	void cargarSala28();
+	void cargarSala29();
+	void cargarSala30();
 
 };
