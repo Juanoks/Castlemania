@@ -246,8 +246,8 @@ void Partida::reiniciarPartida() {
 	_terminada = false;
 	_tiempoDeCompletado = 0;
 	_cantidadMuertes = 0;
-	_lanzas.clear();
-	_lanzaDisponible = true;
+	_lanzas.clear(); // borra cualquier lanza que hubiera en el mapaa
+	_lanzaDisponible = true; // no es si tenes la lanza, si no si la podes tirar
 	for (int i = 0; i < CANTIDAD_COLECCIONABLES; i++) {_obtenidos[i] = false;}
 	_jugador.setDobleSalto(false);
 }

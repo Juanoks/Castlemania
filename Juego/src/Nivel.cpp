@@ -5,8 +5,9 @@
 // izquierda, derecha, arriba, abajo | 0 = pared cerrada | -1 = fin del juego
 // TERRENO_A_MANO (-2) = ese lado lo arma la sala a mano en cargarNivel (por ejemplo, con el hueco en otro lugar)
 const int CONEXIONES[31][4] = {
+	//fila=salas | columnas=lados
 	{0, 1, 0, TERRENO_A_MANO},  // 0: sala de prueba
-	{TERRENO_A_MANO, TERRENO_A_MANO, 0, 0},  // 1: inicio. arriba a la izquierda, la entrada a la sala de la llave roja (a mano)
+	{TERRENO_A_MANO, TERRENO_A_MANO, 0, 0},  // 1: inicio.
 	{TERRENO_A_MANO, TERRENO_A_MANO, 0, 0},  // 2
 	{TERRENO_A_MANO, TERRENO_A_MANO, 0, 0},  // 3: 
 	{TERRENO_A_MANO, TERRENO_A_MANO, 0, TERRENO_A_MANO},  // 4: 
@@ -17,12 +18,12 @@ const int CONEXIONES[31][4] = {
 	{TERRENO_A_MANO, 10, TERRENO_A_MANO, TERRENO_A_MANO},   // 9: centro del mapa 
 	{9, 11, 0, 0},   // 10
 	{10, TERRENO_A_MANO, 0, TERRENO_A_MANO},   // 11
-	{TERRENO_A_MANO, TERRENO_A_MANO, 0, TERRENO_A_MANO},   // 12: puente a media altura, de la 11 a la 13
-	{TERRENO_A_MANO, TERRENO_A_MANO, 0, 0},   // 13: entra abajo a la izquierda (desde la 12), sale arriba a la derecha (a la 14)
-	{TERRENO_A_MANO, 0, 0, TERRENO_A_MANO},   // 14: llave azul; el piso tiene un atajo que cae a la 10, al lado de la 9
-	{TERRENO_A_MANO, TERRENO_A_MANO, TERRENO_A_MANO, TERRENO_A_MANO},   // 15: dos salidas a la 16 (derecha) y dos a la 17 (izquierda)
-	{TERRENO_A_MANO, 0, 0, 0},   // 16: dos salidas a la 15 en la pared izquierda
-	{0, TERRENO_A_MANO, 0, 0},   // 17: laberinto; dos salidas a la 15 en la pared derecha
+	{TERRENO_A_MANO, TERRENO_A_MANO, 0, TERRENO_A_MANO},   // 12
+	{TERRENO_A_MANO, TERRENO_A_MANO, 0, 0},   // 13
+	{TERRENO_A_MANO, 0, 0, TERRENO_A_MANO},   // 14: llave azul
+	{TERRENO_A_MANO, TERRENO_A_MANO, TERRENO_A_MANO, TERRENO_A_MANO},   // 15
+	{TERRENO_A_MANO, 0, 0, 0},   // 16
+	{0, TERRENO_A_MANO, 0, 0},   // 17: laberinto
 	{0, 0, TERRENO_A_MANO, TERRENO_A_MANO},   // 18: llave amarilla
 	{20, TERRENO_A_MANO, 0, 0},   // 19: camino verde
 	{TERRENO_A_MANO, 19, 0, 0},   // 20:
@@ -34,7 +35,7 @@ const int CONEXIONES[31][4] = {
 	{TERRENO_A_MANO, 0, 0, TERRENO_A_MANO},   // 26
 	{TERRENO_A_MANO, TERRENO_A_MANO, 0, 0},   // 27
 	{0, TERRENO_A_MANO, 0, TERRENO_A_MANO},   // 28: sala de la llave roja
-	{8, 30, 0, 0},   // 29: transicion despues de la puerta final
+	{8, 30, 0, 0},   // 29
 	{TERRENO_A_MANO, TERRENO_A_MANO, TERRENO_A_MANO, TERRENO_A_MANO}   // 30: exterior, la salida de la derecha termina el juego
 };
 
