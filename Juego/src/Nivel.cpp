@@ -1,4 +1,5 @@
 #include "Nivel.h"
+#include "PincheParpadea.h"
 #include "Constantes.h"
 
 // Mapa: cada fila es una sala y cada columna un lado de esa sala.
@@ -161,6 +162,7 @@ void Nivel::cargarSala0() {
 	_bloques.push_back(Bloque(sf::Vector2f(350.f, 400.f), sf::Vector2f(200.f, 40.f), _texturas));
 	_bloques.push_back(Bloque(sf::Vector2f(800.f, 300.f), sf::Vector2f(20.f, 100.f), _texturas, true));
 	_obstaculos.push_back(new Pinche(sf::Vector2f(150.f, Y_PISO - 37.5f), _texturas));
+	_obstaculos.push_back(new PincheParpadea(sf::Vector2f(250.f, Y_PISO - 37.5f), _texturas, 1.5f));
 	_obstaculos.push_back(new PilarMovil(sf::Vector2f(600.f, Y_PISO - 80.f), sf::Vector2f(40.f, 80.f), 600.f, 800.f, 150.f, _texturas));
 	_plataformas.push_back(Plataforma(sf::Vector2f(200.f, 300.f), sf::Vector2f(100.f, 20.f), _texturas));
 	_botones.push_back(Boton(sf::Vector2f(500.f, 200.f),1,_texturas));

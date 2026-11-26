@@ -155,6 +155,7 @@
     <ClCompile Include="src\Barrera.cpp" />
     <ClCompile Include="src\Cristal.cpp" />
     <ClCompile Include="src\Decoracion.cpp" />
+    <ClCompile Include="src\PincheParpadea.cpp" />
     <ClCompile Include="src\PuertaFinal.cpp" />
     <ClCompile Include="src\ArchivoPartidas.cpp" />
     <ClCompile Include="src\Bloque.cpp" />
@@ -196,6 +197,7 @@
     <ClInclude Include="include\Mecanismo.h" />
     <ClInclude Include="include\MenuPrincipal.h" />
     <ClInclude Include="include\Musica.h" />
+    <ClInclude Include="include\PincheParpadea.h" />
     <ClInclude Include="include\PuertaLlave.h" />
     <ClInclude Include="include\Salida.h" />
     <ClInclude Include="include\Nivel.h" />

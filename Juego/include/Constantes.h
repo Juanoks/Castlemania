@@ -27,4 +27,4 @@ constexpr int CANAL_PUERTA_VERDE = 11;    // lo abre tener la llave verde
 
 // herramientas para armar salas: coordenadas del mouse, grilla (G) y recargar la sala (R).
 // poner en true si se quiere usar
-constexpr bool MODO_DEBUG = false;
+constexpr bool MODO_DEBUG = true;
