@@ -53,16 +53,22 @@ En el menú: W / S o ↑ / ↓ para elegir y ENTER para confirmar. En la pantall
 4. Abrir `Juego.slnx` y compilar en **x64** (Debug para desarrollar, Release para distribuir).
 5. Copiar las DLL de la carpeta `bin` de SFML junto al `.exe` (las `-d` para Debug, las otras para Release).
 
-<img width="3840" height="1083" alt="image" src="https://github.com/user-attachments/assets/1aba251e-c637-4d4d-9bde-a876ddb7444b" />
+<img width="952" height="531" alt="image" src="https://github.com/user-attachments/assets/9c3dc6ce-a222-4944-9566-cf1995aef896" />
 
-<img width="3840" height="1083" alt="image" src="https://github.com/user-attachments/assets/c64ab2d3-3b59-4647-81fb-9bc4fcfd63d7" />
+<img width="950" height="529" alt="image" src="https://github.com/user-attachments/assets/9960c497-b2d6-42d4-b247-b32e5d862d50" />
 
-<img width="3840" height="1083" alt="image" src="https://github.com/user-attachments/assets/33bc5d4e-7408-4af4-9fde-e199f365d0fc" />
+<img width="949" height="526" alt="image" src="https://github.com/user-attachments/assets/6cf4011e-7cee-454c-9284-46197780ab1d" />
 
-<img width="3840" height="1083" alt="image" src="https://github.com/user-attachments/assets/7b3dd176-1b01-4477-b643-73d556953ba0" />
+<img width="940" height="525" alt="image" src="https://github.com/user-attachments/assets/4045df24-aa85-43d6-b23f-0f6330cd05ba" />
 
-<img width="3840" height="1083" alt="image" src="https://github.com/user-attachments/assets/3b01bbd0-9db5-41c5-9e93-58bcabb30c1b" />
+<img width="950" height="532" alt="image" src="https://github.com/user-attachments/assets/dcca783b-442c-4f03-bfaa-39b609eed170" />
 
+<img width="943" height="524" alt="image" src="https://github.com/user-attachments/assets/eb175cf0-4b7b-4ef3-a2dd-ad3901313380" />
+
+<img width="950" height="520" alt="image" src="https://github.com/user-attachments/assets/da73aeea-89ba-4298-85a4-c41984bbb930" />
+
+
+****
 
 ## Modo debug
 
