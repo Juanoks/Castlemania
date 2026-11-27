@@ -8,7 +8,7 @@ Recorrés un castillo de salas conectadas esquivando pinches y pilares, resolvie
 
 ## Jugar sin compilar
 
-1. Descargá el `.zip` de la sección **Releases** del repositorio.
+1. Descargá el `.zip` de la [última versión](https://github.com/Juanoks/Castlemania/releases/latest).
 2. Extraelo y abrí `JUGAR/Castlemania.exe`.
 
 Si Windows avisa que falta `MSVCP140.dll` o `VCRUNTIME140.dll`, instalá el **Microsoft Visual C++ Redistributable (x64)**.
