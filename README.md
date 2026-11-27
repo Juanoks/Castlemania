@@ -4,7 +4,7 @@ Juego de plataformas de precisión en 2D, hecho en **C++** con **SFML 3.1** como
 
 Recorrés un castillo de salas conectadas esquivando pinches y pilares, resolviendo puzzles con una lanza que se clava en la madera, y juntando las cuatro llaves que abren la puerta final para salir de la mazmorra.
 
-<!-- Agregar acá una captura o un GIF del juego: ![Castlemania](docs/captura.png) -->
+<p align="center"><img src="https://github.com/user-attachments/assets/9c3dc6ce-a222-4944-9566-cf1995aef896" alt="Captura de Castlemania" width="800"></p>
 
 ## Jugar sin compilar
 
@@ -36,6 +36,15 @@ En el menú: W / S o ↑ / ↓ para elegir y ENTER para confirmar. En la pantall
 - **Obstáculos:** pinches y pilares con pinches que se mueven en horizontal o en vertical.
 - **Récords:** al terminar se guardan el tiempo y las muertes en un archivo, y el menú muestra los 5 mejores tiempos.
 
+## Capturas
+
+<table>
+  <tr><td><img src="https://github.com/user-attachments/assets/9960c497-b2d6-42d4-b247-b32e5d862d50" alt="Captura de Castlemania 2" width="440"></td><td><img src="https://github.com/user-attachments/assets/6cf4011e-7cee-454c-9284-46197780ab1d" alt="Captura de Castlemania 3" width="440"></td></tr>
+  <tr><td><img src="https://github.com/user-attachments/assets/4045df24-aa85-43d6-b23f-0f6330cd05ba" alt="Captura de Castlemania 4" width="440"></td><td><img src="https://github.com/user-attachments/assets/dcca783b-442c-4f03-bfaa-39b609eed170" alt="Captura de Castlemania 5" width="440"></td></tr>
+  <tr><td><img src="https://github.com/user-attachments/assets/eb175cf0-4b7b-4ef3-a2dd-ad3901313380" alt="Captura de Castlemania 6" width="440"></td><td><img src="https://github.com/user-attachments/assets/32cfa09f-00dc-4338-998a-d19600e7de8f" alt="Captura de Castlemania 7" width="440"></td></tr>
+  <tr><td><img src="https://github.com/user-attachments/assets/da73aeea-89ba-4298-85a4-c41984bbb930" alt="Captura de Castlemania 8" width="440"></td></tr>
+</table>
+
 ## Conceptos aplicados
 
 - **Clases y encapsulamiento:** cada elemento del juego es una clase con atributos privados.
@@ -53,25 +62,6 @@ En el menú: W / S o ↑ / ↓ para elegir y ENTER para confirmar. En la pantall
 4. Abrir `Juego.slnx` y compilar en **x64** (Debug para desarrollar, Release para distribuir).
 5. Copiar las DLL de la carpeta `bin` de SFML junto al `.exe` (las `-d` para Debug, las otras para Release).
 
-<img width="952" height="531" alt="image" src="https://github.com/user-attachments/assets/9c3dc6ce-a222-4944-9566-cf1995aef896" />
-
-<img width="950" height="529" alt="image" src="https://github.com/user-attachments/assets/9960c497-b2d6-42d4-b247-b32e5d862d50" />
-
-<img width="949" height="526" alt="image" src="https://github.com/user-attachments/assets/6cf4011e-7cee-454c-9284-46197780ab1d" />
-
-<img width="940" height="525" alt="image" src="https://github.com/user-attachments/assets/4045df24-aa85-43d6-b23f-0f6330cd05ba" />
-
-<img width="950" height="532" alt="image" src="https://github.com/user-attachments/assets/dcca783b-442c-4f03-bfaa-39b609eed170" />
-
-<img width="943" height="524" alt="image" src="https://github.com/user-attachments/assets/eb175cf0-4b7b-4ef3-a2dd-ad3901313380" />
-
-<img width="946" height="531" alt="image" src="https://github.com/user-attachments/assets/32cfa09f-00dc-4338-998a-d19600e7de8f" />
-
-<img width="950" height="520" alt="image" src="https://github.com/user-attachments/assets/da73aeea-89ba-4298-85a4-c41984bbb930" />
-
-
-****
-
 ## Modo debug
 
 Con `MODO_DEBUG = true` en `Constantes.h`, la partida arranca con todas las habilidades y llaves, se muestran las coordenadas del mouse, **G** muestra una grilla y **R** recarga la sala actual.
@@ -84,3 +74,4 @@ Con `MODO_DEBUG = true` en `Constantes.h`, la partida arranca con todas las habi
 ## Créditos
 
 - Fuente: *Press Start 2P* de CodeMan38, licencia SIL Open Font License (`fuentes/OFL.txt`).
+- Sprites, sonidos y música: generados con ayuda de Claude (Anthropic).
