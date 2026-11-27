@@ -65,6 +65,8 @@ En el menú: W / S o ↑ / ↓ para elegir y ENTER para confirmar. En la pantall
 
 <img width="943" height="524" alt="image" src="https://github.com/user-attachments/assets/eb175cf0-4b7b-4ef3-a2dd-ad3901313380" />
 
+<img width="946" height="531" alt="image" src="https://github.com/user-attachments/assets/32cfa09f-00dc-4338-998a-d19600e7de8f" />
+
 <img width="950" height="520" alt="image" src="https://github.com/user-attachments/assets/da73aeea-89ba-4298-85a4-c41984bbb930" />
 
 
