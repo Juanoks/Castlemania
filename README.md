@@ -65,4 +65,3 @@ Con `MODO_DEBUG = true` en `Constantes.h`, la partida arranca con todas las habi
 ## Créditos
 
 - Fuente: *Press Start 2P* de CodeMan38, licencia SIL Open Font License (`fuentes/OFL.txt`).
-- Sonidos y música: COMPLETAR (origen y licencia).
