@@ -53,6 +53,17 @@ En el menú: W / S o ↑ / ↓ para elegir y ENTER para confirmar. En la pantall
 4. Abrir `Juego.slnx` y compilar en **x64** (Debug para desarrollar, Release para distribuir).
 5. Copiar las DLL de la carpeta `bin` de SFML junto al `.exe` (las `-d` para Debug, las otras para Release).
 
+<img width="3840" height="1083" alt="image" src="https://github.com/user-attachments/assets/1aba251e-c637-4d4d-9bde-a876ddb7444b" />
+
+<img width="3840" height="1083" alt="image" src="https://github.com/user-attachments/assets/c64ab2d3-3b59-4647-81fb-9bc4fcfd63d7" />
+
+<img width="3840" height="1083" alt="image" src="https://github.com/user-attachments/assets/33bc5d4e-7408-4af4-9fde-e199f365d0fc" />
+
+<img width="3840" height="1083" alt="image" src="https://github.com/user-attachments/assets/7b3dd176-1b01-4477-b643-73d556953ba0" />
+
+<img width="3840" height="1083" alt="image" src="https://github.com/user-attachments/assets/3b01bbd0-9db5-41c5-9e93-58bcabb30c1b" />
+
+
 ## Modo debug
 
 Con `MODO_DEBUG = true` en `Constantes.h`, la partida arranca con todas las habilidades y llaves, se muestran las coordenadas del mouse, **G** muestra una grilla y **R** recarga la sala actual.
