@@ -59,8 +59,8 @@ Con `MODO_DEBUG = true` en `Constantes.h`, la partida arranca con todas las habi
 
 ## Autores
 
-- Juan — [@Juanoks](https://github.com/Juanoks)
-- NOMBRE DEL COMPAÑERO — [@usuario](https://github.com/usuario)
+- Juan Ignacio Crettaz — [@Juanoks](https://github.com/Juanoks)
+- Mateo Viviani — [@mateiko7](https://github.com/mateiko7)
 
 ## Créditos
 
